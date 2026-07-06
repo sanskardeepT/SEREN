@@ -1,15 +1,17 @@
-# Batch 2 Scoping — Tasks
+# STITCH UI/UX Application — Tasks
 
-## Config & Model Updates
-- [ ] Update `app/src/main/java/com/seren/app/data/ConditionIds.kt` with Batch 2 constants and metadata
+## Onboarding Carousel & Role Selector
+- [ ] Implement multi-step onboarding wizard inside `ui/consent/ConsentScreen.kt`
+- [ ] Connect `ConsentViewModel` registration variables correctly
 
-## Practice ViewModel Updates
-- [ ] Update `app/src/main/java/com/seren/app/ui/practice/PracticeViewModel.kt` with Batch 2 daily practice recommenders
+## Triple-Mode Home Dashboard
+- [ ] Implement age-specific home screens inside `ui/home/HomeScreen.kt`
+- [ ] Wire theme colors and icons correctly
 
-## Documentation Updates
-- [ ] Append Batch 2 conditions in `docs/condition-catalogue.md`
-- [ ] Append Batch 2 datasets in `docs/dataset-map.md`
+## Task Intro & Active Bar Screen
+- [ ] Update `ui/screening/ScreeningScreen.kt` with Intro (Screen 9) and Active task (Screen 10) headers
+- [ ] Embed the task runners sequentially
 
-## Finalize & Sync
-- [ ] Verify build compiles and runs
-- [ ] Git commit & Push to origin main
+## Finalize & Remote Push
+- [ ] Verify build compiles
+- [ ] Git commit & push origin main

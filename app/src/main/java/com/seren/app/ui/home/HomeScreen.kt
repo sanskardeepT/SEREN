@@ -1,7 +1,10 @@
 package com.seren.app.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,22 +12,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,13 +44,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.seren.app.data.ConditionIds
 import com.seren.app.data.model.AgeGroup
 
 @Composable
@@ -52,238 +65,496 @@ fun HomeScreen(
     val userProfile by viewModel.userProfile.collectAsState()
     val latestScores by viewModel.latestScores.collectAsState()
 
+    val ageGroup = userProfile?.ageGroup ?: AgeGroup.CHILD_9_12
+
+    when (ageGroup) {
+        AgeGroup.CHILD_5_8, AgeGroup.CHILD_9_12 -> ChildDashboard(
+            onNavigateToPlay = onNavigateToScreening,
+            onNavigateToPractice = onNavigateToPractice
+        )
+        AgeGroup.TEEN_13_19 -> TeenDashboard(
+            onNavigateToChallenge = onNavigateToScreening,
+            onNavigateToPractice = onNavigateToPractice
+        )
+        else -> AdultDashboard(
+            onNavigateToScreening = onNavigateToScreening,
+            onNavigateToPractice = onNavigateToPractice,
+            latestScores = latestScores,
+            onNavigateToReport = onNavigateToReport
+        )
+    }
+}
+
+/**
+ * 1. STITCH Child Mode Dashboard (Ages 5-12)
+ */
+@Composable
+fun ChildDashboard(
+    onNavigateToPlay: () -> Unit,
+    onNavigateToPractice: () -> Unit
+) {
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = Color(0xFF3B82F6))
+                    Text("Games", color = Color(0xFF3B82F6), style = MaterialTheme.typography.labelSmall)
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
+                    Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = Color.Gray)
+                    Text("Practice", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color(0xFFE0F2FE)) // Light Sky Blue
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Header Profile Card
+            // App Bar
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = "Hello, ${userProfile?.displayName ?: "Explorer"}!",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(
-                        text = "Profile: ${userProfile?.let { AgeGroup.displayLabel(it.ageGroup) } ?: "Loading..."}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "Star Motif",
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.height(36.dp).width(36.dp)
-                )
-            }
-
-            // CTAs
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                ElevatedCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.elevatedCardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .background(Color(0xFFFDE68A), CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Default.Assignment,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Comprehensive Screening",
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        }
-                        Text(
-                            text = "Take a game-based assessment (approx. 10 mins) to identify early indicators of dyslexia, ADHD, cluttering, and more.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
-                        )
-                        Button(
-                            onClick = onNavigateToScreening,
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary,
-                                contentColor = MaterialTheme.colorScheme.onSecondary
-                            ),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text(
-                                text = "Start Screening Session",
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        Text("👦", fontSize = 24.sp)
                     }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("SEREN Kids", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
-
-                ElevatedCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.elevatedCardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Default.TrendingUp,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.tertiary
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Daily Practice Coach",
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Text(
-                            text = "Access personalized, daily 10-15 minute cognitive exercises to train and strengthen target learning areas.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                        )
-                        Button(
-                            onClick = onNavigateToPractice,
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.tertiary,
-                                contentColor = MaterialTheme.colorScheme.onTertiary
-                            ),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text(
-                                text = "Continue Daily Practice",
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                IconButton(onClick = {}) {
+                    Icon(imageVector = Icons.Default.Notifications, contentDescription = null, tint = Color.Black)
                 }
             }
 
-            // Latest Screening Results (if exists)
-            if (latestScores.isNotEmpty()) {
+            // Top Sky Robot Banner
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFBAE6FD))
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Column(verticalArrangement = Arrangement.Center) {
+                        Text("Hi there! 👋", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text("Let's discover how\nyour brain works!", style = MaterialTheme.typography.bodySmall, color = Color.DarkGray)
+                    }
+                    Text("🤖", fontSize = 72.sp) // Orange waving robot proxy emoji
+                }
+            }
+
+            // Let's Play CTA
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigateToPlay() },
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE169)) // Bright Yellow
+            ) {
+                Row(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text("Let's Play!", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text("Fun games for your brain!", style = MaterialTheme.typography.bodyMedium, color = Color.Black.copy(alpha = 0.6f))
+                    }
+                    Text("🎮", fontSize = 42.sp)
+                }
+            }
+
+            // Grid Features
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Col 1: Emotion Explorer
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(130.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFF6B6B)), // Coral red
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("☹️", fontSize = 28.sp)
+                        Text("Emotion\nExplorer", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
+                }
+
+                // Col 2: Focus Fun
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(130.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF51CF66)), // Green
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                        Text("Focus\nFun", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 2. STITCH Teen Mode Dashboard (Ages 13-19)
+ */
+@Composable
+fun TeenDashboard(
+    onNavigateToChallenge: () -> Unit,
+    onNavigateToPractice: () -> Unit
+) {
+    Scaffold(
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF0F172A))
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = Color(0xFFA855F7))
+                    Text("Feed", color = Color(0xFFA855F7), style = MaterialTheme.typography.labelSmall)
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
+                    Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = Color.Gray)
+                    Text("Streaks", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color(0xFF3B0764), Color(0xFF0F172A))
+                    )
+                ) // Deep Purple to Black
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // App Bar
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "SEREN Teen",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(Color(0xFF6B21A8), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("🎧", fontSize = 20.sp)
+                }
+            }
+
+            // Streak card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Color(0xFFD8B4FE).copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1B4B).copy(alpha = 0.6f)),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text("Your Streaks", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD8B4FE))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text("🔥 5 Day Streak!", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
+                }
+            }
+
+            // Daily Mood Card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Color(0xFFF472B6).copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1B4B).copy(alpha = 0.6f)),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Daily Mood Check-in", style = MaterialTheme.typography.labelSmall, color = Color(0xFFF472B6))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        listOf("😀", "😐", "😔").forEach { emoji ->
+                            Box(
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .background(Color(0xFF312E81), CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(emoji, fontSize = 28.sp)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Interactive list cards
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                listOf(
+                    "Daily Challenge: Boost Your Focus" to onNavigateToChallenge,
+                    "Quick Quiz: Understanding Stress" to onNavigateToChallenge,
+                    "Mindful Moment: 5-min Breathwork" to onNavigateToChallenge
+                ).forEach { (title, action) ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { action() },
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = title, color = Color.White, style = MaterialTheme.typography.bodyLarge)
+                            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = Color.White)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 3. STITCH Adult Mode Dashboard (Ages 18-60+)
+ */
+@Composable
+fun AdultDashboard(
+    onNavigateToScreening: () -> Unit,
+    onNavigateToPractice: () -> Unit,
+    latestScores: List<com.seren.app.data.model.ConditionScore>,
+    onNavigateToReport: (sessionId: Long) -> Unit
+) {
+    Scaffold(
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = Color(0xFF0CA678))
+                    Text("Dashboard", color = Color(0xFF0CA678), style = MaterialTheme.typography.labelSmall)
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
+                    Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = Color.Gray)
+                    Text("Practice", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Color.White)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // App Bar
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "SEREN Adult",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(Color(0xFFE6FCF5), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("💼", fontSize = 20.sp)
+                }
+            }
+
+            // Screening status banner (mint check banner)
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFEBFBEE)), // Light Mint Green
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = "Success check",
+                        tint = Color(0xFF0CA678),
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text("Last Screening Status", style = MaterialTheme.typography.bodySmall, color = Color(0xFF0CA678), fontWeight = FontWeight.Bold)
+                        Text(
+                            text = if (latestScores.isNotEmpty()) "Completed. Indicators updated!" else "No session completed yet. Start below.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF2B8A3E),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            // Daily practice card (white card, green border)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(2.dp, Color(0xFF0CA678), RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text("⏰", fontSize = 36.sp)
                     Text(
-                        text = "Latest Indicators",
+                        text = "Daily 10-min Practice",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onBackground
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                     Button(
-                        onClick = {
+                        onClick = onNavigateToPractice,
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CA678)),
+                        shape = RoundedCornerShape(24.dp)
+                    ) {
+                        Text("Start Now", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            // Action: Start screening
+            Button(
+                onClick = onNavigateToScreening,
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B))
+            ) {
+                Text("Start Full Screening Session", color = Color.White, fontWeight = FontWeight.Bold)
+            }
+
+            // Quick Links Grid (Progress Tracker + Resource Library)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Card 1
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(110.dp)
+                        .clickable {
                             val lastSessionId = latestScores.firstOrNull()?.sessionId
                             if (lastSessionId != null) {
                                 onNavigateToReport(lastSessionId)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
-                            contentColor = MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0))
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("View Full Report", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = Color(0xFF0CA678))
+                        Text("Progress Tracker", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Color.Black)
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    latestScores.forEach { score ->
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = ConditionIds.getDisplayName(score.conditionId),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "Confidence: ${score.confidenceLevel.uppercase()} (${score.modalitiesUsed} modalities)",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.tertiary
-                                    )
-                                }
-                                Column(horizontalAlignment = Alignment.End) {
-                                    Text(
-                                        text = "${score.riskScore.toInt()}%",
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        color = if (score.riskScore > 60f) MaterialTheme.colorScheme.secondary
-                                                else MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "Risk Level",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                // Info block
+                // Card 2
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                    ),
-                    shape = RoundedCornerShape(12.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(110.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0))
                 ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.Top
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            Icons.Default.Info,
-                            contentDescription = "Info",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = "No screening sessions completed yet. Complete a screening above to view indicators and unlock specialized practice regimens.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                        Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = Color(0xFF0CA678))
+                        Text("Resource Library", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Color.Black)
                     }
                 }
             }
@@ -294,7 +565,7 @@ fun HomeScreen(
             Text(
                 text = "SEREN is an initial screening instrument. Positive indications suggest risk factors and do not constitute a clinical diagnosis. Always seek professional advice.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                color = Color.Gray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 lineHeight = 16.sp,

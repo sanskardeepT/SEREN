@@ -1,14 +1,53 @@
 package com.seren.app.ui.screening
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seren.app.ui.tasks.AttentionTaskScreen
 import com.seren.app.ui.tasks.HandwritingTaskScreen
@@ -27,60 +66,251 @@ fun ScreeningScreen(
     val isSessionComplete by viewModel.isSessionComplete.collectAsState()
     val sessionId by viewModel.sessionId.collectAsState()
 
+    var isIntroActive by remember { mutableStateOf(true) }
+
     // Start session when entered
     LaunchedEffect(key1 = true) {
         viewModel.startSession()
     }
 
-    // Return home once session wraps up successfully
+    // Reset intro status when task index changes
+    LaunchedEffect(currentTaskIndex) {
+        isIntroActive = true
+    }
+
+    // Navigate to report once session wraps up successfully
     LaunchedEffect(isSessionComplete) {
         if (isSessionComplete && sessionId != null) {
             onNavigateToReport(sessionId!!)
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        when (currentTaskIndex) {
-            0 -> HandwritingTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "drawnet_writing", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
-            1 -> NumberTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "numnet_counting", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
-            2 -> ReadingGazeTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "gazenet_gaze", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
-            3 -> PhonologicalTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "phonnet_ran", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
-            4 -> AttentionTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "attentnet_cpt", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
-            5 -> SpeechFluencyTaskScreen(
-                onComplete = { conditionId, score, rawJson, duration ->
-                    viewModel.submitTaskResult(conditionId, "phonnet_speech", rawJson, score, duration)
-                },
-                onNext = { viewModel.nextTask() }
-            )
+    val taskTitle = when (currentTaskIndex) {
+        0 -> "Handwriting & Drawing"
+        1 -> "Number Operations"
+        2 -> "Reading Gaze"
+        3 -> "Rapid Naming (RAN)"
+        4 -> "Attention & Focus"
+        else -> "Speech & Fluency"
+    }
+
+    val taskInstruction = when (currentTaskIndex) {
+        0 -> "We'll look at your handwriting speed and shapes to evaluate letter patterns. Draw the letter requested inside the box!"
+        1 -> "We'll count dots and match numbers as quickly as possible. Keep your touch reactions steady!"
+        2 -> "We'll look at how your eyes move to learn about your focus. Just read the text and keep your face visible!"
+        3 -> "We'll trace voice naming rates. Name the colors from left to right as fast as you can!"
+        4 -> "We'll test target inhibition control. Tap on letters when they appear, except if the letter is X!"
+        else -> "We'll record disfluency rates. Read the sentence aloud when recording starts!"
+    }
+
+    if (isIntroActive) {
+        // --- SCREEN 9: TASK INTRO ---
+        Scaffold(
+            bottomBar = {
+                Button(
+                    onClick = { isIntroActive = false },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF3B82F6), // Vibrant Soft Blue
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "Start Task", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFFE0F2FE), Color.White) // Light Sky Blue to White
+                        )
+                    )
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                // Task Titles
+                Text(
+                    text = taskTitle,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1E293B)
+                )
+                Text(
+                    text = "Task ${currentTaskIndex + 1} of 6",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF64748B)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Vector Eye Illustration Placeholder
+                Box(
+                    modifier = Modifier
+                        .size(160.dp)
+                        .background(Color.White.copy(alpha = 0.5f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Circle Frame representing the eye with a floating star
+                    Box(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .background(Color(0xFF3B82F6).copy(alpha = 0.1f), CircleShape)
+                            .border(3.dp, Color(0xFF1E293B), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // Iris representation
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(Color(0xFF10B981), CircleShape) // Green iris
+                        )
+                        // Floating star icon
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = Color(0xFF10B981),
+                            modifier = Modifier.size(24.dp).align(Alignment.TopEnd).padding(top = 4.dp, right = 4.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Intros Card
+                Text(
+                    text = "Ready for a fun game?",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1E293B)
+                )
+                Text(
+                    text = taskInstruction,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF64748B),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 22.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        }
+    } else {
+        // --- SCREEN 10: ACTIVE SCREEN WRAPPER ---
+        Scaffold(
+            topBar = {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = Color(0xFF1E293B))
+                        }
+                        Text(
+                            text = "Task ${currentTaskIndex + 1} of 6",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1E293B)
+                        )
+                        Spacer(modifier = Modifier.width(48.dp)) // Maintain horizontal centering offsets
+                    }
+                    
+                    // Progress Bar
+                    val progress = (currentTaskIndex + 1).toFloat() / 6f
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 4.dp)
+                            .height(8.dp)
+                            .clip(CircleShape),
+                        color = Color(0xFF3B82F6),
+                        trackColor = Color(0xFFEFF6FF)
+                    )
+                }
+            },
+            bottomBar = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "You're doing great!",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1E293B)
+                    )
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(Color(0xFFEFF6FF), CircleShape)
+                    ) {
+                        Icon(imageVector = Icons.Default.Pause, contentDescription = "Pause", tint = Color(0xFF1E293B))
+                    }
+                }
+            }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(Color.White)
+            ) {
+                when (currentTaskIndex) {
+                    0 -> HandwritingTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "drawnet_writing", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                    1 -> NumberTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "numnet_counting", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                    2 -> ReadingGazeTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "gazenet_gaze", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                    3 -> PhonologicalTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "phonnet_ran", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                    4 -> AttentionTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "attentnet_cpt", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                    5 -> SpeechFluencyTaskScreen(
+                        onComplete = { conditionId, score, rawJson, duration ->
+                            viewModel.submitTaskResult(conditionId, "phonnet_speech", rawJson, score, duration)
+                        },
+                        onNext = { viewModel.nextTask() }
+                    )
+                }
+            }
         }
     }
 }
