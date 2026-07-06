@@ -20,10 +20,12 @@ import com.seren.app.ui.tasks.SpeechFluencyTaskScreen
 @Composable
 fun ScreeningScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToReport: (sessionId: Long) -> Unit,
     viewModel: ScreeningViewModel = viewModel()
 ) {
     val currentTaskIndex by viewModel.currentTaskIndex.collectAsState()
     val isSessionComplete by viewModel.isSessionComplete.collectAsState()
+    val sessionId by viewModel.sessionId.collectAsState()
 
     // Start session when entered
     LaunchedEffect(key1 = true) {
@@ -32,8 +34,8 @@ fun ScreeningScreen(
 
     // Return home once session wraps up successfully
     LaunchedEffect(isSessionComplete) {
-        if (isSessionComplete) {
-            onNavigateBack()
+        if (isSessionComplete && sessionId != null) {
+            onNavigateToReport(sessionId!!)
         }
     }
 

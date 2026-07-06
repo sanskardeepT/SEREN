@@ -1,23 +1,15 @@
-# Mission 3 — Tasks
+# Mission 4 — Tasks
 
-## Dependencies
-- [ ] Uncomment TFLite dependencies in `app/build.gradle.kts`
+## Report Screen & ViewModel
+- [ ] Create `ui/report/ReportViewModel.kt`
+- [ ] Create `ui/report/ReportScreen.kt`
 
-## ML Inference Manager
-- [ ] Create `ml/TfLiteManager.kt`
+## Navigation Updates
+- [ ] Update `navigation/SerenNavGraph.kt` to support `/report/{sessionId}`
+- [ ] Update `ui/screening/ScreeningScreen.kt` to trigger navigation to report on completion
 
-## Task UI Screens & Code
-- [ ] Create `ui/tasks/HandwritingTaskScreen.kt`
-- [ ] Create `ui/tasks/NumberTaskScreen.kt`
-- [ ] Create `ui/tasks/ReadingGazeTaskScreen.kt`
-- [ ] Create `ui/tasks/PhonologicalTaskScreen.kt`
-- [ ] Create `ui/tasks/AttentionTaskScreen.kt`
-- [ ] Create `ui/tasks/SpeechFluencyTaskScreen.kt`
-
-## Orchestration & Navigation
-- [ ] Create `ui/screening/ScreeningViewModel.kt`
-- [ ] Update `ui/screening/ScreeningScreen.kt` to link viewmodel & task engines
-- [ ] Update `navigation/SerenNavGraph.kt` with task routes
+## Home Screen Updates
+- [ ] Update `ui/home/HomeScreen.kt` to show "View Latest Report" button
 
 ## Finalize
 - [ ] Git commit

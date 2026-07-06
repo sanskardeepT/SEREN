@@ -16,6 +16,7 @@ object Destinations {
     const val HOME = "home"
     const val SCREENING = "screening"
     const val PRACTICE = "practice"
+    const val REPORT = "report/{sessionId}"
 }
 
 @Composable
@@ -58,6 +59,9 @@ fun SerenNavGraph(
                 },
                 onNavigateToPractice = {
                     navController.navigate(Destinations.PRACTICE)
+                },
+                onNavigateToReport = { sessionId ->
+                    navController.navigate("report/$sessionId")
                 }
             )
         }
@@ -66,6 +70,11 @@ fun SerenNavGraph(
             ScreeningScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onNavigateToReport = { sessionId ->
+                    navController.navigate("report/$sessionId") {
+                        popUpTo(Destinations.SCREENING) { inclusive = true }
+                    }
                 }
             )
         }
@@ -74,6 +83,25 @@ fun SerenNavGraph(
             PracticeScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Destinations.REPORT,
+            arguments = listOf(
+                androidx.navigation.navArgument("sessionId") {
+                    type = androidx.navigation.navType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            val sessionId = backStackEntry.arguments?.getLong("sessionId") ?: 0L
+            ReportScreen(
+                sessionId = sessionId,
+                onNavigateBack = {
+                    navController.navigate(Destinations.HOME) {
+                        popUpTo(Destinations.HOME) { inclusive = true }
+                    }
                 }
             )
         }

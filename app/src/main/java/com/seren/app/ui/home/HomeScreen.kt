@@ -46,6 +46,7 @@ import com.seren.app.data.model.AgeGroup
 fun HomeScreen(
     onNavigateToScreening: () -> Unit,
     onNavigateToPractice: () -> Unit,
+    onNavigateToReport: (sessionId: Long) -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val userProfile by viewModel.userProfile.collectAsState()
@@ -186,11 +187,32 @@ fun HomeScreen(
 
             // Latest Screening Results (if exists)
             if (latestScores.isNotEmpty()) {
-                Text(
-                    text = "Latest Screening Indicators",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Latest Indicators",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Button(
+                        onClick = {
+                            val lastSessionId = latestScores.firstOrNull()?.sessionId
+                            if (lastSessionId != null) {
+                                onNavigateToReport(lastSessionId)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+                            contentColor = MaterialTheme.colorScheme.secondary
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text("View Full Report", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    }
+                }
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     latestScores.forEach { score ->
