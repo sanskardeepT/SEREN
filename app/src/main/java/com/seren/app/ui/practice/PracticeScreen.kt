@@ -1,7 +1,9 @@
 package com.seren.app.ui.practice
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,25 +19,107 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.seren.app.data.ConditionIds
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun PracticeScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    viewModel: PracticeViewModel = viewModel()
 ) {
+    val scores by viewModel.latestScores.collectAsState()
+    val streakCount by viewModel.streakCount.collectAsState()
+    val isPracticeSaved by viewModel.isPracticeSaved.collectAsState()
+
+    val scope = rememberCoroutineScope()
+    var activeExerciseName by remember { mutableStateOf<String?>(null) }
+    var exerciseTimerActive by remember { mutableStateOf(false) }
+    var exerciseProgress by remember { mutableStateOf(0f) }
+    
+    // Trackers for completed exercises inside this session
+    var completedExercises by remember { mutableStateOf(0) }
+    val totalRequiredExercises = 2
+
+    LaunchedEffect(isPracticeSaved) {
+        if (isPracticeSaved) {
+            onNavigateBack()
+        }
+    }
+
+    // Determine targeted exercises based on scores
+    val recommendations = remember(scores) {
+        val list = mutableListOf<PracticeTaskItem>()
+        
+        val hasReadingRisk = scores.any { 
+            (it.conditionId == ConditionIds.DYSLEXIA || it.conditionId == ConditionIds.DYSGRAPHIA) && it.riskScore > 40f 
+        }
+        val hasMathRisk = scores.any { 
+            it.conditionId == ConditionIds.DYSCALCULIA && it.riskScore > 40f 
+        }
+        val hasAttentionRisk = scores.any { 
+            (it.conditionId == ConditionIds.ADHD_INATTENTIVE || it.conditionId == ConditionIds.ADHD_HYPERACTIVE || it.conditionId == ConditionIds.ADHD_COMBINED) && it.riskScore > 40f 
+        }
+        val hasSpeechRisk = scores.any { 
+            (it.conditionId == ConditionIds.STUTTERING || it.conditionId == ConditionIds.CLUTTERING || it.conditionId == ConditionIds.ANOMIA) && it.riskScore > 40f 
+        }
+
+        if (hasReadingRisk) {
+            list.add(PracticeTaskItem("Phoneme Segmentation", "Drag & connect matching phonemes to read sentences.", "Dyslexia Indicator Module"))
+            list.add(PracticeTaskItem("Letter-Formation Canvas", "Copy Hindi characters highlighting kinematics alignment.", "Dysgraphia Indicator Module"))
+        }
+        if (hasMathRisk) {
+            list.add(PracticeTaskItem("Subitizing Count", "Identify dot groups rapidly to improve number sense.", "Dyscalculia Indicator Module"))
+        }
+        if (hasAttentionRisk) {
+            list.add(PracticeTaskItem("Breathing Focus Space", "Follow the expanding circle triggers to train focus.", "ADHD Attention Module"))
+        }
+        if (hasSpeechRisk) {
+            list.add(PracticeTaskItem("Syllable Pacing", "Read the paragraph aligning with rhythmic sound ticks.", "Speech Indicator Module"))
+        }
+
+        // Fill up to default if list size is small
+        if (list.size < 2) {
+            if (list.none { it.title == "Phoneme Segmentation" }) {
+                list.add(PracticeTaskItem("Phoneme Segmentation", "Empower decoding loops with phonological games.", "Foundational Phonics"))
+            }
+            if (list.none { it.title == "Breathing Focus Space" }) {
+                list.add(PracticeTaskItem("Breathing Focus Space", "Train sustained attention spans.", "Focus Training"))
+            }
+        }
+        list
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -53,7 +138,7 @@ fun PracticeScreen(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Daily Practice Loop (Batch 1)",
+                    text = "Daily Practice Hub",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -67,101 +152,239 @@ fun PracticeScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Streak Header Card with Star Motif
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                ),
-                shape = RoundedCornerShape(12.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Practice Loop Pending (Mission 5)",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "The daily practice loop, tailored difficulty adjustments, intervention exercises (Orton-Gillingham games, dot calculations), progress trackers, and milestone badges will be implemented in Mission 5.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                Row(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Daily Practice Streak",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = "$streakCount Days Active",
+                            style = MaterialTheme.typography.displaySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Streak Star",
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(56.dp)
                     )
                 }
             }
 
-            // Target practice highlights based on Technical Research Paper
+            // Daily progress bar
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Today's Task Completion",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "$completedExercises / $totalRequiredExercises",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    val progress = completedExercises.toFloat() / totalRequiredExercises.toFloat()
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                }
+            }
+
             Text(
-                text = "Planned Practice Tasks",
+                text = "Targeted Exercises for You",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            val practiceTasks = listOf(
-                "Phoneme segmentation games & Sight-word drills" to "Targeted spelling & reading training.",
-                "Subitizing & Number-line comparison" to "Mathematical concepts reinforcement.",
-                "Motor-sequence building & handwriting tracing" to "Fine motor coordination.",
-                "Vigilance tasks & breathing-based self-regulation" to "Attention control & executive functions."
-            )
+            // Lists targeted exercises
+            recommendations.forEach { task ->
+                var taskDone by remember { mutableStateOf(false) }
 
-            practiceTasks.forEach { (title, desc) ->
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     ),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Task Indicator",
-                            tint = MaterialTheme.colorScheme.tertiary
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = title,
-                                style = MaterialTheme.typography.bodyLarge,
+                                text = task.title,
+                                style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = desc,
+                                text = task.description,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                             )
+                            Text(
+                                text = "Category: ${task.reason}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        if (taskDone) {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = "Finished",
+                                tint = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.size(36.dp)
+                            )
+                        } else {
+                            Button(
+                                onClick = {
+                                    activeExerciseName = task.title
+                                    exerciseTimerActive = true
+                                    exerciseProgress = 0f
+                                    
+                                    // Start simulated timer sequence
+                                    scope.launch {
+                                        for (i in 1..10) {
+                                            delay(150)
+                                            exerciseProgress = i.toFloat() / 10f
+                                        }
+                                        delay(100)
+                                        exerciseTimerActive = false
+                                        taskDone = true
+                                        completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondary,
+                                    contentColor = MaterialTheme.colorScheme.onSecondary
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Icon(Icons.Default.PlayArrow, contentDescription = "Start")
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text("Start", fontSize = 12.sp)
+                            }
                         }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-            Button(
-                onClick = onNavigateBack,
+            // Completion submit trigger CTA
+            AnimatedVisibility(visible = completedExercises >= totalRequiredExercises) {
+                Button(
+                    onClick = { viewModel.savePracticeSession() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    )
+                ) {
+                    Text(
+                        text = "Complete Today's Loop",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+        }
+    }
+
+    // Practice Simulation progress dialog modal
+    if (exerciseTimerActive && activeExerciseName != null) {
+        Dialog(onDismissRequest = {}) {
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                    contentColor = MaterialTheme.colorScheme.onTertiary
-                )
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
-                Text(
-                    text = "Return to Home",
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Training: $activeExerciseName",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Follow on-screen cues and focus on accuracy rather than speed.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    
+                    LinearProgressIndicator(
+                        progress = { exerciseProgress },
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    
+                    Text(
+                        text = "${(exerciseProgress * 100).toInt()}% Done",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
             }
         }
     }
 }
+
+data class PracticeTaskItem(
+    val title: String,
+    val description: String,
+    val reason: String
+)
