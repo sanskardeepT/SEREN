@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -16,6 +17,11 @@ android {
         versionName = "0.1.0-batch1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Room schema export for migration testing
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -57,6 +63,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material.icons:material-icons-extended")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.navigation:navigation-compose:2.8.5")
 
@@ -69,7 +76,7 @@ dependencies {
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    // kapt or ksp will be added when we add Room entities in Mission 1
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     // TensorFlow Lite (on-device ML inference — Mission 3+)
     // implementation("org.tensorflow:tensorflow-lite:2.16.1")
@@ -83,7 +90,7 @@ dependencies {
     // implementation("androidx.camera:camera-lifecycle:1.4.1")
     // implementation("androidx.camera:camera-view:1.4.1")
 
-    // Google Fonts (Inter for body text)
+    // Google Fonts (Inter + Fraunces)
     implementation("androidx.compose.ui:ui-text-google-fonts")
 
     // Testing
