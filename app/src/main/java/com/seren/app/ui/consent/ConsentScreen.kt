@@ -1,11 +1,14 @@
 package com.seren.app.ui.consent
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.res.painterResource
+import com.seren.app.R
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -239,19 +242,13 @@ fun RoleSelectorScreen(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Box(
+                    Image(
+                        painter = painterResource(id = R.drawable.seren_logo),
+                        contentDescription = "SEREN Logo",
                         modifier = Modifier
                             .size(32.dp)
-                            .background(
-                                brush = Brush.linearGradient(
-                                    colors = listOf(Color(0xFFEC4899), Color(0xFF3B82F6))
-                                ),
-                                shape = RoundedCornerShape(6.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "S", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    }
+                            .clip(RoundedCornerShape(6.dp))
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "SEREN",
