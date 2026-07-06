@@ -1,17 +1,23 @@
-# Mission 2 — Tasks
+# Mission 3 — Tasks
 
-## Requirements Configuration
-- [ ] Create `training/requirements.txt`
+## Dependencies
+- [ ] Uncomment TFLite dependencies in `app/build.gradle.kts`
 
-## Jupyter Notebooks
-- [ ] Create `training/train_drawnet.ipynb`
-- [ ] Create `training/train_gazenet.ipynb`
-- [ ] Create `training/train_phonnet.ipynb`
-- [ ] Create `training/train_attentnet.ipynb`
+## ML Inference Manager
+- [ ] Create `ml/TfLiteManager.kt`
 
-## Documentation & Guide
-- [ ] Update `training/README.md`
-- [ ] Verify TFLite target settings and folder structures
+## Task UI Screens & Code
+- [ ] Create `ui/tasks/HandwritingTaskScreen.kt`
+- [ ] Create `ui/tasks/NumberTaskScreen.kt`
+- [ ] Create `ui/tasks/ReadingGazeTaskScreen.kt`
+- [ ] Create `ui/tasks/PhonologicalTaskScreen.kt`
+- [ ] Create `ui/tasks/AttentionTaskScreen.kt`
+- [ ] Create `ui/tasks/SpeechFluencyTaskScreen.kt`
+
+## Orchestration & Navigation
+- [ ] Create `ui/screening/ScreeningViewModel.kt`
+- [ ] Update `ui/screening/ScreeningScreen.kt` to link viewmodel & task engines
+- [ ] Update `navigation/SerenNavGraph.kt` with task routes
 
 ## Finalize
 - [ ] Git commit

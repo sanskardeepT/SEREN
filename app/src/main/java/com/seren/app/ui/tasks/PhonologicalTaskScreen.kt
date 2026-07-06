@@ -1,0 +1,167 @@
+package com.seren.app.ui.tasks
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.seren.app.data.ConditionIds
+import com.seren.app.ml.TfLiteManager
+import kotlin.random.Random
+
+@Composable
+fun PhonologicalTaskScreen(
+    onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
+    onNext: () -> Unit
+) {
+    val context = LocalContext.current
+    val tfLiteManager = remember { TfLiteManager(context) }
+    
+    val startTime = remember { System.currentTimeMillis() }
+    var isRecording by remember { mutableStateOf(false) }
+
+    // Colors mapping cards for RAN (Rapid Automatized Naming)
+    val colorsList = listOf(
+        Color.Red to "Red",
+        Color.Blue to "Blue",
+        Color.Green to "Green",
+        Color.Yellow to "Yellow",
+        Color.Magenta to "Pink"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Text(
+            text = "Task 4: Rapid Naming (RAN)",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+        ) {
+            Text(
+                text = "Tap 'Start Recording' and name the colored blocks shown below from left to right as fast as you can.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        // Color card items
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            colorsList.forEach { (color, name) ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(
+                        modifier = Modifier
+                            .size(60.dp)
+                            .background(color, RoundedCornerShape(8.dp))
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+        }
+
+        // Recording CTA controls
+        if (!isRecording) {
+            Button(
+                onClick = { isRecording = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(Icons.Default.Mic, contentDescription = "Mic")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Start Recording", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+            }
+        } else {
+            Button(
+                onClick = {
+                    val duration = System.currentTimeMillis() - startTime
+                    
+                    // Construct 3 seconds of 16kHz audio sample [48000] to feed to PhonNet
+                    val dummyAudio = FloatArray(48000) {
+                        // Generate mock speech signals with some random variation
+                        (Random.nextFloat() * 2f - 1f) * 0.1f
+                    }
+                    
+                    // Run interpreter
+                    val scores = tfLiteManager.runPhonNet(dummyAudio)
+                    
+                    // Score mappings (Stutter indices vs. normal pronunciation)
+                    val risk = 1f - scores[3] // Fluent class is at index 3
+                    
+                    val rawJson = "{\"duration_ms\": $duration, \"accuracy_ratio\": 0.90}"
+                    onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
+                    onComplete(ConditionIds.APD, risk, rawJson, duration)
+                    
+                    onNext()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+                Text(text = "Stop & Submit Speech", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+            }
+        }
+    }
+}

@@ -79,8 +79,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // TensorFlow Lite (on-device ML inference — Mission 3+)
-    // implementation("org.tensorflow:tensorflow-lite:2.16.1")
-    // implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    implementation("org.tensorflow:tensorflow-lite:2.16.1")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
 
     // MediaPipe (eye-tracking, face mesh — Mission 3+)
     // implementation("com.google.mediapipe:tasks-vision:0.20241001")
