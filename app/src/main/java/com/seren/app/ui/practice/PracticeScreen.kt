@@ -93,6 +93,21 @@ fun PracticeScreen(
         val hasSpeechRisk = scores.any { 
             (it.conditionId == ConditionIds.STUTTERING || it.conditionId == ConditionIds.CLUTTERING || it.conditionId == ConditionIds.ANOMIA) && it.riskScore > 40f 
         }
+        val hasAnxietyRisk = scores.any {
+            (it.conditionId == ConditionIds.SOCIAL_ANXIETY || it.conditionId == ConditionIds.GAD || it.conditionId == ConditionIds.TEST_ANXIETY || it.conditionId == ConditionIds.SEPARATION_ANXIETY || it.conditionId == ConditionIds.SCHOOL_PHOBIA) && it.riskScore > 40f
+        }
+        val hasDepressionRisk = scores.any {
+            it.conditionId == ConditionIds.DEPRESSION && it.riskScore > 40f
+        }
+        val hasDysregulationRisk = scores.any {
+            it.conditionId == ConditionIds.EMOTIONAL_DYSREGULATION && it.riskScore > 40f
+        }
+        val hasExecutiveMemoryRisk = scores.any {
+            (it.conditionId == ConditionIds.EXECUTIVE_FUNCTION || it.conditionId == ConditionIds.WORKING_MEMORY) && it.riskScore > 40f
+        }
+        val hasMutismRisk = scores.any {
+            it.conditionId == ConditionIds.SELECTIVE_MUTISM && it.riskScore > 40f
+        }
 
         if (hasReadingRisk) {
             list.add(PracticeTaskItem("Phoneme Segmentation", "Drag & connect matching phonemes to read sentences.", "Dyslexia Indicator Module"))
@@ -106,6 +121,23 @@ fun PracticeScreen(
         }
         if (hasSpeechRisk) {
             list.add(PracticeTaskItem("Syllable Pacing", "Read the paragraph aligning with rhythmic sound ticks.", "Speech Indicator Module"))
+        }
+        if (hasAnxietyRisk) {
+            list.add(PracticeTaskItem("Brave Explorer", "Practice micro-courage scenarios step-by-step to build confidence.", "Anxiety Coping Module"))
+            list.add(PracticeTaskItem("Worry Externalisation (CBT)", "Externalise worries into separate boxes to restructure thoughts.", "GAD Worry Restructuring"))
+        }
+        if (hasMutismRisk) {
+            list.add(PracticeTaskItem("Whisper-to-Voice Fading", "Practice speaking gentle syllables starting from a whisper to full voice.", "Selective Mutism Speech fading"))
+        }
+        if (hasDepressionRisk) {
+            list.add(PracticeTaskItem("Positive Moments Log", "Recall and record positive events to build behavioral activation.", "Masked Depression Activation"))
+        }
+        if (hasDysregulationRisk) {
+            list.add(PracticeTaskItem("DBT Calming Routines", "Trace calming visual trigger paths and regulate breathing.", "Emotional Calm Module"))
+        }
+        if (hasExecutiveMemoryRisk) {
+            list.add(PracticeTaskItem("Sort the Stars (Switch)", "Practice rapid task-switching speed and categorization.", "Executive Control Training"))
+            list.add(PracticeTaskItem("Memory Castle (Corsi)", "Recall spatial block patterns sequences to train memory spans.", "Working Memory Training"))
         }
 
         // Fill up to default if list size is small

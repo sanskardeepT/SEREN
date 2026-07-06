@@ -1,17 +1,15 @@
-# Mission 6 — Tasks
+# Batch 2 Scoping — Tasks
 
-## Compliance Audit & Copy Verification
-- [ ] Review user-facing copy in all code files for diagnostic terms
-- [ ] Confirm disclaimers are clear and consistent
+## Config & Model Updates
+- [ ] Update `app/src/main/java/com/seren/app/data/ConditionIds.kt` with Batch 2 constants and metadata
 
-## UI Design & Spacing Audit
-- [ ] Check primary/secondary/tertiary colors integration
-- [ ] Verify star motif implementation in Home and Report screens
+## Practice ViewModel Updates
+- [ ] Update `app/src/main/java/com/seren/app/ui/practice/PracticeViewModel.kt` with Batch 2 daily practice recommenders
 
-## Room Storage Audit
-- [ ] Confirm CASCADE deletions and indexes are set
-- [ ] Verify database schema export location config
+## Documentation Updates
+- [ ] Append Batch 2 conditions in `docs/condition-catalogue.md`
+- [ ] Append Batch 2 datasets in `docs/dataset-map.md`
 
-## Finalize
-- [ ] Update `walkthrough.md` with final Batch 1 implementation summary
-- [ ] Git commit
+## Finalize & Sync
+- [ ] Verify build compiles and runs
+- [ ] Git commit & Push to origin main

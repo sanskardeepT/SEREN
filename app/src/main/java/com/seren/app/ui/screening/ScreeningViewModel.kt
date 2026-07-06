@@ -98,8 +98,8 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
             val results = screeningDao.getTaskResultsForSession(currentSessionId)
             
             // --- FUSIONNET ENSEMBLE SCORING ---
-            // Combine active task results into 0-100 scores for the 10 Batch 1 conditions.
-            val finalScores = ConditionIds.BATCH_1.map { conditionId ->
+            // Combine active task results into 0-100 scores for all active conditions.
+            val finalScores = ConditionIds.ALL.map { conditionId ->
                 // Gather task scores targeting this specific condition
                 val conditionResults = results.filter { it.conditionId == conditionId }
                 

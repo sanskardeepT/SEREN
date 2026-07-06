@@ -66,7 +66,27 @@
 
 ---
 
-## Multimodal & General Datasets (used across Batch 1)
+## Anxiety & Emotional Datasets (covers SAD, GAD, Selective Mutism, Depression)
+
+| Dataset | Link | License | SEREN Use |
+|---|---|---|---|
+| **DAIC-WOZ** | dcapswoz.ict.usc.edu | Free research | EmotNet: clinical interview transcripts & audio vectors (189 sessions) |
+| **MPAD (Anxiety)** | doi.org/10.1016/j.bspc.2020.102390 | Research | EmotNet: heart-rate (rPPG) and galvanic skin response anxiety thresholds |
+| **Reddit Mental-Health Text** | github.com/amurark/mental-health-detection | Open | EmotNet: worry/perfectionism lexical classifier fine-tuning |
+| **CASME II (Micro-Expressions)** | fvh.ict.ac.cn/casme | Research | GazeNet: facial micro-expression parameters validation under social tasks |
+
+---
+
+## Executive & Memory Datasets (covers Executive Function, Working Memory)
+
+| Dataset | Link | License | SEREN Use |
+|---|---|---|---|
+| **Corsi-Block Normative Spans** | doi.org/10.3389/fpsyg.2019.02882 | Research | SpatialNet: age-adapted z-scores for spatial recall sequences (2,000+ children) |
+| **PISA Cognitive Battery** | oecd.org/pisa | OECD Open | NumNet: cognitive switch-cost parameters and time-efficiency baselines |
+
+---
+
+## Multimodal & General Datasets (used across Batch 1 + 2)
 
 | Dataset | Link | License | SEREN Use |
 |---|---|---|---|
@@ -75,23 +95,25 @@
 
 ---
 
-## Condition → Dataset → Module Quick Reference (Batch 1)
+## Condition → Dataset → Module Quick Reference (Batch 1 + Batch 2)
 
 | # | Condition | Module(s) | Primary Datasets | Detection Modality |
 |---|---|---|---|---|
-| 1 | Dyslexia (Phonological) | GazeNet + PhonNet | ETDD70, FluencyBank | Eye-tracking regressions + phonological task RT |
-| 2 | Dyslexia (Surface) | DrawNet + PhonNet | Dyslexia HW (Kaggle), UCLASS | Handwriting CNN + reading speed |
-| 3 | Dyslexia (Deep/Mixed) | All 3 modules | ETDD70 + HW datasets + FluencyBank | Full multimodal fusion |
-| 4 | Dyscalculia (Core) | NumNet | NSS Norms, PISA Math | Number comparison RT + subitizing accuracy |
-| 5 | Dyscalculia (Access deficit) | NumNet + SpatialNet | PISA Math subsets | Symbolic processing + spatial tasks |
-| 6 | Dysgraphia (Phonological) | DrawNet + PhonNet | IAM, Devanagari (Kaggle) | Handwriting kinematics + spelling audio |
-| 7 | Dysgraphia (Motor) | DrawNet | IAM, CASIA, ICDAR | Stroke velocity, pressure, jerk CNN |
-| 8 | ADHD — Inattentive | AttentNet + GazeNet | IEEE EEG ADHD, ADHD-200 | Sustained attention task + gaze deviation |
-| 9 | ADHD — Hyperactive/Impulsive | AttentNet | IEEE EEG ADHD, KSoF | Response inhibition + commission errors |
-| 10 | ADHD — Combined | AttentNet + FusionNet | IEEE EEG + ADHD-200 + Mendeley EEG | Full attention battery |
-| 11 | Stuttering (Repetitions) | PhonNet | UCLASS, FluencyBank, SEP-28k | Audio: repetition event detection |
-| 12 | Stuttering (Prolongations) | PhonNet | UCLASS, KSoF, LibriStutter | Audio: prolongation acoustic feature |
-| 13 | Stuttering (Interjections) | PhonNet | FluencyBank, LibriStutter | Audio: interjection token detection |
-| 14 | Cluttering (Fast Speech) | PhonNet | FluencyBank (rate analysis) | Audio: syllable rate + intelligibility |
-| 15 | Word-Finding Difficulty | PhonNet | FluencyBank + fluency norms | Verbal fluency: items/60s + pause rate |
-| 16 | Auditory Processing Disorder | PhonNet | ChildVox (noise-added), SCAN-3 norms | Target-in-noise accuracy degradation |
+| 1 | Dyslexia | GazeNet + PhonNet | ETDD70, FluencyBank | Eye-tracking regressions + phonological task RT |
+| 2 | Dyscalculia | NumNet | NSS Norms, PISA Math | Number comparison RT + subitizing accuracy |
+| 3 | Dysgraphia | DrawNet | Dyslexia HW (Kaggle), IAM | Touchscreen stroke kinematics CNN |
+| 4 | ADHD | AttentNet | IEEE EEG ADHD, ADHD-200 | Sustained attention task + Go/No-Go errors |
+| 5 | Stuttering | PhonNet | UCLASS, FluencyBank, SEP-28k | Audio: repetition & block events detection |
+| 6 | Cluttering | PhonNet | FluencyBank (rate analysis) | Audio: syllable rate + pacing irregularity |
+| 7 | Word-Finding Difficulty | PhonNet | FluencyBank + fluency norms | Verbal fluency: items/60s + pause rate |
+| 8 | Auditory Processing | PhonNet | ChildVox (noise-added), SCAN-3 | Target-in-noise accuracy degradation |
+| 9 | Social Anxiety (SAD) | GazeNet + PhonNet | MPAD, CASME II | Gaze avoidance + voice-tremor analysis |
+| 10 | Generalised Anxiety (GAD) | EmotNet | Reddit Mental-Health, DAIC-WOZ | Worry-language (NLP) + erase/redo counts |
+| 11 | Selective Mutism (SM) | PhonNet + AttentNet | IndicSUPERB, CHILDES | Initiation latency + freeze-response pauses |
+| 12 | Exam / Test Anxiety | AttentNet + EmotNet | PISA Cognitive Battery | Latency inflation under time pressure |
+| 13 | Separation Anxiety | EmotNet | DAIC-WOZ (attachment subsets) | Parent-separation distress questionnaire |
+| 14 | Specific Phobia (School) | EmotNet | Avoidance scaling norms | School-scenario dread scoring |
+| 15 | Childhood Depression | PhonNet + EmotNet | DAIC-WOZ, Reddit NLP | Psychomotor speech slowing + negative sentiment |
+| 16 | Emotional Dysregulation | AttentNet | Frustration touch metrics | Tapping frequency on error triggers |
+| 17 | Executive Function | NumNet + SpatialNet | PISA Cognitive subsets | Star sorting task-switch cost delay |
+| 18 | Working Memory | SpatialNet | Corsi-Block Spans Norms | Spatial recall block pattern sequences |

@@ -284,3 +284,264 @@
 - Auditory figure-ground task accuracy
 - Performance differential: visual vs. auditory task presentation
 - Response latency specifically on verbally-presented instructions
+
+---
+---
+
+# SEREN — Condition Catalogue (Batch 2)
+
+> **Scope**: 10 conditions (Anxiety, Emotional & Executive Function).
+> **Source**: SEREN Technical Research Paper v3.0 SECTION 2
+
+---
+
+## 11. Social Anxiety Disorder (SAD)
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 7–13% lifetime |
+| **Target Accuracy** | 87–92% |
+| **AI Modules** | **GazeNet** (gaze aversion), **PhonNet** (tremor analysis), **EmotNet** (avoidance logs), **FusionNet** |
+
+**Neuroscience Basis**: Fear of negative social evaluation associated with right amygdala hyperactivation and reduced prefrontal control. Avoidance behaviors compound over time and peak in prevalence during adolescence.
+
+**Manifestations**:
+- Intense fear of being watched, judged, or embarrassed in public
+- Complete avoidance of oral participation (freezes when called upon)
+- Shaking, blushing, or voice tremor when speaking
+- Avoidance of group tasks, presentations, or shared activities
+- Adults: avoidance of networking, job interviews, and phone calls
+
+**Detection Signals**:
+- Gaze-aversion frequency during simulated social tasks (via GazeNet webcam eye-tracking)
+- Voice-tremor detection via acoustic jitter and shimmer analysis under pressure
+- Response-delay differential between solo and group task conditions
+- Avoidance-behavior scoring on social-scenario decision tasks
+- Camera-based heart-rate proxy (rPPG) during social tasks
+
+---
+
+## 12. Generalised Anxiety Disorder (GAD)
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 6.5% children; 3.7% adults |
+| **Target Accuracy** | 85–90% |
+| **AI Modules** | **EmotNet** (CBT self-talk NLP), **AttentNet** (perfectionism action count), **FusionNet** |
+
+**Neuroscience Basis**: Associated with dysregulation of the hypothalamic-pituitary-adrenal (HPA) axis and reduced prefrontal control over amygdala-driven worry circuitry.
+
+**Manifestations**:
+- Excessive worry spanning multiple domains: school, family, health, and future
+- Concentration difficulties; mind going blank during tasks
+- Physical complaints (headaches/stomach aches) before high-stakes tasks
+- Perfectionism with excessive time spent re-checking work
+- Repeated reassurance-seeking from parents or teachers
+
+**Detection Signals**:
+- Worry-language frequency detected via NLP analysis of task-related self-talk
+- Perfectionism score derived from erase/redo action counts on touchscreen tasks
+- Task-abandonment rate above a defined threshold, indicating failure-avoidance
+- Response-latency elongation on low-difficulty items, indicating anxious overthinking
+- Performance delta between timed and self-paced task versions
+
+---
+
+## 13. Selective Mutism (SM)
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 0.47–0.76% globally |
+| **Target Accuracy** | 82–88% |
+| **AI Modules** | **PhonNet** (whisper detection, latency), **AttentNet** (freeze response), **FusionNet** |
+
+**Neuroscience Basis**: Consistent failure to speak in specific social settings (such as school) despite typical speech at home; anxiety-based rather than oppositional in origin.
+
+**Manifestations**:
+- Speaks normally at home; mute or near-mute at school
+- Communicates through gestures, pointing, or writing in public settings
+- Visible distress or freezing when expected to speak
+- Frequently misidentified by adults as shyness or stubborness
+
+**Detection Signals**:
+- Speech-initiation latency during prompted speaking tasks
+- Whisper-versus-normal-voice detection across session contexts
+- Freeze-response detection: motor-activity pause (via sensors) when speech is expected
+- Speech-latency differential between familiar and unfamiliar interaction partners
+
+---
+
+## 14. Exam / Test Anxiety
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 10–40% of students |
+| **Target Accuracy** | 85–90% |
+| **AI Modules** | **AttentNet** (latency inflation under pressure), **EmotNet** (post-task self-talk), **FusionNet** |
+
+**Neuroscience Basis**: Cognitive interference model; task-irrelevant thoughts (worry about failure) consume working memory capacity, degrading performance under time-pressure.
+
+**Manifestations**:
+- Significant performance drop in timed testing vs. relaxed practice settings
+- Blanking out during tests despite knowing the material
+- Physical anxiety symptoms (sweating, rapid breathing) under evaluation
+- Rapid guessing or early abandonment of difficult test items
+
+**Detection Signals**:
+- Cognitive latency inflation specifically under simulated test timers
+- High-frequency answer validation/modification attempts before submitting
+- Performance delta between timed and self-paced versions of identical cognitive tasks
+- Camera-based heart-rate proxy (rPPG) elevation during timed segments
+
+---
+
+## 15. Separation Anxiety Disorder
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 4–5% of children |
+| **Target Accuracy** | 78–84% |
+| **AI Modules** | **EmotNet** (separation distress index), **FusionNet** |
+
+**Neuroscience Basis**: Hyperactive threat-detection circuitry (amygdala) and atypical regulation of cortisol response when separated from attachment figures.
+
+**Manifestations**:
+- Extreme distress when separating from parents or home
+- Persistent worry about harm coming to attachment figures
+- Refusal to go to school or sleep alone due to separation fears
+- Somatic complaints (nausea, stomach aches) on mornings of separation
+
+**Detection Signals**:
+- Parent-separation distress indexing through child self-reports
+- Somatic symptom logging frequency
+- Session logs correlating attendance/participation drops with separation events
+
+---
+
+## 16. Specific Phobia (School)
+
+| Field | Detail |
+|---|---|
+| **Category** | Anxiety Disorders |
+| **Prevalence** | 2–5% of children (School Refusal subclass) |
+| **Target Accuracy** | 80–86% |
+| **AI Modules** | **EmotNet** (avoidance scaling), **FusionNet** |
+
+**Neuroscience Basis**: Amygdala-mediated fear conditioning to school-related stimuli (bullies, sensory overload, failure) leading to active avoidance patterns.
+
+**Manifestations**:
+- Intense dread of going to school resulting in tantrums or begging to stay home
+- Severe somatic symptoms (headaches, stomach aches) before school
+- Chronic absenteeism or school refusal
+- Elevated anxiety levels on Sunday evenings or end of holidays
+
+**Detection Signals**:
+- Avoidance patterns mapping across simulated school-scenario tasks
+- Attendance pattern correlation log analysis
+- Self-reported dread ratings on school-themed visual tasks
+
+---
+
+## 17. Childhood Depression (Masked)
+
+| Field | Detail |
+|---|---|
+| **Category** | Emotional & Behavioural |
+| **Prevalence** | 2–3% of children |
+| **Target Accuracy** | 80–86% |
+| **AI Modules** | **PhonNet** (psychomotor speech slowing), **EmotNet** (sentiment), **AttentNet** (energy drop), **FusionNet** |
+
+**Neuroscience Basis**: Dysphoric mood and cognitive slowing associated with HPA-axis dysregulation and reduced prefrontal cortical volume. Often masked in children as simple quietness.
+
+**Manifestations**:
+- Persistent low energy and reduced interest in previously enjoyed games
+- Frequent negative self-talk ("I can't do anything right")
+- Psychomotor slowing (slowed physical movement and speech)
+- Somatic complaints without medical explanation
+
+**Detection Signals**:
+- Energy-level drop across the session, measured as performance deterioration over time
+- Sentiment analysis of self-referential language for negative content (via NLP)
+- Anhedonia proxy: reduced engagement or speed in reward-based game tasks
+- Psychomotor slowing: elevation across all response-latency measures
+- Future-negative language patterns detected via speech transcripts
+
+---
+
+## 18. Emotional Dysregulation
+
+| Field | Detail |
+|---|---|
+| **Category** | Emotional & Behavioural |
+| **Prevalence** | ~8% globally |
+| **Target Accuracy** | 82–87% |
+| **AI Modules** | **AttentNet** (frustration taps), **EmotNet** (self-regulation questionnaire), **FusionNet** |
+
+**Neuroscience Basis**: Atypical prefrontal-amygdala structural connectivity, leading to difficulty modulating intense emotional states.
+
+**Manifestations**:
+- Frequent, intense temper outbursts disproportionate to the trigger
+- Rapid mood shifts (happy to extremely angry or crying in seconds)
+- Low frustration tolerance; gives up or throws objects when a task is hard
+- Difficulty calming down once upset
+
+**Detection Signals**:
+- Frustration indices: rapid random tapping or high-pressure touches on error screens
+- Recovery latency: time to resume typical response speeds after a simulated failure trigger
+- Sensor-detected device shaking or rapid movements during difficult task segments
+
+---
+
+## 19. Executive Function Deficit
+
+| Field | Detail |
+|---|---|
+| **Category** | Attention & Processing |
+| **Prevalence** | ~10% school and working population |
+| **Target Accuracy** | 80–87% |
+| **AI Modules** | **NumNet** (star sorting task switch costs), **SpatialNet** (planning maze paths), **FusionNet** |
+
+**Neuroscience Basis**: Prefrontal cortex dysfunction and atypical connectivity in frontoparietal networks regulating cognitive control, task switching, and planning.
+
+**Manifestations**:
+- Chronic disorganization and loss of school/work materials
+- Difficulty starting, planning, and prioritizing multi-step tasks
+- Struggle to switch attention between different tasks or rules
+- Poor time estimation; frequently late or runs out of time
+
+**Detection Signals**:
+- Switch-cost reaction delay on star sorting tasks (cognitive flexibility)
+- Planning efficiency: move-count and pause durations on maze/organization tasks
+- Working memory updates accuracy on n-back task steps
+- Task execution sequencing errors
+
+---
+
+## 20. Working Memory Deficit
+
+| Field | Detail |
+|---|---|
+| **Category** | Attention & Processing |
+| **Prevalence** | ~10% of school population |
+| **Target Accuracy** | 78–85% |
+| **AI Modules** | **SpatialNet** (Corsi block sequence recall), **PhonNet** (verbal digit span), **FusionNet** |
+
+**Neuroscience Basis**: Reduced activation and capacity limit in the dorsolateral prefrontal cortex and parietal regions responsible for short-term information storage and manipulation.
+
+**Manifestations**:
+- Forgets instructions immediately after hearing them
+- Loses place in the middle of a task (e.g., forgets what step they were on)
+- Difficulty holding words/numbers in mind while working (like mental arithmetic)
+- Slow learning progress due to fast cognitive overload
+
+**Detection Signals**:
+- Spatial recall span: maximum correct sequence length on Corsi block tasks
+- Verbal digit span: maximum correct length of numbers recalled forward/backward
+- Error rate on n-back working memory tasks
+- Latency decay: performance drop as delay intervals increase
+

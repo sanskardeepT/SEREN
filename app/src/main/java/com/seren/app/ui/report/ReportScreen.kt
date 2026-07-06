@@ -148,7 +148,13 @@ fun ReportScreen(
             }
 
             // Results by categories
-            val categories = listOf("Learning Differences", "Attention & Processing", "Speech & Language")
+            val categories = listOf(
+                "Learning Differences", 
+                "Attention & Processing", 
+                "Speech & Language",
+                "Anxiety Disorders",
+                "Emotional & Behavioural"
+            )
 
             categories.forEach { category ->
                 val categoryScores = scores.filter { ConditionIds.getCategory(it.conditionId) == category }
