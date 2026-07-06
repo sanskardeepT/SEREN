@@ -12,6 +12,8 @@ This directory contains Google Colab-compatible Jupyter notebooks to train and e
 | **GazeNet** | `train_gazenet.ipynb` | `ETDD70` (Zenodo ID: `13332134`) | `seren_gazenet.tflite` | < 5 MB |
 | **PhonNet** | `train_phonnet.ipynb` | `apple/ml-stuttering-events-dataset`<br>`ai4bharat/indicsuperb` | `seren_phonnet.tflite` | < 45 MB |
 | **AttentNet** | `train_attentnet.ipynb` | `danizo/eeg-dataset-for-adhd` | `seren_attentnet.tflite` | < 50 KB |
+| **EmotNet** | `train_emotnet.ipynb` | `Reddit Mental-Health Text` | `seren_emotnet.tflite` | < 45 MB |
+| **SpatialNet** | `train_spatialnet.ipynb` | `Corsi-Block Spans Norms` | `seren_spatialnet.tflite` | < 50 KB |
 
 ---
 
@@ -45,7 +47,9 @@ SEREN/app/src/main/assets/
 ├── seren_drawnet.tflite
 ├── seren_gazenet.tflite
 ├── seren_phonnet.tflite
-└── seren_attentnet.tflite
+├── seren_attentnet.tflite
+├── seren_emotnet.tflite
+└── seren_spatialnet.tflite
 ```
 
 *Note: TFLite models are configured with float16 quantization to guarantee memory footprints under 50MB and local inference latencies under 15ms.*

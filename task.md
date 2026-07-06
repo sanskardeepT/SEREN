@@ -1,17 +1,15 @@
-# STITCH UI/UX Application — Tasks
+# EmotNet & SpatialNet Pipelines — Tasks
 
-## Onboarding Carousel & Role Selector
-- [ ] Implement multi-step onboarding wizard inside `ui/consent/ConsentScreen.kt`
-- [ ] Connect `ConsentViewModel` registration variables correctly
+## Notebooks
+- [ ] Create `training/train_emotnet.ipynb`
+- [ ] Create `training/train_spatialnet.ipynb`
 
-## Triple-Mode Home Dashboard
-- [ ] Implement age-specific home screens inside `ui/home/HomeScreen.kt`
-- [ ] Wire theme colors and icons correctly
+## TfLiteManager
+- [ ] Modify `app/src/main/java/com/seren/app/ml/TfLiteManager.kt` to load EmotNet & SpatialNet with fallbacks
 
-## Task Intro & Active Bar Screen
-- [ ] Update `ui/screening/ScreeningScreen.kt` with Intro (Screen 9) and Active task (Screen 10) headers
-- [ ] Embed the task runners sequentially
+## Documentation
+- [ ] Update `training/README.md` to document the new TFLite targets
 
-## Finalize & Remote Push
+## Finalize & Sync
 - [ ] Verify build compiles
 - [ ] Git commit & push origin main
