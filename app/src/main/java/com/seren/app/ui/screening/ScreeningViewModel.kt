@@ -98,23 +98,18 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
             val results = screeningDao.getTaskResultsForSession(currentSessionId)
             
             // --- FUSIONNET ENSEMBLE SCORING ---
-            // Combine active task results into 0-100 scores for all active conditions.
-            val finalScores = ConditionIds.ALL.map { conditionId ->
+            // Combine active task results into 0-100 scores for all active Batch 1 conditions.
+            val finalScores = ConditionIds.BATCH_1.mapNotNull { conditionId ->
                 // Gather task scores targeting this specific condition
                 val conditionResults = results.filter { it.conditionId == conditionId }
                 
-                // Average scores or apply weight heuristic
-                var riskVal = 0f
-                var modalitiesCount = 0
-                
-                if (conditionResults.isNotEmpty()) {
-                    riskVal = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
-                    modalitiesCount = conditionResults.map { it.taskType }.distinct().size
-                } else {
-                    // Fallback to random value to complete testing if no matching task result was stored
-                    riskVal = (15..80).random().toFloat()
-                    modalitiesCount = 1
+                if (conditionResults.isEmpty()) {
+                    return@mapNotNull null
                 }
+                
+                // Average scores
+                val riskVal = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
+                val modalitiesCount = conditionResults.map { it.taskType }.distinct().size
                 
                 // Confidence labels based on count of active modalities (docs/training-protocols.md Section 9.1):
                 // 1 modality ➜ LOW confidence

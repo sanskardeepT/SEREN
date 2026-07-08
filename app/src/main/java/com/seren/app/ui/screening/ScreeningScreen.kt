@@ -2,6 +2,7 @@ package com.seren.app.ui.screening
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -115,8 +117,8 @@ fun ScreeningScreen(
                         .height(56.dp),
                     shape = RoundedCornerShape(28.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF3B82F6), // Vibrant Soft Blue
-                        contentColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text(text = "Start Task", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -129,7 +131,7 @@ fun ScreeningScreen(
                     .padding(innerPadding)
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = listOf(Color(0xFFE0F2FE), Color.White) // Light Sky Blue to White
+                            colors = listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.background)
                         )
                     )
                     .padding(24.dp),
@@ -143,12 +145,12 @@ fun ScreeningScreen(
                     text = taskTitle,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E293B)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = "Task ${currentTaskIndex + 1} of 6",
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color(0xFF64748B)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -164,22 +166,22 @@ fun ScreeningScreen(
                     Box(
                         modifier = Modifier
                             .size(110.dp)
-                            .background(Color(0xFF3B82F6).copy(alpha = 0.1f), CircleShape)
-                            .border(3.dp, Color(0xFF1E293B), CircleShape),
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), CircleShape)
+                            .border(3.dp, MaterialTheme.colorScheme.onSurface, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         // Iris representation
                         Box(
                             modifier = Modifier
                                 .size(48.dp)
-                                .background(Color(0xFF10B981), CircleShape) // Green iris
+                                .background(MaterialTheme.colorScheme.secondary, CircleShape)
                         )
                         // Floating star icon
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = Color(0xFF10B981),
-                            modifier = Modifier.size(24.dp).align(Alignment.TopEnd).padding(top = 4.dp, right = 4.dp)
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.size(24.dp).align(Alignment.TopEnd).padding(top = 4.dp, end = 4.dp)
                         )
                     }
                 }
@@ -191,12 +193,12 @@ fun ScreeningScreen(
                     text = "Ready for a fun game?",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E293B)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = taskInstruction,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF64748B),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     lineHeight = 22.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -216,13 +218,13 @@ fun ScreeningScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = onNavigateBack) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = Color(0xFF1E293B))
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurface)
                         }
                         Text(
                             text = "Task ${currentTaskIndex + 1} of 6",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1E293B)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.width(48.dp)) // Maintain horizontal centering offsets
                     }
@@ -236,8 +238,8 @@ fun ScreeningScreen(
                             .padding(horizontal = 24.dp, vertical = 4.dp)
                             .height(8.dp)
                             .clip(CircleShape),
-                        color = Color(0xFF3B82F6),
-                        trackColor = Color(0xFFEFF6FF)
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 }
             },
@@ -253,15 +255,15 @@ fun ScreeningScreen(
                         text = "You're doing great!",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     IconButton(
                         onClick = {},
                         modifier = Modifier
                             .size(48.dp)
-                            .background(Color(0xFFEFF6FF), CircleShape)
+                            .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
                     ) {
-                        Icon(imageVector = Icons.Default.Pause, contentDescription = "Pause", tint = Color(0xFF1E293B))
+                        Icon(imageVector = Icons.Default.Pause, contentDescription = "Pause", tint = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -270,7 +272,7 @@ fun ScreeningScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 when (currentTaskIndex) {
                     0 -> HandwritingTaskScreen(

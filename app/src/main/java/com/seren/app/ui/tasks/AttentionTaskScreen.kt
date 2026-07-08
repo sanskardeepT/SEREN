@@ -58,6 +58,7 @@ fun AttentionTaskScreen(
     var misses by remember { mutableStateOf(0) }
     var falseAlarms by remember { mutableStateOf(0) }
     val responseTimes = remember { mutableStateListOf<Long>() }
+    var trialStartTime by remember { mutableStateOf(0L) }
     var hasTappedInTrial by remember { mutableStateOf(false) }
 
     // Run Go/No-Go loop
@@ -71,7 +72,7 @@ fun AttentionTaskScreen(
         currentLetter = if (Random.nextFloat() > 0.7f) "X" else listOf("A", "B", "C", "D", "E").random()
         letterVisible = true
         hasTappedInTrial = false
-        val trialStartTime = System.currentTimeMillis()
+        trialStartTime = System.currentTimeMillis()
 
         // Visible period (800ms)
         delay(850)
@@ -123,7 +124,7 @@ fun AttentionTaskScreen(
                 .clickable {
                     if (!hasTappedInTrial && trialIndex < totalTrials) {
                         hasTappedInTrial = true
-                        val rt = (System.currentTimeMillis() - startTime) % 800 // Mock response latency offset
+                        val rt = System.currentTimeMillis() - trialStartTime
                         responseTimes.add(rt)
                         
                         if (currentLetter == "X") {

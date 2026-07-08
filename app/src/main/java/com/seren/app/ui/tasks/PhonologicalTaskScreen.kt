@@ -1,5 +1,13 @@
 package com.seren.app.ui.tasks
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,10 +44,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.seren.app.data.ConditionIds
 import com.seren.app.ml.TfLiteManager
-import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
+@SuppressLint("MissingPermission")
 @Composable
 fun PhonologicalTaskScreen(
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
@@ -49,8 +63,11 @@ fun PhonologicalTaskScreen(
     
     val startTime = remember { System.currentTimeMillis() }
     var isRecording by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    // Colors mapping cards for RAN (Rapid Automatized Naming)
+    val audioBuffer = remember { mutableListOf<Float>() }
+    var recordingJob by remember { mutableStateOf<Job?>(null) }
+
     val colorsList = listOf(
         Color.Red to "Red",
         Color.Blue to "Blue",
@@ -58,6 +75,62 @@ fun PhonologicalTaskScreen(
         Color.Yellow to "Yellow",
         Color.Magenta to "Pink"
     )
+
+    val startRecordingLogic = {
+        synchronized(audioBuffer) { audioBuffer.clear() }
+        isRecording = true
+        recordingJob = coroutineScope.launch(Dispatchers.IO) {
+            val sampleRate = 16000
+            val channelConfig = AudioFormat.CHANNEL_IN_MONO
+            val audioFormat = AudioFormat.ENCODING_PCM_16BIT
+            val minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
+            val bufferSize = if (minBufferSize > 0) minBufferSize else 2048
+            
+            val record = try {
+                AudioRecord(
+                    MediaRecorder.AudioSource.MIC,
+                    sampleRate,
+                    channelConfig,
+                    audioFormat,
+                    bufferSize
+                )
+            } catch (e: SecurityException) {
+                null
+            }
+            
+            if (record != null && record.state == AudioRecord.STATE_INITIALIZED) {
+                try {
+                    record.startRecording()
+                    val tempBuffer = ShortArray(bufferSize)
+                    while (isRecording) {
+                        val read = record.read(tempBuffer, 0, tempBuffer.size)
+                        if (read > 0) {
+                            val floatList = ArrayList<Float>(read)
+                            for (i in 0 until read) {
+                                floatList.add(tempBuffer[i] / 32768.0f)
+                            }
+                            synchronized(audioBuffer) {
+                                audioBuffer.addAll(floatList)
+                            }
+                        }
+                    }
+                    record.stop()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    record.release()
+                }
+            }
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            startRecordingLogic()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -114,7 +187,17 @@ fun PhonologicalTaskScreen(
         // Recording CTA controls
         if (!isRecording) {
             Button(
-                onClick = { isRecording = true },
+                onClick = {
+                    val hasPermission = ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.RECORD_AUDIO
+                    ) == PackageManager.PERMISSION_GRANTED
+                    if (hasPermission) {
+                        startRecordingLogic()
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -131,21 +214,27 @@ fun PhonologicalTaskScreen(
         } else {
             Button(
                 onClick = {
+                    isRecording = false
+                    recordingJob?.cancel()
+                    
                     val duration = System.currentTimeMillis() - startTime
                     
-                    // Construct 3 seconds of 16kHz audio sample [48000] to feed to PhonNet
-                    val dummyAudio = FloatArray(48000) {
-                        // Generate mock speech signals with some random variation
-                        (Random.nextFloat() * 2f - 1f) * 0.1f
+                    val finalAudio = FloatArray(48000)
+                    val rawList = synchronized(audioBuffer) { audioBuffer.toList() }
+                    
+                    if (rawList.isNotEmpty()) {
+                        for (i in 0 until 48000) {
+                            finalAudio[i] = if (i < rawList.size) rawList[i] else 0f
+                        }
                     }
                     
-                    // Run interpreter
-                    val scores = tfLiteManager.runPhonNet(dummyAudio)
+                    val silencePercent = calculateSilencePercentage(finalAudio)
+                    val jitter = calculateAmplitudeJitter(finalAudio)
                     
-                    // Score mappings (Stutter indices vs. normal pronunciation)
-                    val risk = 1f - scores[3] // Fluent class is at index 3
+                    val scores = tfLiteManager.runPhonNet(finalAudio)
+                    val risk = 1f - scores[3]
                     
-                    val rawJson = "{\"duration_ms\": $duration, \"accuracy_ratio\": 0.90}"
+                    val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
                     onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
                     onComplete(ConditionIds.APD, risk, rawJson, duration)
                     
@@ -164,4 +253,21 @@ fun PhonologicalTaskScreen(
             }
         }
     }
+}
+
+private fun calculateSilencePercentage(audio: FloatArray): Float {
+    if (audio.isEmpty()) return 0f
+    val silentSamples = audio.count { abs(it) < 0.01f }
+    return (silentSamples.toFloat() / audio.size) * 100f
+}
+
+private fun calculateAmplitudeJitter(audio: FloatArray): Float {
+    if (audio.size < 2) return 0f
+    var diffSum = 0f
+    var count = 0
+    for (i in 1 until audio.size) {
+        diffSum += abs(abs(audio[i]) - abs(audio[i - 1]))
+        count++
+    }
+    return diffSum / count
 }

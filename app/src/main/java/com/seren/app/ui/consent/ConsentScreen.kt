@@ -195,8 +195,8 @@ fun WelcomeSlide(onNext: () -> Unit) {
                     .height(56.dp),
                 shape = RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2F80ED),
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(text = "Next", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -218,7 +218,7 @@ fun RoleSelectorScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0F172A)) // Dark backdrop overlying sheet
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // White Card representing bottom-sheet layout
         Card(
@@ -226,7 +226,7 @@ fun RoleSelectorScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
                 .align(Alignment.BottomCenter),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
         ) {
             Column(
@@ -318,8 +318,8 @@ fun RoleSelectorScreen(
                         modifier = Modifier.weight(1f).height(56.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (tempRoleSelection != null) Color(0xFF1E293B) else Color(0xFFE2E8F0),
-                            contentColor = Color.White
+                            containerColor = if (tempRoleSelection != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
                         Text(text = "Continue", fontWeight = FontWeight.Bold)
@@ -345,7 +345,7 @@ fun RoleCard(
             .clickable { onClick() }
             .border(
                 width = if (isSelected) 3.dp else 0.dp,
-                color = if (isSelected) Color(0xFF3B82F6) else Color.Transparent,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
                 shape = RoundedCornerShape(16.dp)
             ),
         shape = RoundedCornerShape(16.dp),
@@ -383,12 +383,20 @@ fun ConsentPrivacyScreen(
     onBack: () -> Unit,
     onAccept: () -> Unit
 ) {
-    // Exact text from mockup copy (including typos to preserve visual match specs)
     val mockupTermsText = """
-        SEREN app eromated mandmodries to use data and use the tools to provided to mtre and resource your content. We use colaborations and tow data usage data vrom protorotional using and user data, and collectratiom to oxensure your data on is incluzed with precenge and encrypted,. You can emure save message and encryptinz your provessional data usags are encrypted to your data encrypted.
+        IMPORTANT INFORMATION AND CONSENT (DPDP ACT COMPLIANT)
         
-        SCREENING NOTICE
-        SEREN is an initial screening instrument. Positive indications suggest risk factors and do not constitute a clinical diagnosis. Always seek professional advice.
+        1. Purpose of Screening
+        SEREN is designed to screen for early indicators of cognitive differences, including learning and language processing profiles. 
+        
+        2. Clinical Disclaimer
+        This application is an initial screening instrument. Positive indications suggest potential risk factors and areas that may benefit from support; they DO NOT constitute a clinical, medical, or psychological diagnosis. Always seek advice from qualified clinicians or medical professionals for a formal evaluation.
+        
+        3. 100% On-Device Processing & Privacy Policy
+        To comply with the Digital Personal Data Protection (DPDP) Act of India and guarantee complete privacy, all sensitive data—including voice recordings, drawing inputs, touch statistics, and task results—are processed and stored 100% on-device. No audio recordings, drawings, or raw interaction logs are ever uploaded to external servers, cloud services, or third parties.
+        
+        4. Consent Affirmation
+        By tapping "Accept", you provide explicit, voluntary, and informed consent for this application to access necessary on-device sensors (such as the microphone for voice analysis and the touchscreen for drawing/interaction analysis) and process this information locally on your device in accordance with the terms stated above. You retain the right to withdraw this consent at any time by uninstalling the application.
     """.trimIndent()
 
     Column(
@@ -412,9 +420,9 @@ fun ConsentPrivacyScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF8FAFC)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(12.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0))
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
             Column(
                 modifier = Modifier
@@ -425,7 +433,7 @@ fun ConsentPrivacyScreen(
                 Text(
                     text = mockupTermsText,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF475569),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 22.sp
                 )
             }
@@ -439,7 +447,7 @@ fun ConsentPrivacyScreen(
             Icon(
                 imageVector = Icons.Default.Lock,
                 contentDescription = "Data Encrypted Lock",
-                tint = Color(0xFF3B82F6),
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(36.dp)
             )
             Text(
@@ -469,8 +477,8 @@ fun ConsentPrivacyScreen(
                 modifier = Modifier.weight(1.5f).height(56.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF1E293B), // Dark Slate
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(text = "Accept & Continue", fontWeight = FontWeight.Bold)

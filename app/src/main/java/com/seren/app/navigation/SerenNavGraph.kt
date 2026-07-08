@@ -9,6 +9,7 @@ import com.seren.app.ui.home.HomeScreen
 import com.seren.app.ui.practice.PracticeScreen
 import com.seren.app.ui.screening.ScreeningScreen
 import com.seren.app.ui.splash.SplashScreen
+import com.seren.app.ui.report.ReportScreen
 
 object Destinations {
     const val SPLASH = "splash"
@@ -91,7 +92,7 @@ fun SerenNavGraph(
             route = Destinations.REPORT,
             arguments = listOf(
                 androidx.navigation.navArgument("sessionId") {
-                    type = androidx.navigation.navType.LongType
+                    type = androidx.navigation.NavType.LongType
                 }
             )
         ) { backStackEntry ->

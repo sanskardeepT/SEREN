@@ -28,21 +28,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.seren.app.data.ConditionIds
-import com.seren.app.ml.TfLiteManager
-import kotlin.random.Random
 
 @Composable
 fun ReadingGazeTaskScreen(
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
-    val context = LocalContext.current
-    val tfLiteManager = remember { TfLiteManager(context) }
-    
     val startTime = remember { System.currentTimeMillis() }
-    var mockGazeTrackingActive by remember { mutableStateOf(false) }
-    var mockTrackingProgress by remember { mutableStateOf(0f) }
 
     val passage = """
         The little boy went to the forest to find his lost dog. 
@@ -59,7 +53,7 @@ fun ReadingGazeTaskScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
-            text = "Task 3: Silent Reading Gaze",
+            text = "Task 3: Silent Reading Speed",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
@@ -69,12 +63,22 @@ fun ReadingGazeTaskScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
         ) {
-            Text(
-                text = "Keep your face visible to the front camera and read the text below silently. Tap 'Complete' when finished.",
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-            )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Read the passage below silently and tap 'Complete' when finished.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Reading latency evaluation active. Camera eye-tracking version coming soon.",
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
 
         // Passage Display Box
@@ -101,60 +105,24 @@ fun ReadingGazeTaskScreen(
             }
         }
 
-        // Camera feed status indicator
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "● Front Camera Tracking Active",
-                color = MaterialTheme.colorScheme.tertiary,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
         Button(
             onClick = {
                 val duration = System.currentTimeMillis() - startTime
                 
-                // Construct mock gaze coordinates array [1, 100, 6] to feed to GazeNet LSTM
-                // Gaze features: [x, y, dx, dy, speed, is_fixation]
-                val mockGazeData = Array(1) { Array(100) { FloatArray(6) } }
+                val wordCount = passage.split("\\s+".toRegex()).filter { it.isNotBlank() }.size
+                val durationSeconds = duration / 1000f
+                val wpm = if (durationSeconds > 0.1f) (wordCount / durationSeconds) * 60f else 0f
                 
-                // Simulate eye scanning coordinates (scanning left to right, line by line)
-                var x = 100f
-                var y = 200f
-                val randomDyslexiaIndicator = Random.nextBoolean()
-                
-                for (i in 0 until 100) {
-                    if (randomDyslexiaIndicator && i % 15 == 0) {
-                        // Simulate regression (eye backing up to check word)
-                        x -= 80f
-                    } else {
-                        x += 30f
-                    }
-                    
-                    if (x > 800f) {
-                        x = 100f
-                        y += 100f // Next line
-                    }
-                    
-                    mockGazeData[0][i][0] = x
-                    mockGazeData[0][i][1] = y
-                    mockGazeData[0][i][2] = if (i > 0) x - mockGazeData[0][i-1][0] else 0f
-                    mockGazeData[0][i][3] = if (i > 0) y - mockGazeData[0][i-1][1] else 0f
-                    mockGazeData[0][i][4] = Random.nextFloat() * 15f
-                    mockGazeData[0][i][5] = if (Random.nextFloat() > 0.3f) 1.0f else 0.0f
+                val riskScore = when {
+                    wpm < 10f -> 0.50f
+                    wpm < 60f -> 0.80f
+                    wpm < 100f -> 0.50f
+                    wpm < 140f -> 0.25f
+                    wpm < 250f -> 0.10f
+                    else -> 0.15f
                 }
                 
-                // Run GazeNet inference
-                val riskScore = tfLiteManager.runGazeNet(mockGazeData[0])
-                
-                val rawJson = "{\"duration_ms\": $duration, \"regressions_injected\": $randomDyslexiaIndicator}"
+                val rawJson = "{\"duration_ms\": $duration, \"wpm\": $wpm, \"word_count\": $wordCount}"
                 onComplete(ConditionIds.DYSLEXIA, riskScore, rawJson, duration)
                 
                 onNext()
