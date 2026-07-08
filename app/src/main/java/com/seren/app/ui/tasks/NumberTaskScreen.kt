@@ -232,11 +232,6 @@ private fun submitHeuristicResult(
 
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
     onComplete(ConditionIds.DYSCALCULIA, riskScore, rawJson, duration)
-    onComplete(ConditionIds.EXECUTIVE_FUNCTION, riskScore, rawJson, duration)
-    onComplete(ConditionIds.WORKING_MEMORY, riskScore, rawJson, duration)
-    onComplete(ConditionIds.TEST_ANXIETY, riskScore, rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
-    onComplete(ConditionIds.NON_VERBAL_LD, riskScore, rawJson, duration)
-    onComplete(ConditionIds.TWICE_EXCEPTIONAL, riskScore, rawJson, duration)
     onNext()
 }

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.seren.app.data.ConditionIds
 import com.seren.app.ml.TfLiteManager
+import com.seren.app.util.AudioFeatures
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -230,19 +231,15 @@ fun SpeechFluencyTaskScreen(
                     val validAudioSize = minOf(48000, rawList.size)
                     val activeAudio = finalAudio.copyOfRange(0, validAudioSize)
                     
-                    val silencePercent = calculateSilencePercentage(activeAudio)
-                    val jitter = calculateAmplitudeJitter(activeAudio)
+                    val silencePercent = AudioFeatures.calculateSilencePercentage(activeAudio)
+                    val jitter = AudioFeatures.calculateAmplitudeJitter(activeAudio)
                     
-                    val scores = tfLiteManager.runPhonNet(finalAudio)
+                    val scores = tfLiteManager.runPhonNet(activeAudio)
                     val disfluencyScore = 1f - scores[3]
                     
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
                     onComplete(ConditionIds.STUTTERING, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.CLUTTERING, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.DEPRESSION, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.SEPARATION_ANXIETY, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.SOCIAL_ANXIETY, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.SELECTIVE_MUTISM, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.VOICE_DISORDER, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
@@ -264,19 +261,4 @@ fun SpeechFluencyTaskScreen(
     }
 }
 
-private fun calculateSilencePercentage(audio: FloatArray): Float {
-    if (audio.isEmpty()) return 0f
-    val silentSamples = audio.count { abs(it) < 0.01f }
-    return (silentSamples.toFloat() / audio.size) * 100f
-}
 
-private fun calculateAmplitudeJitter(audio: FloatArray): Float {
-    if (audio.size < 2) return 0f
-    var diffSum = 0f
-    var count = 0
-    for (i in 1 until audio.size) {
-        diffSum += abs(abs(audio[i]) - abs(audio[i - 1]))
-        count++
-    }
-    return diffSum / count
-}

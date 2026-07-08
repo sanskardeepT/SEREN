@@ -125,8 +125,6 @@ fun ReadingGazeTaskScreen(
                 
                 val rawJson = "{\"duration_ms\": $duration, \"wpm\": $wpm, \"word_count\": $wordCount}"
                 onComplete(ConditionIds.DYSLEXIA, riskScore, rawJson, duration)
-                onComplete(ConditionIds.SOCIAL_ANXIETY, riskScore, rawJson, duration)
-                onComplete(ConditionIds.SCHOOL_PHOBIA, riskScore, rawJson, duration)
                 onComplete(ConditionIds.ADULT_DYSLEXIA, riskScore, rawJson, duration)
                 
                 onNext()

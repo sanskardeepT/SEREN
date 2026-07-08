@@ -202,18 +202,12 @@ private fun submitAttentionResults(
     val predictions = tfLiteManager.runAttentNet(inputStats)
     
     // Predictions array mapping classes: [Control, Inattentive, Hyperactive, Combined]
-    onComplete(ConditionIds.ADHD_INATTENTIVE, predictions[1], "{}", duration)
-    onComplete(ConditionIds.ADHD_HYPERACTIVE, predictions[2], "{}", duration)
-    onComplete(ConditionIds.ADHD_COMBINED, predictions[3], "{}", duration)
-    onComplete(ConditionIds.EXECUTIVE_FUNCTION, predictions[3], "{}", duration)
-    onComplete(ConditionIds.WORKING_MEMORY, predictions[1], "{}", duration)
-    onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, predictions[2], "{}", duration)
-    onComplete(ConditionIds.TEST_ANXIETY, predictions[3], "{}", duration)
-    onComplete(ConditionIds.GAD, predictions[1], "{}", duration)
-    onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], "{}", duration)
-    onComplete(ConditionIds.RECEPTIVE_LANGUAGE, predictions[1], "{}", duration)
-    onComplete(ConditionIds.TWICE_EXCEPTIONAL, predictions[3], "{}", duration)
-    onComplete(ConditionIds.ADULT_ADHD, predictions[3], "{}", duration)
+    val rawJson = "{\"misses\": $misses, \"false_alarms\": $falseAlarms, \"rt_mean\": ${"%.1f".format(rtMean)}, \"rt_std\": ${"%.1f".format(rtStd)}, \"duration_ms\": $duration}"
+    onComplete(ConditionIds.ADHD_INATTENTIVE, predictions[1], rawJson, duration)
+    onComplete(ConditionIds.ADHD_HYPERACTIVE, predictions[2], rawJson, duration)
+    onComplete(ConditionIds.ADHD_COMBINED, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.ADULT_ADHD, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
     
     onNext()
 }

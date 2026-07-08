@@ -99,7 +99,7 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
             
             // --- FUSIONNET ENSEMBLE SCORING ---
             // Combine active task results into 0-100 scores for all active conditions.
-            val finalScores = ConditionIds.ALL.mapNotNull { conditionId ->
+            val finalScores = ConditionIds.ACTIVE.mapNotNull { conditionId ->
                 // Gather task scores targeting this specific condition
                 val conditionResults = results.filter { it.conditionId == conditionId }
                 
