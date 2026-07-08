@@ -237,6 +237,7 @@ fun PhonologicalTaskScreen(
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
                     onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
                     onComplete(ConditionIds.APD, risk, rawJson, duration)
+                    onComplete(ConditionIds.SELECTIVE_MUTISM, risk, rawJson, duration)
                     
                     onNext()
                 },

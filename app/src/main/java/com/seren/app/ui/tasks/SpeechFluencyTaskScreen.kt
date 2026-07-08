@@ -228,6 +228,10 @@ fun SpeechFluencyTaskScreen(
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
                     onComplete(ConditionIds.STUTTERING, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.CLUTTERING, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.DEPRESSION, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.SEPARATION_ANXIETY, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.SOCIAL_ANXIETY, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.SELECTIVE_MUTISM, disfluencyScore, rawJson, duration)
                     
                     onNext()
                 },

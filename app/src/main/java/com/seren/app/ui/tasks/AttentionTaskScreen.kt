@@ -205,6 +205,11 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.ADHD_INATTENTIVE, predictions[1], "{}", duration)
     onComplete(ConditionIds.ADHD_HYPERACTIVE, predictions[2], "{}", duration)
     onComplete(ConditionIds.ADHD_COMBINED, predictions[3], "{}", duration)
+    onComplete(ConditionIds.EXECUTIVE_FUNCTION, predictions[3], "{}", duration)
+    onComplete(ConditionIds.WORKING_MEMORY, predictions[1], "{}", duration)
+    onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, predictions[2], "{}", duration)
+    onComplete(ConditionIds.TEST_ANXIETY, predictions[3], "{}", duration)
+    onComplete(ConditionIds.GAD, predictions[1], "{}", duration)
     
     onNext()
 }
