@@ -1,6 +1,7 @@
 package com.seren.app.data
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -31,13 +32,18 @@ abstract class SerenDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): SerenDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                val builder = Room.databaseBuilder(
                     context.applicationContext,
                     SerenDatabase::class.java,
                     "seren_database"
                 )
-                .fallbackToDestructiveMigration() // Simple fallback for pre-launch development
-                .build()
+                // Only allow destructive migration in debug builds.
+                // In release, a missing migration will crash — forcing us to write proper migrations.
+                val isDebug = (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+                if (isDebug) {
+                    builder.fallbackToDestructiveMigration()
+                }
+                val instance = builder.build()
                 INSTANCE = instance
                 instance
             }
