@@ -64,6 +64,7 @@ fun SpeechFluencyTaskScreen(
     
     val audioBuffer = remember { mutableListOf<Float>() }
     var recordingJob by remember { mutableStateOf<Job?>(null) }
+    var activeRecord by remember { mutableStateOf<AudioRecord?>(null) }
 
     val readingPassage = "The quick brown fox jumps over the lazy dog."
 
@@ -88,6 +89,7 @@ fun SpeechFluencyTaskScreen(
             } catch (e: SecurityException) {
                 null
             }
+            activeRecord = record
             
             if (record != null && record.state == AudioRecord.STATE_INITIALIZED) {
                 try {
@@ -105,11 +107,12 @@ fun SpeechFluencyTaskScreen(
                             }
                         }
                     }
-                    record.stop()
+                    try { record.stop() } catch (e: Exception) {}
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } finally {
                     record.release()
+                    activeRecord = null
                 }
             }
         }
@@ -206,6 +209,11 @@ fun SpeechFluencyTaskScreen(
             Button(
                 onClick = {
                     isRecording = false
+                    try {
+                        activeRecord?.stop()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                     recordingJob?.cancel()
                     
                     val duration = System.currentTimeMillis() - startTime
@@ -219,8 +227,11 @@ fun SpeechFluencyTaskScreen(
                         }
                     }
                     
-                    val silencePercent = calculateSilencePercentage(finalAudio)
-                    val jitter = calculateAmplitudeJitter(finalAudio)
+                    val validAudioSize = minOf(48000, rawList.size)
+                    val activeAudio = finalAudio.copyOfRange(0, validAudioSize)
+                    
+                    val silencePercent = calculateSilencePercentage(activeAudio)
+                    val jitter = calculateAmplitudeJitter(activeAudio)
                     
                     val scores = tfLiteManager.runPhonNet(finalAudio)
                     val disfluencyScore = 1f - scores[3]

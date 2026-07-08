@@ -114,11 +114,12 @@ fun ReadingGazeTaskScreen(
                 val wpm = if (durationSeconds > 0.1f) (wordCount / durationSeconds) * 60f else 0f
                 
                 val riskScore = when {
-                    wpm < 10f -> 0.50f
-                    wpm < 60f -> 0.80f
-                    wpm < 100f -> 0.50f
-                    wpm < 140f -> 0.25f
-                    wpm < 250f -> 0.10f
+                    wpm < 10f -> 0.90f
+                    wpm < 60f -> 0.75f
+                    wpm < 100f -> 0.55f
+                    wpm < 140f -> 0.30f
+                    wpm < 250f -> 0.12f
+                    wpm >= 600f -> 0.80f // Flagged as skipping/skimming text
                     else -> 0.15f
                 }
                 
