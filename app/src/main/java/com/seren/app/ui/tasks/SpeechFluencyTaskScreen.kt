@@ -232,6 +232,9 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.SEPARATION_ANXIETY, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.SOCIAL_ANXIETY, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.SELECTIVE_MUTISM, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.VOICE_DISORDER, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
                     
                     onNext()
                 },

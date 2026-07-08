@@ -235,5 +235,8 @@ private fun submitHeuristicResult(
     onComplete(ConditionIds.EXECUTIVE_FUNCTION, riskScore, rawJson, duration)
     onComplete(ConditionIds.WORKING_MEMORY, riskScore, rawJson, duration)
     onComplete(ConditionIds.TEST_ANXIETY, riskScore, rawJson, duration)
+    onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
+    onComplete(ConditionIds.NON_VERBAL_LD, riskScore, rawJson, duration)
+    onComplete(ConditionIds.TWICE_EXCEPTIONAL, riskScore, rawJson, duration)
     onNext()
 }

@@ -210,6 +210,10 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, predictions[2], "{}", duration)
     onComplete(ConditionIds.TEST_ANXIETY, predictions[3], "{}", duration)
     onComplete(ConditionIds.GAD, predictions[1], "{}", duration)
+    onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], "{}", duration)
+    onComplete(ConditionIds.RECEPTIVE_LANGUAGE, predictions[1], "{}", duration)
+    onComplete(ConditionIds.TWICE_EXCEPTIONAL, predictions[3], "{}", duration)
+    onComplete(ConditionIds.ADULT_ADHD, predictions[3], "{}", duration)
     
     onNext()
 }
