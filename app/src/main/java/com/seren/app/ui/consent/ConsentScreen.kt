@@ -64,6 +64,7 @@ fun ConsentScreen(
     val isConsentSaved by viewModel.isConsentSaved.collectAsState()
     var currentStep by remember { mutableStateOf(1) } // 1: Splash/Welcome, 2: Role Selection, 3: Consent/Privacy
     var selectedRole by remember { mutableStateOf<String?>(null) } // "parent", "teen", "adult"
+    var selectedChildAgeGroup by remember { mutableStateOf<String?>(null) } // AgeGroup.CHILD_5_8 or AgeGroup.CHILD_9_12
 
     LaunchedEffect(isConsentSaved) {
         if (isConsentSaved) {
@@ -75,8 +76,9 @@ fun ConsentScreen(
         1 -> WelcomeSlide(onNext = { currentStep = 2 })
         2 -> RoleSelectorScreen(
             onBack = { currentStep = 1 },
-            onSelect = { role ->
+            onSelect = { role, childAge ->
                 selectedRole = role
+                selectedChildAgeGroup = childAge
                 currentStep = 3
             }
         )
@@ -84,7 +86,7 @@ fun ConsentScreen(
             onBack = { currentStep = 2 },
             onAccept = {
                 val ageBand = when (selectedRole) {
-                    "parent" -> AgeGroup.CHILD_9_12
+                    "parent" -> selectedChildAgeGroup ?: AgeGroup.CHILD_9_12
                     "teen" -> AgeGroup.TEEN_13_19
                     else -> AgeGroup.ADULT_20_PLUS
                 }
@@ -211,9 +213,10 @@ fun WelcomeSlide(onNext: () -> Unit) {
 @Composable
 fun RoleSelectorScreen(
     onBack: () -> Unit,
-    onSelect: (String) -> Unit
+    onSelect: (role: String, childAgeGroup: String?) -> Unit
 ) {
     var tempRoleSelection by remember { mutableStateOf<String?>(null) }
+    var selectedChildAge by remember { mutableStateOf<String?>(null) }
 
     Box(
         modifier = Modifier
@@ -276,7 +279,10 @@ fun RoleSelectorScreen(
                         gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.secondaryContainer)),
                         textColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         isSelected = tempRoleSelection == "parent",
-                        onClick = { tempRoleSelection = "parent" }
+                        onClick = {
+                            tempRoleSelection = "parent"
+                            selectedChildAge = null
+                        }
                     )
 
                     // Card 2: Teen
@@ -285,7 +291,10 @@ fun RoleSelectorScreen(
                         gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.tertiaryContainer, MaterialTheme.colorScheme.tertiary)),
                         textColor = MaterialTheme.colorScheme.onTertiaryContainer,
                         isSelected = tempRoleSelection == "teen",
-                        onClick = { tempRoleSelection = "teen" }
+                        onClick = {
+                            tempRoleSelection = "teen"
+                            selectedChildAge = null
+                        }
                     )
 
                     // Card 3: Adult
@@ -294,8 +303,49 @@ fun RoleSelectorScreen(
                         gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.inverseSurface)),
                         textColor = MaterialTheme.colorScheme.inverseOnSurface,
                         isSelected = tempRoleSelection == "adult",
-                        onClick = { tempRoleSelection = "adult" }
+                        onClick = {
+                            tempRoleSelection = "adult"
+                            selectedChildAge = null
+                        }
                     )
+
+                    if (tempRoleSelection == "parent") {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Select your child's age group:",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Button(
+                                onClick = { selectedChildAge = AgeGroup.CHILD_5_8 },
+                                modifier = Modifier.weight(1f).height(48.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (selectedChildAge == AgeGroup.CHILD_5_8) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (selectedChildAge == AgeGroup.CHILD_5_8) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            ) {
+                                Text("Ages 5–8", fontWeight = FontWeight.Bold)
+                            }
+
+                            Button(
+                                onClick = { selectedChildAge = AgeGroup.CHILD_9_12 },
+                                modifier = Modifier.weight(1f).height(48.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (selectedChildAge == AgeGroup.CHILD_9_12) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (selectedChildAge == AgeGroup.CHILD_9_12) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            ) {
+                                Text("Ages 9–12", fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
                 }
 
                 // Buttons controls
@@ -312,13 +362,14 @@ fun RoleSelectorScreen(
                         Text(text = "Back", fontWeight = FontWeight.Bold)
                     }
 
+                    val isContinueEnabled = tempRoleSelection != null && (tempRoleSelection != "parent" || selectedChildAge != null)
                     Button(
-                        onClick = { tempRoleSelection?.let { onSelect(it) } },
-                        enabled = tempRoleSelection != null,
+                        onClick = { tempRoleSelection?.let { onSelect(it, selectedChildAge) } },
+                        enabled = isContinueEnabled,
                         modifier = Modifier.weight(1f).height(56.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (tempRoleSelection != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = if (isContinueEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
