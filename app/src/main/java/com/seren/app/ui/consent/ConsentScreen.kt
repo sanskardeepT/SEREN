@@ -107,7 +107,7 @@ fun WelcomeSlide(onNext: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF103652)) // Prussian Blue
+            .background(MaterialTheme.colorScheme.primaryContainer) // Prussian Blue replacement
     ) {
         Column(
             modifier = Modifier
@@ -123,25 +123,25 @@ fun WelcomeSlide(onNext: () -> Unit) {
                     .size(160.dp)
                     .background(Color.White.copy(alpha = 0.05f), CircleShape)
             ) {
-                // Outermost light blue glowing star
+                // Outermost glowing star
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    tint = Color(0xFF60A5FA).copy(alpha = 0.3f),
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     modifier = Modifier.size(130.dp)
                 )
-                // Middle gold gradient star outline
+                // Middle star outline
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    tint = Color(0xFFF59E0B).copy(alpha = 0.6f),
+                    tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.6f),
                     modifier = Modifier.size(100.dp)
                 )
-                // Innermost solid cyan star
+                // Innermost solid star
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    tint = Color(0xFF22D3EE),
+                    tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.size(70.dp)
                 )
             }
@@ -169,7 +169,7 @@ fun WelcomeSlide(onNext: () -> Unit) {
                     modifier = Modifier
                         .size(width = 24.dp, height = 8.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF2F80ED))
+                        .background(MaterialTheme.colorScheme.primary)
                 )
                 Box(
                     modifier = Modifier
@@ -273,8 +273,8 @@ fun RoleSelectorScreen(
                     // Card 1: Parent
                     RoleCard(
                         title = "I am a\nParent",
-                        gradient = Brush.linearGradient(colors = listOf(Color(0xFFFEF3C7), Color(0xFFFDE68A))),
-                        textColor = Color(0xFF78350F),
+                        gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.secondaryContainer)),
+                        textColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         isSelected = tempRoleSelection == "parent",
                         onClick = { tempRoleSelection = "parent" }
                     )
@@ -282,8 +282,8 @@ fun RoleSelectorScreen(
                     // Card 2: Teen
                     RoleCard(
                         title = "I am a\nTeen",
-                        gradient = Brush.linearGradient(colors = listOf(Color(0xFFD8B4FE), Color(0xFFF472B6))),
-                        textColor = Color.White,
+                        gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.tertiaryContainer, MaterialTheme.colorScheme.tertiary)),
+                        textColor = MaterialTheme.colorScheme.onTertiaryContainer,
                         isSelected = tempRoleSelection == "teen",
                         onClick = { tempRoleSelection = "teen" }
                     )
@@ -291,8 +291,8 @@ fun RoleSelectorScreen(
                     // Card 3: Adult
                     RoleCard(
                         title = "I am an\nAdult",
-                        gradient = Brush.linearGradient(colors = listOf(Color(0xFF334155), Color(0xFF1E293B))),
-                        textColor = Color.White,
+                        gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.inverseSurface)),
+                        textColor = MaterialTheme.colorScheme.inverseOnSurface,
                         isSelected = tempRoleSelection == "adult",
                         onClick = { tempRoleSelection = "adult" }
                     )

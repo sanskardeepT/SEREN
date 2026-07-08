@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seren.app.data.model.AgeGroup
+import com.seren.app.ui.practice.PracticeViewModel
 
 @Composable
 fun HomeScreen(
@@ -103,8 +104,8 @@ fun ChildDashboard(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = Color(0xFF3B82F6))
-                    Text("Games", color = Color(0xFF3B82F6), style = MaterialTheme.typography.labelSmall)
+                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Text("Games", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
                     Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = Color.Gray)
@@ -117,7 +118,7 @@ fun ChildDashboard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(Color(0xFFE0F2FE)) // Light Sky Blue
+                .background(MaterialTheme.colorScheme.primaryContainer) // Light Sky Blue replacement
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -132,7 +133,7 @@ fun ChildDashboard(
                     Box(
                         modifier = Modifier
                             .size(42.dp)
-                            .background(Color(0xFFFDE68A), CircleShape),
+                            .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text("👦", fontSize = 24.sp)
@@ -151,7 +152,7 @@ fun ChildDashboard(
                     .fillMaxWidth()
                     .height(140.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFBAE6FD))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
             ) {
                 Row(
                     modifier = Modifier
@@ -174,7 +175,7 @@ fun ChildDashboard(
                     .fillMaxWidth()
                     .clickable { onNavigateToPlay() },
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE169)) // Bright Yellow
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer) // Bright Yellow replacement
             ) {
                 Row(
                     modifier = Modifier.padding(20.dp),
@@ -199,7 +200,7 @@ fun ChildDashboard(
                     modifier = Modifier
                         .weight(1f)
                         .height(130.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFF6B6B)), // Coral red
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer), // Coral red replacement
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -218,7 +219,7 @@ fun ChildDashboard(
                     modifier = Modifier
                         .weight(1f)
                         .height(130.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF51CF66)), // Green
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer), // Green replacement
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -242,20 +243,22 @@ fun ChildDashboard(
 @Composable
 fun TeenDashboard(
     onNavigateToChallenge: () -> Unit,
-    onNavigateToPractice: () -> Unit
+    onNavigateToPractice: () -> Unit,
+    practiceViewModel: PracticeViewModel = viewModel()
 ) {
+    val streakCount by practiceViewModel.streakCount.collectAsState()
     Scaffold(
         bottomBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF0F172A))
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = Color(0xFFA855F7))
-                    Text("Feed", color = Color(0xFFA855F7), style = MaterialTheme.typography.labelSmall)
+                    Icon(imageVector = Icons.Default.Gamepad, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Text("Feed", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
                     Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = Color.Gray)
@@ -270,9 +273,9 @@ fun TeenDashboard(
                 .padding(innerPadding)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color(0xFF3B0764), Color(0xFF0F172A))
+                        colors = listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.background)
                     )
-                ) // Deep Purple to Black
+                ) // Deep Purple to Black replacement
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -292,7 +295,7 @@ fun TeenDashboard(
                 Box(
                     modifier = Modifier
                         .size(36.dp)
-                        .background(Color(0xFF6B21A8), CircleShape),
+                        .background(MaterialTheme.colorScheme.primary, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("🎧", fontSize = 20.sp)
@@ -303,8 +306,8 @@ fun TeenDashboard(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color(0xFFD8B4FE).copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1B4B).copy(alpha = 0.6f)),
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Row(
@@ -313,9 +316,10 @@ fun TeenDashboard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Your Streaks", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD8B4FE))
+                        Text("Your Streaks", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("🔥 5 Day Streak!", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                        val streakText = if (streakCount > 0) "🔥 $streakCount Day Streak!" else "Start your streak today! 🚀"
+                        Text(streakText, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -324,12 +328,12 @@ fun TeenDashboard(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color(0xFFF472B6).copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1B4B).copy(alpha = 0.6f)),
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Daily Mood Check-in", style = MaterialTheme.typography.labelSmall, color = Color(0xFFF472B6))
+                    Text("Daily Mood Check-in", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -338,7 +342,7 @@ fun TeenDashboard(
                             Box(
                                 modifier = Modifier
                                     .size(56.dp)
-                                    .background(Color(0xFF312E81), CircleShape),
+                                    .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(emoji, fontSize = 28.sp)
@@ -359,7 +363,7 @@ fun TeenDashboard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { action() },
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Row(
@@ -399,12 +403,12 @@ fun AdultDashboard(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = Color(0xFF0CA678))
-                    Text("Dashboard", color = Color(0xFF0CA678), style = MaterialTheme.typography.labelSmall)
+                    Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Text("Dashboard", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { onNavigateToPractice() }) {
-                    Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = Color.Gray)
-                    Text("Practice", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+                    Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                    Text("Practice", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), style = MaterialTheme.typography.labelSmall)
                 }
             }
         }
@@ -434,7 +438,7 @@ fun AdultDashboard(
                 Box(
                     modifier = Modifier
                         .size(36.dp)
-                        .background(Color(0xFFE6FCF5), CircleShape),
+                        .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("💼", fontSize = 20.sp)
@@ -444,7 +448,7 @@ fun AdultDashboard(
             // Screening status banner (mint check banner)
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFEBFBEE)), // Light Mint Green
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), // Light Mint Green
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(
@@ -454,16 +458,16 @@ fun AdultDashboard(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = "Success check",
-                        tint = Color(0xFF0CA678),
+                        tint = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(32.dp)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
-                        Text("Last Screening Status", style = MaterialTheme.typography.bodySmall, color = Color(0xFF0CA678), fontWeight = FontWeight.Bold)
+                        Text("Last Screening Status", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold)
                         Text(
                             text = if (latestScores.isNotEmpty()) "Completed. Indicators updated!" else "No session completed yet. Start below.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF2B8A3E),
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -474,7 +478,7 @@ fun AdultDashboard(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(2.dp, Color(0xFF0CA678), RoundedCornerShape(16.dp)),
+                    .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -493,7 +497,7 @@ fun AdultDashboard(
                     Button(
                         onClick = onNavigateToPractice,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0CA678)),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(24.dp)
                     ) {
                         Text("Start Now", color = Color.White, fontWeight = FontWeight.Bold)
@@ -506,7 +510,7 @@ fun AdultDashboard(
                 onClick = onNavigateToScreening,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
             ) {
                 Text("Start Full Screening Session", color = Color.White, fontWeight = FontWeight.Bold)
             }
@@ -528,14 +532,14 @@ fun AdultDashboard(
                             }
                         },
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize().padding(16.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = Color(0xFF0CA678))
+                        Icon(imageVector = Icons.Default.TrendingUp, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Text("Progress Tracker", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Color.Black)
                     }
                 }
@@ -546,14 +550,14 @@ fun AdultDashboard(
                         .weight(1f)
                         .height(110.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize().padding(16.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = Color(0xFF0CA678))
+                        Icon(imageVector = Icons.Default.Book, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Text("Resource Library", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Color.Black)
                     }
                 }
