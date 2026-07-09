@@ -7,7 +7,7 @@ import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import kotlin.math.absoluteValue
+
 
 /**
  * TfLiteManager handles loading TFLite models from assets.
@@ -59,26 +59,15 @@ class TfLiteManager(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(inputImage, output)
+                Log.i(TAG, "DrawNet: TFLite model inference succeeded.")
                 return output[0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running DrawNet: ${e.message}")
+                Log.e(TAG, "Error running DrawNet TFLite: ${e.message}")
             }
         }
         
-        // Heuristic fallback: calculate average pixel intensities to compute dummy probability
-        var sum = 0f
-        var count = 0
-        for (i in inputImage[0].indices step 8) {
-            for (j in inputImage[0][i].indices step 8) {
-                sum += inputImage[0][i][j][0] // Red channel
-                count++
-            }
-        }
-        val intensity = if (count > 0) sum / count else 0f
-        
-        // Simulating some pseudo-randomness based on pixel density
-        val rawProb = (intensity * 10f).absoluteValue % 1f
-        return floatArrayOf(1f - rawProb, rawProb * 0.7f, rawProb * 0.3f)
+        Log.i(TAG, "DrawNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scoreDrawNet(inputImage)
     }
 
     /**
@@ -93,29 +82,15 @@ class TfLiteManager(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(gazeSequence, output)
+                Log.i(TAG, "GazeNet: TFLite model inference succeeded.")
                 return output[0][0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running GazeNet: ${e.message}")
+                Log.e(TAG, "Error running GazeNet TFLite: ${e.message}")
             }
         }
         
-        // Heuristic fallback: compute count of regressions (backward movements) from sequence
-        var regressionCount = 0
-        for (i in 1 until gazeSequence[0].size) {
-            val prevX = gazeSequence[0][i-1][0]
-            val currX = gazeSequence[0][i][0]
-            val prevY = gazeSequence[0][i-1][1]
-            val currY = gazeSequence[0][i][1]
-            
-            // If movement is backward (e.g. current X is less than previous X while Y is steady)
-            if (currX < prevX && (currY - prevY).absoluteValue < 20f) {
-                regressionCount++
-            }
-        }
-        
-        // Heuristic mapping: higher regressions indicate reading difficulty
-        val ratio = regressionCount.toFloat() / gazeSequence[0].size.toFloat()
-        return (ratio * 5f).coerceIn(0f, 1f)
+        Log.i(TAG, "GazeNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scoreGazeNet(gazeSequence)
     }
 
     /**
@@ -130,33 +105,15 @@ class TfLiteManager(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(audioData, output)
+                Log.i(TAG, "PhonNet: TFLite model inference succeeded.")
                 return output[0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running PhonNet: ${e.message}")
+                Log.e(TAG, "Error running PhonNet TFLite: ${e.message}")
             }
         }
         
-        // Heuristic fallback: spectral silence ratio to flag speech blocks
-        var silenceFrames = 0
-        val frameSize = 256
-        for (i in audioData.indices step frameSize) {
-            var energy = 0f
-            val endIdx = minOf(i + frameSize, audioData.size)
-            for (j in i until endIdx) {
-                energy += audioData[j] * audioData[j]
-            }
-            if (energy < 0.005f) {
-                silenceFrames++
-            }
-        }
-        
-        val totalFrames = audioData.size / frameSize
-        val silenceRatio = silenceFrames.toFloat() / totalFrames.toFloat()
-        
-        // Map silence ratios to indicators: high silence maps to speech block/stutter risk
-        val blockProb = (silenceRatio * 2f).coerceIn(0f, 0.8f)
-        val fluentProb = 1f - blockProb
-        return floatArrayOf(blockProb * 0.4f, blockProb * 0.4f, blockProb * 0.2f, fluentProb)
+        Log.i(TAG, "PhonNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scorePhonNet(audioData)
     }
 
     /**
@@ -172,33 +129,15 @@ class TfLiteManager(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(behaviorStats, output)
+                Log.i(TAG, "AttentNet: TFLite model inference succeeded.")
                 return output[0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running AttentNet: ${e.message}")
+                Log.e(TAG, "Error running AttentNet TFLite: ${e.message}")
             }
         }
         
-        // Direct heuristic logic mapping:
-        val missRate = behaviorStats[0]
-        val commRate = behaviorStats[1]
-        val rtVar = behaviorStats[2]
-        val gazeOff = behaviorStats[3]
-        
-        // Inattentive indicators
-        val inattentiveScore = ((missRate + gazeOff) / 2f).coerceIn(0f, 1f)
-        // Hyperactive indicators
-        val hyperactiveScore = commRate.coerceIn(0f, 1f)
-        // Combined indicators
-        val combinedScore = (inattentiveScore * hyperactiveScore).coerceIn(0f, 1f)
-        val typicalScore = (1f - maxOf(inattentiveScore, hyperactiveScore, combinedScore)).coerceIn(0f, 1f)
-        
-        val sum = typicalScore + inattentiveScore + hyperactiveScore + combinedScore
-        return floatArrayOf(
-            typicalScore / sum,
-            inattentiveScore / sum,
-            hyperactiveScore / sum,
-            combinedScore / sum
-        )
+        Log.i(TAG, "AttentNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scoreAttentNet(behaviorStats)
     }
 
     /**
@@ -209,45 +148,27 @@ class TfLiteManager(private val context: Context) {
     fun runEmotNet(textInput: String): FloatArray {
         val interpreter = emotnetInterpreter
         
-        // DistilBERT inputs require tokenization [1, 64] which is typically done via an on-device Vocab dictionary.
-        // For fallback validation/execution:
         val output = Array(1) { FloatArray(4) }
         if (interpreter != null) {
             try {
-                // Tokenize simple character sequences internally for interpreter
                 val mockInputIds = Array(1) { IntArray(64) { 0 } }
                 val words = textInput.lowercase().split(" ")
                 for (i in 0 until minOf(words.size, 64)) {
-                    mockInputIds[0][i] = words[i].hashCode() % 30000 // Hash proxy token values
+                    mockInputIds[0][i] = words[i].hashCode() % 30000
                 }
                 val mockMask = Array(1) { IntArray(64) { if (it < words.size) 1 else 0 } }
                 
                 val inputs = arrayOf(mockInputIds, mockMask)
                 interpreter.run(inputs, output)
+                Log.i(TAG, "EmotNet: TFLite model inference succeeded.")
                 return output[0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running EmotNet: ${e.message}")
+                Log.e(TAG, "Error running EmotNet TFLite: ${e.message}")
             }
         }
         
-        // Heuristic fallback: search for sentiment keywords
-        val lowerText = textInput.lowercase()
-        val worryCount = listOf("worry", "fail", "afraid", "scared", "test", "exam", "stomach").count { lowerText.contains(it) }
-        val perfectionismCount = listOf("perfect", "mistake", "erase", "redo", "correct").count { lowerText.contains(it) }
-        val sadnessCount = listOf("tired", "alone", "sad", "unhappy", "cry", "give up").count { lowerText.contains(it) }
-        
-        val worryProb = (worryCount * 0.35f).coerceIn(0f, 0.9f)
-        val perfectionismProb = (perfectionismCount * 0.35f).coerceIn(0f, 0.9f)
-        val sadnessProb = (sadnessCount * 0.35f).coerceIn(0f, 0.9f)
-        val controlProb = (1f - maxOf(worryProb, perfectionismProb, sadnessProb)).coerceIn(0.1f, 1f)
-        
-        val sum = controlProb + worryProb + perfectionismProb + sadnessProb
-        return floatArrayOf(
-            controlProb / sum,
-            worryProb / sum,
-            perfectionismProb / sum,
-            sadnessProb / sum
-        )
+        Log.i(TAG, "EmotNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scoreEmotNet(textInput)
     }
 
     /**
@@ -263,34 +184,18 @@ class TfLiteManager(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(spatialStats, output)
+                Log.i(TAG, "SpatialNet: TFLite model inference succeeded.")
                 return output[0]
             } catch (e: Exception) {
-                Log.e("TfLiteManager", "Error running SpatialNet: ${e.message}")
+                Log.e(TAG, "Error running SpatialNet TFLite: ${e.message}")
             }
         }
         
-        // Direct heuristic logic mapping:
-        val span = spatialStats[0]
-        val planningTime = spatialStats[1]
-        val errors = spatialStats[2]
-        val targetLen = spatialStats[3]
-        
-        val spanLoss = (targetLen - span).coerceAtLeast(0f)
-        
-        // Memory Deficit: low span, high errors, typical planning time
-        val memoryScore = (spanLoss * 0.3f + errors * 0.15f).coerceIn(0f, 1f)
-        // Executive Deficit: high planning delays
-        val executiveScore = (planningTime / 5000f).coerceIn(0f, 1f)
-        // Combined deficit: both high
-        val combinedScore = (memoryScore * executiveScore).coerceIn(0f, 1f)
-        val typicalScore = (1f - maxOf(memoryScore, executiveScore, combinedScore)).coerceIn(0f, 1f)
-        
-        val sum = typicalScore + memoryScore + executiveScore + combinedScore
-        return floatArrayOf(
-            typicalScore / sum,
-            memoryScore / sum,
-            executiveScore / sum,
-            combinedScore / sum
-        )
+        Log.i(TAG, "SpatialNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        return HeuristicScorers.scoreSpatialNet(spatialStats)
+    }
+
+    companion object {
+        private const val TAG = "TfLiteManager"
     }
 }

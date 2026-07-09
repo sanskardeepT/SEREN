@@ -30,7 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.content.Context
+import android.os.Vibrator
+import android.os.VibrationEffect
+import android.os.Build
+import androidx.compose.ui.platform.LocalContext
 import com.seren.app.data.ConditionIds
+import com.seren.app.ml.TfLiteManager
 import kotlin.random.Random
 
 @Composable
@@ -38,8 +44,11 @@ fun NumberTaskScreen(
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
+    val context = LocalContext.current
+    val tfLiteManager = remember { TfLiteManager(context) }
     var step by remember { mutableStateOf(1) } // Step 1: dot subitizing, Step 2: comparison
     val startTime = remember { mutableStateOf(System.currentTimeMillis()) }
+    var showSpamAlert by remember { mutableStateOf(false) }
     
     // Task 1: Subitizing configuration
     val dotCount = remember { Random.nextInt(3, 8) }
@@ -120,12 +129,25 @@ fun NumberTaskScreen(
                 options.forEach { option ->
                     Button(
                         onClick = {
-                            subitizingResponseTime = System.currentTimeMillis() - startTime.value
-                            isSubitizingCorrect = (option == dotCount)
-                            
-                            // Advance to comparison step
-                            step = 2
-                            startTime.value = System.currentTimeMillis()
+                            val rt = System.currentTimeMillis() - startTime.value
+                            if (rt < 300) {
+                                showSpamAlert = true
+                                val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                                vibrator?.let { v ->
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        v.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+                                    } else {
+                                        v.vibrate(300)
+                                    }
+                                }
+                            } else {
+                                subitizingResponseTime = rt
+                                isSubitizingCorrect = (option == dotCount)
+                                
+                                // Advance to comparison step
+                                step = 2
+                                startTime.value = System.currentTimeMillis()
+                            }
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp),
@@ -162,13 +184,27 @@ fun NumberTaskScreen(
                 // Left Option Card
                 Card(
                     onClick = {
-                        comparisonResponseTime = System.currentTimeMillis() - startTime.value
-                        isComparisonCorrect = (numLeft > numRight)
-                        submitHeuristicResult(
-                            subitizingResponseTime, isSubitizingCorrect,
-                            comparisonResponseTime, isComparisonCorrect,
-                            onComplete, onNext
-                        )
+                        val rt = System.currentTimeMillis() - startTime.value
+                        if (rt < 280) {
+                            showSpamAlert = true
+                            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                            vibrator?.let { v ->
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+                                } else {
+                                    v.vibrate(300)
+                                }
+                            }
+                        } else {
+                            comparisonResponseTime = rt
+                            isComparisonCorrect = (numLeft > numRight)
+                            submitHeuristicResult(
+                                subitizingResponseTime, isSubitizingCorrect,
+                                comparisonResponseTime, isComparisonCorrect,
+                                tfLiteManager,
+                                onComplete, onNext
+                            )
+                        }
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -184,13 +220,27 @@ fun NumberTaskScreen(
                 // Right Option Card
                 Card(
                     onClick = {
-                        comparisonResponseTime = System.currentTimeMillis() - startTime.value
-                        isComparisonCorrect = (numRight > numLeft)
-                        submitHeuristicResult(
-                            subitizingResponseTime, isSubitizingCorrect,
-                            comparisonResponseTime, isComparisonCorrect,
-                            onComplete, onNext
-                        )
+                        val rt = System.currentTimeMillis() - startTime.value
+                        if (rt < 280) {
+                            showSpamAlert = true
+                            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                            vibrator?.let { v ->
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+                                } else {
+                                    v.vibrate(300)
+                                }
+                            }
+                        } else {
+                            comparisonResponseTime = rt
+                            isComparisonCorrect = (numRight > numLeft)
+                            submitHeuristicResult(
+                                subitizingResponseTime, isSubitizingCorrect,
+                                comparisonResponseTime, isComparisonCorrect,
+                                tfLiteManager,
+                                onComplete, onNext
+                            )
+                        }
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -205,6 +255,27 @@ fun NumberTaskScreen(
             }
             Spacer(modifier = Modifier.height(56.dp)) // Maintain layouts spacing alignment
         }
+
+        if (showSpamAlert) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { 
+                    showSpamAlert = false
+                    startTime.value = System.currentTimeMillis()
+                },
+                title = { Text("Rapid Response Detected", fontWeight = FontWeight.Bold) },
+                text = { Text("Your response was recorded faster than the typical observation threshold. Please take sufficient time to count the items and make an accurate selection.") },
+                confirmButton = {
+                    Button(
+                        onClick = { 
+                            showSpamAlert = false
+                            startTime.value = System.currentTimeMillis()
+                        }
+                    ) {
+                        Text("Resume Test")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -213,6 +284,7 @@ private fun submitHeuristicResult(
     correct1: Boolean,
     rt2: Long,
     correct2: Boolean,
+    tfLiteManager: TfLiteManager,
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
@@ -230,8 +302,25 @@ private fun submitHeuristicResult(
         else -> 0.15f
     }
 
+    val span = if (correct1 && correct2) 6f else 4f
+    val planningTime = rt2.toFloat()
+    val errors = (if (correct1) 0f else 1f) + (if (correct2) 0f else 1f)
+    val seqLen = 6f
+    
+    val spatialStats = floatArrayOf(span, planningTime, errors, seqLen)
+    val spatialScores = tfLiteManager.runSpatialNet(spatialStats)
+    val memoryScore = spatialScores[1]
+    val execScore = spatialScores[2]
+
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
+    
+    // Batch 1 Conditions
     onComplete(ConditionIds.DYSCALCULIA, riskScore, rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
+    
+    // Batch 2 Conditions
+    onComplete(ConditionIds.WORKING_MEMORY, memoryScore, rawJson, duration)
+    onComplete(ConditionIds.EXECUTIVE_FUNCTION, execScore, rawJson, duration)
+    
     onNext()
 }

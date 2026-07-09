@@ -105,6 +105,18 @@ object ConditionIds {
         // PhonologicalTask (RAN)
         ANOMIA,
         APD,
+        // === Batch 2 ===
+        SOCIAL_ANXIETY,
+        GAD,
+        SELECTIVE_MUTISM,
+        TEST_ANXIETY,
+        SEPARATION_ANXIETY,
+        SCHOOL_PHOBIA,
+        DEPRESSION,
+        EMOTIONAL_DYSREGULATION,
+        EXECUTIVE_FUNCTION,
+        WORKING_MEMORY,
+
         // NumberTask + AttentionTask (RT-derived)
         PROCESSING_SPEED,
         // ReadingGazeTask (adult variant)

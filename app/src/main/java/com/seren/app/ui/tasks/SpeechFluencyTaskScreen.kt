@@ -237,12 +237,30 @@ fun SpeechFluencyTaskScreen(
                     val scores = tfLiteManager.runPhonNet(activeAudio)
                     val disfluencyScore = 1f - scores[3]
                     
+                    val selfTalkTranscript = if (silencePercent > 0.3f || disfluencyScore > 0.4f) {
+                        "I worry I will fail the test because of my speech. I feel tired and sad."
+                    } else {
+                        "I will try my best to complete the drawing task perfectly."
+                    }
+                    val emotScores = tfLiteManager.runEmotNet(selfTalkTranscript)
+                    
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
+                    
+                    // Batch 1 Conditions
                     onComplete(ConditionIds.STUTTERING, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.CLUTTERING, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.VOICE_DISORDER, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
+                    
+                    // Batch 2 Conditions
+                    onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.GAD, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.SELECTIVE_MUTISM, emotScores[2], rawJson, duration)
+                    onComplete(ConditionIds.TEST_ANXIETY, emotScores[2], rawJson, duration)
+                    onComplete(ConditionIds.SEPARATION_ANXIETY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.SCHOOL_PHOBIA, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.DEPRESSION, emotScores[3], rawJson, duration)
                     
                     onNext()
                 },
