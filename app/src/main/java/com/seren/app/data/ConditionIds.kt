@@ -130,7 +130,11 @@ object ConditionIds {
         // SpeechFluencyTask (acoustic quality)
         VOICE_DISORDER,
         // SpeechFluencyTask (motor speech planning)
-        APRAXIA_OF_SPEECH
+        APRAXIA_OF_SPEECH,
+        // Batch 3 missing integrations
+        RECEPTIVE_LANGUAGE,
+        NON_VERBAL_LD,
+        TWICE_EXCEPTIONAL
     )
 
     fun getDisplayName(id: String): String = when (id) {

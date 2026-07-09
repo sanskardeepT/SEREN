@@ -99,7 +99,7 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
             
             // --- FUSIONNET ENSEMBLE SCORING ---
             // Combine active task results into 0-100 scores for all active conditions.
-            val finalScores = ConditionIds.ACTIVE.mapNotNull { conditionId ->
+            val mappedScores = ConditionIds.ACTIVE.filter { it != ConditionIds.TWICE_EXCEPTIONAL }.mapNotNull { conditionId ->
                 // Gather task scores targeting this specific condition
                 val conditionResults = results.filter { it.conditionId == conditionId }
                 
@@ -128,10 +128,36 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
                     confidenceLevel = confidence,
                     modalitiesUsed = modalitiesCount
                 )
-            }
+            }.toMutableList()
+
+            // Calculate Twice-Exceptional (2e) profile dynamically:
+            // High cognitive/academic capacity (e.g. low dyscalculia or executive deficit risk)
+            // co-occurring with high learning/attention differences (dyslexia or adhd).
+            val dyslexiaScore = mappedScores.find { it.conditionId == ConditionIds.DYSLEXIA }?.riskScore ?: 0f
+            val adhdScore = maxOf(
+                mappedScores.find { it.conditionId == ConditionIds.ADHD_INATTENTIVE }?.riskScore ?: 0f,
+                mappedScores.find { it.conditionId == ConditionIds.ADHD_HYPERACTIVE }?.riskScore ?: 0f,
+                mappedScores.find { it.conditionId == ConditionIds.ADHD_COMBINED }?.riskScore ?: 0f
+            )
+            val dyscalculiaScore = mappedScores.find { it.conditionId == ConditionIds.DYSCALCULIA }?.riskScore ?: 0f
+            val execScore = mappedScores.find { it.conditionId == ConditionIds.EXECUTIVE_FUNCTION }?.riskScore ?: 0f
+
+            val highCognitiveCapacity = (100f - minOf(dyscalculiaScore, execScore))
+            val cooccurringDifference = maxOf(dyslexiaScore, adhdScore)
+            val twiceExceptionalScore = (highCognitiveCapacity * cooccurringDifference / 100f).coerceIn(0f, 100f)
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.TWICE_EXCEPTIONAL,
+                    riskScore = twiceExceptionalScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 2
+                )
+            )
 
             // Save to database
-            screeningDao.insertConditionScores(finalScores)
+            screeningDao.insertConditionScores(mappedScores)
             
             // Mark session as complete
             screeningDao.updateSessionStatus(

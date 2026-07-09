@@ -321,6 +321,7 @@ private fun submitHeuristicResult(
     // Batch 2 Conditions
     onComplete(ConditionIds.WORKING_MEMORY, memoryScore, rawJson, duration)
     onComplete(ConditionIds.EXECUTIVE_FUNCTION, execScore, rawJson, duration)
+    onComplete(ConditionIds.NON_VERBAL_LD, execScore, rawJson, duration)
     
     onNext()
 }
