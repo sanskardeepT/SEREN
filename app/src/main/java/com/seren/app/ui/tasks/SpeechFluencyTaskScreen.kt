@@ -257,6 +257,16 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.PRAGMATIC_LANGUAGE, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.THEORY_OF_MIND, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.TRAUMA_SILENCE, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.BODY_IMAGE_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.IMPOSTER_SYNDROME, emotScores[2], rawJson, duration)
+                    onComplete(ConditionIds.REJECTION_SENSITIVITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.WORKPLACE_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.RELATIONSHIP_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.FOMO_ANXIETY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.DIGITAL_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.ACADEMIC_TRAUMA, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.STUTTERING_CONFIDENCE_DEFICIT, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.DECISION_PARALYSIS, emotScores[2], rawJson, duration)
                     
                     // Batch 2 Conditions
                     onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)

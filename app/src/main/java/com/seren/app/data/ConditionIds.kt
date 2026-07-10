@@ -66,6 +66,18 @@ object ConditionIds {
     const val PROPRIOCEPTIVE_DIFFICULTY = "proprioceptive_difficulty"
     const val TRAUMA_SILENCE = "trauma_silence"
 
+    // === Batch 6 Conditions ===
+    const val BODY_IMAGE_INSECURITY = "body_image_insecurity"
+    const val IMPOSTER_SYNDROME = "imposter_syndrome"
+    const val REJECTION_SENSITIVITY = "rejection_sensitivity"
+    const val WORKPLACE_INSECURITY = "workplace_insecurity"
+    const val RELATIONSHIP_INSECURITY = "relationship_insecurity"
+    const val FOMO_ANXIETY = "fomo_anxiety"
+    const val DIGITAL_INSECURITY = "digital_insecurity"
+    const val ACADEMIC_TRAUMA = "academic_trauma"
+    const val STUTTERING_CONFIDENCE_DEFICIT = "stuttering_confidence_deficit"
+    const val DECISION_PARALYSIS = "decision_paralysis"
+
     val BATCH_1 = listOf(
         DYSLEXIA,
         DYSGRAPHIA,
@@ -131,7 +143,20 @@ object ConditionIds {
         TRAUMA_SILENCE
     )
 
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5
+    val BATCH_6 = listOf(
+        BODY_IMAGE_INSECURITY,
+        IMPOSTER_SYNDROME,
+        REJECTION_SENSITIVITY,
+        WORKPLACE_INSECURITY,
+        RELATIONSHIP_INSECURITY,
+        FOMO_ANXIETY,
+        DIGITAL_INSECURITY,
+        ACADEMIC_TRAUMA,
+        STUTTERING_CONFIDENCE_DEFICIT,
+        DECISION_PARALYSIS
+    )
+
+    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6
 
     /**
      * Only conditions with at least one clinically defensible signal source
@@ -206,7 +231,18 @@ object ConditionIds {
         SENSORY_DEFENSIVENESS,
         VESTIBULAR_DIFFICULTY,
         PROPRIOCEPTIVE_DIFFICULTY,
-        TRAUMA_SILENCE
+        TRAUMA_SILENCE,
+        // Batch 6 integrations
+        BODY_IMAGE_INSECURITY,
+        IMPOSTER_SYNDROME,
+        REJECTION_SENSITIVITY,
+        WORKPLACE_INSECURITY,
+        RELATIONSHIP_INSECURITY,
+        FOMO_ANXIETY,
+        DIGITAL_INSECURITY,
+        ACADEMIC_TRAUMA,
+        STUTTERING_CONFIDENCE_DEFICIT,
+        DECISION_PARALYSIS
     )
 
     fun getDisplayName(id: String): String = when (id) {
@@ -265,6 +301,17 @@ object ConditionIds {
         PROPRIOCEPTIVE_DIFFICULTY -> "Proprioceptive Processing Difficulty"
         TRAUMA_SILENCE -> "Trauma-Based Silence"
         
+        BODY_IMAGE_INSECURITY -> "Body Image Insecurity"
+        IMPOSTER_SYNDROME -> "Imposter Syndrome"
+        REJECTION_SENSITIVITY -> "Rejection Sensitivity"
+        WORKPLACE_INSECURITY -> "Workplace & Career Insecurity"
+        RELATIONSHIP_INSECURITY -> "Relationship Insecurity"
+        FOMO_ANXIETY -> "FOMO & Social Comparison Anxiety"
+        DIGITAL_INSECURITY -> "Digital & Online Social Insecurity"
+        ACADEMIC_TRAUMA -> "Academic Trauma"
+        STUTTERING_CONFIDENCE_DEFICIT -> "Stuttering-Linked Confidence Deficit"
+        DECISION_PARALYSIS -> "Decision Paralysis"
+        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
@@ -289,6 +336,11 @@ object ConditionIds {
         TWICE_EXCEPTIONAL, MASKING, HFA_MASKED, SOCIAL_COMMUNICATION_DISORDER, THEORY_OF_MIND -> "Silent Profiles"
         
         VMI, SENSORY_PROCESSING, SENSORY_DEFENSIVENESS, VESTIBULAR_DIFFICULTY, PROPRIOCEPTIVE_DIFFICULTY -> "Sensory & Motor"
+        
+        BODY_IMAGE_INSECURITY, IMPOSTER_SYNDROME, REJECTION_SENSITIVITY,
+        WORKPLACE_INSECURITY, RELATIONSHIP_INSECURITY, FOMO_ANXIETY,
+        DIGITAL_INSECURITY, ACADEMIC_TRAUMA, STUTTERING_CONFIDENCE_DEFICIT,
+        DECISION_PARALYSIS -> "Insecurities & Confidence Deficits"
         
         else -> "General"
     }
@@ -348,6 +400,17 @@ object ConditionIds {
         VESTIBULAR_DIFFICULTY -> "Balance, movement coordination, and tactile motor planning deficits."
         PROPRIOCEPTIVE_DIFFICULTY -> "Atypical touch feedback, writing stroke pressure, or spatial coordination."
         TRAUMA_SILENCE -> "Vocal avoidance, low volume, or situational silence linked to emotional stressors."
+        
+        BODY_IMAGE_INSECURITY -> "Worry or anxiety regarding physical appearance and social feedback."
+        IMPOSTER_SYNDROME -> "Cognitive anxiety relating to competence, feeling like a fraud despite success."
+        REJECTION_SENSITIVITY -> "Extreme sensitivity to negative evaluation, feedback, or social exclusion."
+        WORKPLACE_INSECURITY -> "Anxiety regarding performance, career advancement, and job stability."
+        RELATIONSHIP_INSECURITY -> "Interpersonal trust anxiety, attachment concern, and fear of abandonment."
+        FOMO_ANXIETY -> "Social comparison anxiety and fear of missing out on peer group activities."
+        DIGITAL_INSECURITY -> "Anxiety relating to online presence, social media evaluation, and digital interactions."
+        ACADEMIC_TRAUMA -> "Performance fatigue, stress, or avoidance linked to academic evaluative tasks."
+        STUTTERING_CONFIDENCE_DEFICIT -> "Reduced verbal confidence, speech avoidance, and expression anxiety."
+        DECISION_PARALYSIS -> "Prolonged decision latencies, erasures, and difficulty choosing under low pressure."
         
         else -> "Neurodevelopmental and cognitive screening profile."
     }

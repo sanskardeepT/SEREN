@@ -131,6 +131,8 @@ fun ReadingGazeTaskScreen(
                 onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, riskScore, rawJson, duration)
                 onComplete(ConditionIds.SOCIAL_COMMUNICATION_DISORDER, riskScore, rawJson, duration)
                 onComplete(ConditionIds.THEORY_OF_MIND, riskScore, rawJson, duration)
+                onComplete(ConditionIds.ACADEMIC_TRAUMA, riskScore, rawJson, duration)
+                onComplete(ConditionIds.DECISION_PARALYSIS, riskScore, rawJson, duration)
                 
                 onNext()
             },

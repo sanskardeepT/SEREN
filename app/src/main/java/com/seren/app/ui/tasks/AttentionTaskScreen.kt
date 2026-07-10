@@ -270,6 +270,7 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.ADULT_PROCESSING_SPEED, predictions[3], rawJson, duration)
     onComplete(ConditionIds.SENSORY_PROCESSING, predictions[2], rawJson, duration)
     onComplete(ConditionIds.SENSORY_DEFENSIVENESS, predictions[2], rawJson, duration)
+    onComplete(ConditionIds.DECISION_PARALYSIS, predictions[1], rawJson, duration)
     
     onNext()
 }
