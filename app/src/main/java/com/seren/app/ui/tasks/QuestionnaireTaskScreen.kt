@@ -29,11 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seren.app.data.ConditionIds
+import com.seren.app.ml.TfLiteManager
 
 data class QuestionnaireItem(
     val parentText: String,
@@ -47,6 +49,8 @@ fun QuestionnaireTaskScreen(
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
+    val context = LocalContext.current
+    val tfLiteManager = remember { TfLiteManager(context) }
     val startTime = remember { System.currentTimeMillis() }
     
     val questions = remember {
@@ -162,11 +166,31 @@ fun QuestionnaireTaskScreen(
                 domainAverages[domain] = avg
             }
 
-            val anxietyScore = domainAverages["anxiety"] ?: 0.15f
-            val emotionalScore = domainAverages["emotional"] ?: 0.15f
+            val rawAnxiety = domainAverages["anxiety"] ?: 0.15f
+            val rawEmotional = domainAverages["emotional"] ?: 0.15f
             val sensoryScore = domainAverages["sensory"] ?: 0.15f
             val executiveScore = domainAverages["executive"] ?: 0.15f
-            val insecurityScore = domainAverages["insecurity"] ?: 0.15f
+            val rawInsecurity = domainAverages["insecurity"] ?: 0.15f
+
+            // Construct transcript statement for NLP classification using EmotNet
+            val summaryBuilder = StringBuilder()
+            questions.forEachIndexed { idx, q ->
+                val ans = responses[idx]
+                if (ans > 0) {
+                    val text = if (userRole.lowercase() == "parent") q.parentText else q.selfText
+                    summaryBuilder.append(text).append(" ")
+                }
+            }
+            val summaryText = summaryBuilder.toString().trim()
+            val emotNetPredictions = tfLiteManager.runEmotNet(summaryText.ifEmpty { "no symptoms reported" })
+            val worryScore = emotNetPredictions[1]
+            val perfScore = emotNetPredictions[2]
+            val sadnessScore = emotNetPredictions[3]
+
+            // Blend NLP classification with questionnaire scores
+            val anxietyScore = (rawAnxiety * 0.5f) + (worryScore * 0.5f)
+            val emotionalScore = (rawEmotional * 0.5f) + (sadnessScore * 0.5f)
+            val insecurityScore = (rawInsecurity * 0.5f) + (perfScore * 0.5f)
 
             val rawJson = StringBuilder().apply {
                 append("{\"q_responses\":[")

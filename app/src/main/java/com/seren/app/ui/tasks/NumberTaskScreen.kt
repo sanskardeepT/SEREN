@@ -201,6 +201,7 @@ fun NumberTaskScreen(
                             submitHeuristicResult(
                                 subitizingResponseTime, isSubitizingCorrect,
                                 comparisonResponseTime, isComparisonCorrect,
+                                tfLiteManager,
                                 onComplete, onNext
                             )
                         }
@@ -236,6 +237,7 @@ fun NumberTaskScreen(
                             submitHeuristicResult(
                                 subitizingResponseTime, isSubitizingCorrect,
                                 comparisonResponseTime, isComparisonCorrect,
+                                tfLiteManager,
                                 onComplete, onNext
                             )
                         }
@@ -282,6 +284,7 @@ private fun submitHeuristicResult(
     correct1: Boolean,
     rt2: Long,
     correct2: Boolean,
+    tfLiteManager: TfLiteManager,
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
@@ -289,15 +292,28 @@ private fun submitHeuristicResult(
     val averageRT = (rt1 + rt2) / 2f
     val accuracy = (if (correct1) 0.5f else 0f) + (if (correct2) 0.5f else 0f)
     
+    // Construct spatialStats vector for SpatialNet: shape [4]
+    // [corsi_span, planning_time_ms, error_count, sequence_length]
+    val span = if (correct1) 5f else 3f
+    val planningTime = rt1.toFloat()
+    val errors = (if (correct1) 0f else 1f) + (if (correct2) 0f else 1f)
+    val seqLen = 2f
+    val spatialStats = floatArrayOf(span, planningTime, errors, seqLen)
+    
+    val predictions = tfLiteManager.runSpatialNet(spatialStats)
+    val modelRisk = (predictions[1] + predictions[2] + predictions[3]).coerceIn(0f, 1f)
+    
     // Heuristic z-score calculation (normative standard: normal reading RT < 1200ms)
     // Map RT delays and errors directly to Dyscalculia risk probability (0.0 to 1.0)
-    val riskScore = when {
+    val heuristicScore = when {
         accuracy == 0f -> 0.9f
         accuracy == 0.5f && averageRT > 1800f -> 0.8f
         accuracy == 1f && averageRT > 2000f -> 0.6f
         accuracy == 1f && averageRT > 1300f -> 0.4f
         else -> 0.15f
     }
+    
+    val riskScore = (modelRisk * 0.7f) + (heuristicScore * 0.3f)
 
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
     // Batch 1 Conditions

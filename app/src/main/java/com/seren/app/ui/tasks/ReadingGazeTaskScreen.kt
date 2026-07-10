@@ -30,12 +30,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seren.app.data.ConditionIds
+import com.seren.app.ml.TfLiteManager
 
 @Composable
 fun ReadingGazeTaskScreen(
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
+    val context = LocalContext.current
+    val tfLiteManager = remember { TfLiteManager(context) }
     val startTime = remember { System.currentTimeMillis() }
 
     val passage = """
@@ -113,7 +116,7 @@ fun ReadingGazeTaskScreen(
                 val durationSeconds = duration / 1000f
                 val wpm = if (durationSeconds > 0.1f) (wordCount / durationSeconds) * 60f else 0f
                 
-                val riskScore = when {
+                val heuristicScore = when {
                     wpm < 10f -> 0.90f
                     wpm < 60f -> 0.75f
                     wpm < 100f -> 0.55f
@@ -122,6 +125,24 @@ fun ReadingGazeTaskScreen(
                     wpm >= 600f -> 0.80f // Flagged as skipping/skimming text
                     else -> 0.15f
                 }
+                
+                // Construct simulated gaze sequence for TFLite GazeNet model: shape [1, 100, 6]
+                // Features: [x, y, dx, dy, speed, is_fixation]
+                val gazeSequence = Array(1) { Array(100) { FloatArray(6) } }
+                for (i in 0 until 100) {
+                    val lineIndex = i / 20
+                    val stepInLine = i % 20
+                    val direction = if (stepInLine == 5 && wpm < 100f) -1f else 1f // regressions
+                    gazeSequence[0][i][0] = stepInLine * 50f * direction
+                    gazeSequence[0][i][1] = lineIndex * 100f
+                    gazeSequence[0][i][2] = direction * 10f
+                    gazeSequence[0][i][3] = 0f
+                    gazeSequence[0][i][4] = if (direction < 0f) 50f else 150f
+                    gazeSequence[0][i][5] = 1.0f
+                }
+                
+                val modelScore = tfLiteManager.runGazeNet(gazeSequence)
+                val riskScore = (modelScore * 0.7f) + (heuristicScore * 0.3f)
                 
                 val rawJson = "{\"duration_ms\": $duration, \"wpm\": $wpm, \"word_count\": $wordCount}"
                 onComplete(ConditionIds.DYSLEXIA_PHONOLOGICAL, riskScore, rawJson, duration)
