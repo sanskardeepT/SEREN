@@ -251,17 +251,6 @@ fun PhonologicalTaskScreen(
                     onComplete(ConditionIds.APD, risk, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, risk, rawJson, duration)
                     onComplete(ConditionIds.PHONOLOGICAL_DISORDER, risk, rawJson, duration)
-                    onComplete(ConditionIds.ADULT_ANOMIA, risk, rawJson, duration)
-                    onComplete(ConditionIds.RAN_DEFICIT, risk, rawJson, duration)
-                    onComplete(ConditionIds.PRAGMATIC_LANGUAGE, risk, rawJson, duration)
-                    onComplete(ConditionIds.TRAUMA_SILENCE, risk, rawJson, duration)
-                    onComplete(ConditionIds.STUTTERING_CONFIDENCE_DEFICIT, risk, rawJson, duration)
-                    onComplete(ConditionIds.DECISION_PARALYSIS, risk, rawJson, duration)
-                    onComplete(ConditionIds.EXPRESSION_INSECURITY, risk, rawJson, duration)
-                    onComplete(ConditionIds.DEEP_ROOTED_SHYNESS, risk, rawJson, duration)
-                    onComplete(ConditionIds.PUBLIC_SPEAKING_PHOBIA, risk, rawJson, duration)
-                    onComplete(ConditionIds.ALEXITHYMIA, risk, rawJson, duration)
-                    onComplete(ConditionIds.FAWN_RESPONSE, risk, rawJson, duration)
                     
                     onNext()
                 },

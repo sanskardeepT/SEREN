@@ -258,23 +258,9 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.ADHD_HYPERACTIVE, predictions[2], rawJson, duration)
     onComplete(ConditionIds.ADHD_COMBINED, predictions[3], rawJson, duration)
     
-    // Batch 2 Conditions
-    onComplete(ConditionIds.DEPRESSION, predictions[1] * 0.7f, rawJson, duration)
-    onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, predictions[2] * 0.8f, rawJson, duration)
-    onComplete(ConditionIds.TEST_ANXIETY, predictions[1] * 0.6f, rawJson, duration)
-    
     // Batch 3 / Adults / Others
     onComplete(ConditionIds.ADULT_ADHD, predictions[3], rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
-    onComplete(ConditionIds.VMI, predictions[2] * 0.8f, rawJson, duration)
-    onComplete(ConditionIds.ADULT_PROCESSING_SPEED, predictions[3], rawJson, duration)
-    onComplete(ConditionIds.SENSORY_PROCESSING, predictions[2], rawJson, duration)
-    onComplete(ConditionIds.SENSORY_DEFENSIVENESS, predictions[2], rawJson, duration)
-    onComplete(ConditionIds.DECISION_PARALYSIS, predictions[1], rawJson, duration)
-    onComplete(ConditionIds.SELF_CRITICISM, predictions[2], rawJson, duration)
-    onComplete(ConditionIds.PERFORMANCE_INSECURITY, predictions[1], rawJson, duration)
-    onComplete(ConditionIds.PDA, predictions[1], rawJson, duration)
-    onComplete(ConditionIds.HSP_OVERWHELM, predictions[2], rawJson, duration)
     
     onNext()
 }

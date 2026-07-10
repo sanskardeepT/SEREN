@@ -201,7 +201,6 @@ fun NumberTaskScreen(
                             submitHeuristicResult(
                                 subitizingResponseTime, isSubitizingCorrect,
                                 comparisonResponseTime, isComparisonCorrect,
-                                tfLiteManager,
                                 onComplete, onNext
                             )
                         }
@@ -237,7 +236,6 @@ fun NumberTaskScreen(
                             submitHeuristicResult(
                                 subitizingResponseTime, isSubitizingCorrect,
                                 comparisonResponseTime, isComparisonCorrect,
-                                tfLiteManager,
                                 onComplete, onNext
                             )
                         }
@@ -284,7 +282,6 @@ private fun submitHeuristicResult(
     correct1: Boolean,
     rt2: Long,
     correct2: Boolean,
-    tfLiteManager: TfLiteManager,
     onComplete: (conditionId: String, score: Float, rawJson: String, duration: Long) -> Unit,
     onNext: () -> Unit
 ) {
@@ -302,31 +299,11 @@ private fun submitHeuristicResult(
         else -> 0.15f
     }
 
-    val span = if (correct1 && correct2) 6f else 4f
-    val planningTime = rt2.toFloat()
-    val errors = (if (correct1) 0f else 1f) + (if (correct2) 0f else 1f)
-    val seqLen = 6f
-    
-    val spatialStats = floatArrayOf(span, planningTime, errors, seqLen)
-    val spatialScores = tfLiteManager.runSpatialNet(spatialStats)
-    val memoryScore = spatialScores[1]
-    val execScore = spatialScores[2]
-
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
     
     // Batch 1 Conditions
     onComplete(ConditionIds.DYSCALCULIA, riskScore, rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
-    
-    // Batch 2 Conditions
-    onComplete(ConditionIds.WORKING_MEMORY, memoryScore, rawJson, duration)
-    onComplete(ConditionIds.EXECUTIVE_FUNCTION, execScore, rawJson, duration)
-    onComplete(ConditionIds.NON_VERBAL_LD, execScore, rawJson, duration)
-    onComplete(ConditionIds.DYSPRAXIA, execScore, rawJson, duration)
-    onComplete(ConditionIds.ADULT_PROCESSING_SPEED, riskScore, rawJson, duration)
-    onComplete(ConditionIds.PLACE_VALUE_CONFUSION, riskScore, rawJson, duration)
-    onComplete(ConditionIds.FRACTION_RATIO_DEFICIT, riskScore, rawJson, duration)
-    onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, execScore, rawJson, duration)
     
     onNext()
 }

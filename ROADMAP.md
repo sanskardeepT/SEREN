@@ -23,7 +23,7 @@
 ---
 
 ## Batch 2 — Anxiety, Emotional & Executive Function
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 | # | Condition | Category |
 |---|---|---|
@@ -41,7 +41,7 @@
 ---
 
 ## Batch 3 — Additional Speech/Language, Adult Variants & Processing
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 | # | Condition | Category |
 |---|---|---|
@@ -59,7 +59,7 @@
 ---
 
 ## Batch 4 — Motor, Visual-Motor, Adult Extensions & Math Subtypes
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 | # | Condition | Category |
 |---|---|---|
@@ -77,7 +77,7 @@
 ---
 
 ## Batch 5 — Masking, Social Communication & Sensory (Phase 3 conditions, partial dataset support via ABIDE/ChildVox)
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 | # | Condition | Category |
 |---|---|---|
@@ -95,17 +95,17 @@
 ---
 
 ## Batch 6 — Insecurities & Confidence Deficits (Part 1)
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 ---
 
 ## Batch 7 — Insecurities & Confidence Deficits (Part 2)
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 ---
 
 ## Batch 8 — Remaining Insecurities & Silent Profiles (Final)
-**Status**: ✅ Completed & Integrated
+**Status**: Pending — needs dedicated tasks
 
 > ⚠️ **No dedicated public dataset exists for these conditions** (per Dataset Blueprint Section 6.7). These get built as validated-questionnaire + NLP self-report modules on EmotNet, not new trained sub-models. All 21 Insecurities + remaining Silent Profiles conditions go here, split across Batches 6 to 8.
 

@@ -226,18 +226,6 @@ object ConditionIds {
         // PhonologicalTask (RAN)
         ANOMIA,
         APD,
-        // === Batch 2 ===
-        SOCIAL_ANXIETY,
-        GAD,
-        SELECTIVE_MUTISM,
-        TEST_ANXIETY,
-        SEPARATION_ANXIETY,
-        SCHOOL_PHOBIA,
-        DEPRESSION,
-        EMOTIONAL_DYSREGULATION,
-        EXECUTIVE_FUNCTION,
-        WORKING_MEMORY,
-
         // NumberTask + AttentionTask (RT-derived)
         PROCESSING_SPEED,
         // ReadingGazeTask (adult variant)
@@ -251,64 +239,7 @@ object ConditionIds {
         // SpeechFluencyTask (acoustic quality)
         VOICE_DISORDER,
         // SpeechFluencyTask (motor speech planning)
-        APRAXIA_OF_SPEECH,
-        // Batch 3 missing integrations
-        RECEPTIVE_LANGUAGE,
-        NON_VERBAL_LD,
-        TWICE_EXCEPTIONAL,
-        // Batch 4 integrations
-        DYSPRAXIA,
-        VMI,
-        ADULT_ANOMIA,
-        ADULT_PROCESSING_SPEED,
-        READING_FLUENCY_LAG,
-        ORTHOGRAPHIC_DEFICIT,
-        RAN_DEFICIT,
-        SPELLING_DISORDER,
-        PLACE_VALUE_CONFUSION,
-        FRACTION_RATIO_DEFICIT,
-        // Batch 5 integrations
-        MASKING,
-        HFA_MASKED,
-        SOCIAL_COMMUNICATION_DISORDER,
-        PRAGMATIC_LANGUAGE,
-        THEORY_OF_MIND,
-        SENSORY_PROCESSING,
-        SENSORY_DEFENSIVENESS,
-        VESTIBULAR_DIFFICULTY,
-        PROPRIOCEPTIVE_DIFFICULTY,
-        TRAUMA_SILENCE,
-        // Batch 6 integrations
-        BODY_IMAGE_INSECURITY,
-        IMPOSTER_SYNDROME,
-        REJECTION_SENSITIVITY,
-        WORKPLACE_INSECURITY,
-        RELATIONSHIP_INSECURITY,
-        FOMO_ANXIETY,
-        DIGITAL_INSECURITY,
-        ACADEMIC_TRAUMA,
-        STUTTERING_CONFIDENCE_DEFICIT,
-        DECISION_PARALYSIS,
-        // Batch 7 integrations
-        FINANCIAL_INSECURITY,
-        LEADERSHIP_AVOIDANCE,
-        CAREER_STAGNATION,
-        DEEP_ROOTED_SHYNESS,
-        EXPRESSION_INSECURITY,
-        SOCIAL_BELONGING_INSECURITY,
-        PERFORMANCE_INSECURITY,
-        ANGER_INSECURITY,
-        FAMILY_ORIGIN_INSECURITY,
-        SELF_CRITICISM,
-        // Batch 8 integrations
-        PUBLIC_SPEAKING_PHOBIA,
-        PDA,
-        GIFTED_UNDERACHIEVEMENT,
-        INTROVERSION_SUPPRESSION,
-        INVISIBLE_STRUGGLE,
-        ALEXITHYMIA,
-        HSP_OVERWHELM,
-        FAWN_RESPONSE
+        APRAXIA_OF_SPEECH
     )
 
     fun getDisplayName(id: String): String = when (id) {

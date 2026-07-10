@@ -192,16 +192,6 @@ fun HandwritingTaskScreen(
                     val rawJson = "{\"strokes\": $strokeCount, \"total_distance\": $totalDistance, \"duration_ms\": $duration}"
                     onComplete(ConditionIds.DYSLEXIA, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.DYSGRAPHIA, reversalScore, rawJson, duration) // Dysgraphia overlaps same task inputs
-                    onComplete(ConditionIds.NON_VERBAL_LD, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.DYSPRAXIA, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.VMI, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.SPELLING_DISORDER, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.SENSORY_PROCESSING, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.VESTIBULAR_DIFFICULTY, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.SELF_CRITICISM, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.PDA, reversalScore, rawJson, duration)
                     
                     onNext()
                 },
