@@ -30,6 +30,9 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
     private val _isSessionComplete = MutableStateFlow(false)
     val isSessionComplete: StateFlow<Boolean> = _isSessionComplete.asStateFlow()
 
+    private val _userAgeGroup = MutableStateFlow<String?>(null)
+    val userAgeGroup: StateFlow<String?> = _userAgeGroup.asStateFlow()
+
     /** Order of assessment task screens */
     val tasksList = listOf(
         "Handwriting",
@@ -37,13 +40,15 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
         "Reading Gaze",
         "RAN Phonological",
         "CPT Attention",
-        "Speech Fluency"
+        "Speech Fluency",
+        "Self-Report Questionnaire"
     )
 
     fun startSession() {
         viewModelScope.launch {
             val profile = userDao.getUserProfile()
             if (profile != null) {
+                _userAgeGroup.value = profile.ageGroup
                 // If there's already an active session, reuse it, otherwise create one
                 val active = screeningDao.getActiveSession()
                 if (active != null) {

@@ -56,6 +56,7 @@ import com.seren.app.ui.tasks.NumberTaskScreen
 import com.seren.app.ui.tasks.PhonologicalTaskScreen
 import com.seren.app.ui.tasks.ReadingGazeTaskScreen
 import com.seren.app.ui.tasks.SpeechFluencyTaskScreen
+import com.seren.app.ui.tasks.QuestionnaireTaskScreen
 
 @Composable
 fun ScreeningScreen(
@@ -92,7 +93,8 @@ fun ScreeningScreen(
         2 -> "Reading Gaze"
         3 -> "Rapid Naming (RAN)"
         4 -> "Attention & Focus"
-        else -> "Speech & Fluency"
+        5 -> "Speech & Fluency"
+        else -> "Self-Report Questionnaire"
     }
 
     val taskInstruction = when (currentTaskIndex) {
@@ -101,7 +103,8 @@ fun ScreeningScreen(
         2 -> "We'll look at how your eyes move to learn about your focus. Just read the text and keep your face visible!"
         3 -> "We'll trace voice naming rates. Name the colors from left to right as fast as you can!"
         4 -> "We'll test target inhibition control. Tap on letters when they appear, except if the letter is X!"
-        else -> "We'll record disfluency rates. Read the sentence aloud when recording starts!"
+        5 -> "We'll record disfluency rates. Read the sentence aloud when recording starts!"
+        else -> "Please answer the self-report questions to help us understand your emotional and sensory needs."
     }
 
     if (isIntroActive) {
@@ -147,7 +150,7 @@ fun ScreeningScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "Task ${currentTaskIndex + 1} of 6",
+                    text = "Task ${currentTaskIndex + 1} of 7",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -220,7 +223,7 @@ fun ScreeningScreen(
                             Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurface)
                         }
                         Text(
-                            text = "Task ${currentTaskIndex + 1} of 6",
+                            text = "Task ${currentTaskIndex + 1} of 7",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -229,7 +232,7 @@ fun ScreeningScreen(
                     }
                     
                     // Progress Bar
-                    val progress = (currentTaskIndex + 1).toFloat() / 6f
+                    val progress = (currentTaskIndex + 1).toFloat() / 7f
                     LinearProgressIndicator(
                         progress = { progress },
                         modifier = Modifier
@@ -308,6 +311,21 @@ fun ScreeningScreen(
                         },
                         onNext = { viewModel.nextTask() }
                     )
+                    6 -> {
+                        val userAgeGroup by viewModel.userAgeGroup.collectAsState()
+                        val role = when {
+                            userAgeGroup?.startsWith("child") == true -> "parent"
+                            userAgeGroup?.startsWith("teen") == true -> "teen"
+                            else -> "adult"
+                        }
+                        QuestionnaireTaskScreen(
+                            userRole = role,
+                            onComplete = { conditionId, score, rawJson, duration ->
+                                viewModel.submitTaskResult(conditionId, "self_report_q", rawJson, score, duration)
+                            },
+                            onNext = { viewModel.nextTask() }
+                        )
+                    }
                 }
             }
         }

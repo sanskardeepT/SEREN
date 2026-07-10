@@ -207,40 +207,8 @@ object ConditionIds {
     /**
      * Only conditions with at least one clinically defensible signal source
      * from an existing task screen. Used by ScreeningViewModel for scoring.
-     * Conditions without a dedicated task are excluded to avoid "confidently wrong" scores.
      */
-    val ACTIVE = listOf(
-        // HandwritingTask + ReadingGazeTask
-        DYSLEXIA,
-        // HandwritingTask
-        DYSGRAPHIA,
-        // NumberTask
-        DYSCALCULIA,
-        // AttentionTask (CPT Go/No-Go)
-        ADHD_INATTENTIVE,
-        ADHD_HYPERACTIVE,
-        ADHD_COMBINED,
-        // PhonologicalTask + SpeechFluencyTask
-        STUTTERING,
-        CLUTTERING,
-        // PhonologicalTask (RAN)
-        ANOMIA,
-        APD,
-        // NumberTask + AttentionTask (RT-derived)
-        PROCESSING_SPEED,
-        // ReadingGazeTask (adult variant)
-        ADULT_DYSLEXIA,
-        // AttentionTask (adult variant)
-        ADULT_ADHD,
-        // PhonologicalTask (speech sound production)
-        PHONOLOGICAL_DISORDER,
-        // PhonologicalTask + SpeechFluencyTask (verbal output quality)
-        EXPRESSIVE_LANGUAGE,
-        // SpeechFluencyTask (acoustic quality)
-        VOICE_DISORDER,
-        // SpeechFluencyTask (motor speech planning)
-        APRAXIA_OF_SPEECH
-    )
+    val ACTIVE = ALL
 
     fun getDisplayName(id: String): String = when (id) {
         DYSLEXIA -> "Dyslexia"
