@@ -189,6 +189,46 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
                 )
             )
 
+            // Extract depression score for Gifted Underachievement composite
+            val depressionScore = mappedScores.find { it.conditionId == ConditionIds.DEPRESSION }?.riskScore ?: 0f
+            val giftedUnderachievementScore = ((100f - minOf(dyscalculiaScore, adhdScore)) * maxOf(depressionScore, execScore) / 100f).coerceIn(0f, 100f)
+
+            // Introversion-Driven Academic Suppression composite
+            val introversionSuppressionScore = ((100f - maxOf(adhdScore, execScore)) * maxOf(socialAnxietyScore, selectiveMutismScore) / 100f).coerceIn(0f, 100f)
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.GIFTED_UNDERACHIEVEMENT,
+                    riskScore = giftedUnderachievementScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 2
+                )
+            )
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.INTROVERSION_SUPPRESSION,
+                    riskScore = introversionSuppressionScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 2
+                )
+            )
+
+            // Invisible Struggle: average risk score across all other active conditions
+            val invisibleStruggleScore = if (mappedScores.isNotEmpty()) mappedScores.map { it.riskScore }.average().toFloat() else 0f
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.INVISIBLE_STRUGGLE,
+                    riskScore = invisibleStruggleScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 6
+                )
+            )
+
             // Save to database
             screeningDao.insertConditionScores(mappedScores)
             

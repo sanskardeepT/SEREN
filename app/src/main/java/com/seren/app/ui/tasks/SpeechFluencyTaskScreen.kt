@@ -277,6 +277,10 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.ANGER_INSECURITY, emotScores[3], rawJson, duration)
                     onComplete(ConditionIds.FAMILY_ORIGIN_INSECURITY, emotScores[1], rawJson, duration)
                     onComplete(ConditionIds.SELF_CRITICISM, emotScores[2], rawJson, duration)
+                    onComplete(ConditionIds.PUBLIC_SPEAKING_PHOBIA, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.ALEXITHYMIA, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.HSP_OVERWHELM, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.FAWN_RESPONSE, emotScores[1], rawJson, duration)
                     
                     // Batch 2 Conditions
                     onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)

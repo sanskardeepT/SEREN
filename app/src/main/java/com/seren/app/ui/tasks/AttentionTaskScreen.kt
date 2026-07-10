@@ -273,6 +273,8 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.DECISION_PARALYSIS, predictions[1], rawJson, duration)
     onComplete(ConditionIds.SELF_CRITICISM, predictions[2], rawJson, duration)
     onComplete(ConditionIds.PERFORMANCE_INSECURITY, predictions[1], rawJson, duration)
+    onComplete(ConditionIds.PDA, predictions[1], rawJson, duration)
+    onComplete(ConditionIds.HSP_OVERWHELM, predictions[2], rawJson, duration)
     
     onNext()
 }

@@ -259,6 +259,9 @@ fun PhonologicalTaskScreen(
                     onComplete(ConditionIds.DECISION_PARALYSIS, risk, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSION_INSECURITY, risk, rawJson, duration)
                     onComplete(ConditionIds.DEEP_ROOTED_SHYNESS, risk, rawJson, duration)
+                    onComplete(ConditionIds.PUBLIC_SPEAKING_PHOBIA, risk, rawJson, duration)
+                    onComplete(ConditionIds.ALEXITHYMIA, risk, rawJson, duration)
+                    onComplete(ConditionIds.FAWN_RESPONSE, risk, rawJson, duration)
                     
                     onNext()
                 },

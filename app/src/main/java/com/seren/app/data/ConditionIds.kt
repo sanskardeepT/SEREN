@@ -90,6 +90,16 @@ object ConditionIds {
     const val FAMILY_ORIGIN_INSECURITY = "family_origin_insecurity"
     const val SELF_CRITICISM = "self_criticism"
 
+    // === Batch 8 Conditions ===
+    const val PUBLIC_SPEAKING_PHOBIA = "public_speaking_phobia"
+    const val PDA = "pda"
+    const val GIFTED_UNDERACHIEVEMENT = "gifted_underachievement"
+    const val INTROVERSION_SUPPRESSION = "introversion_suppression"
+    const val INVISIBLE_STRUGGLE = "invisible_struggle"
+    const val ALEXITHYMIA = "alexithymia"
+    const val HSP_OVERWHELM = "hsp_overwhelm"
+    const val FAWN_RESPONSE = "fawn_response"
+
     val BATCH_1 = listOf(
         DYSLEXIA,
         DYSGRAPHIA,
@@ -181,7 +191,18 @@ object ConditionIds {
         SELF_CRITICISM
     )
 
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6 + BATCH_7
+    val BATCH_8 = listOf(
+        PUBLIC_SPEAKING_PHOBIA,
+        PDA,
+        GIFTED_UNDERACHIEVEMENT,
+        INTROVERSION_SUPPRESSION,
+        INVISIBLE_STRUGGLE,
+        ALEXITHYMIA,
+        HSP_OVERWHELM,
+        FAWN_RESPONSE
+    )
+
+    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6 + BATCH_7 + BATCH_8
 
     /**
      * Only conditions with at least one clinically defensible signal source
@@ -278,7 +299,16 @@ object ConditionIds {
         PERFORMANCE_INSECURITY,
         ANGER_INSECURITY,
         FAMILY_ORIGIN_INSECURITY,
-        SELF_CRITICISM
+        SELF_CRITICISM,
+        // Batch 8 integrations
+        PUBLIC_SPEAKING_PHOBIA,
+        PDA,
+        GIFTED_UNDERACHIEVEMENT,
+        INTROVERSION_SUPPRESSION,
+        INVISIBLE_STRUGGLE,
+        ALEXITHYMIA,
+        HSP_OVERWHELM,
+        FAWN_RESPONSE
     )
 
     fun getDisplayName(id: String): String = when (id) {
@@ -359,6 +389,15 @@ object ConditionIds {
         FAMILY_ORIGIN_INSECURITY -> "Family-Origin Insecurity"
         SELF_CRITICISM -> "Perfectionism-Driven Self-Criticism"
         
+        PUBLIC_SPEAKING_PHOBIA -> "Public Speaking Phobia"
+        PDA -> "Pathological Demand Avoidance"
+        GIFTED_UNDERACHIEVEMENT -> "Gifted Underachievement Profile"
+        INTROVERSION_SUPPRESSION -> "Introversion-Driven Academic Suppression"
+        INVISIBLE_STRUGGLE -> "Invisible Struggle Composite Burden"
+        ALEXITHYMIA -> "Alexithymia Profile"
+        HSP_OVERWHELM -> "Highly Sensitive Person Overwhelm"
+        FAWN_RESPONSE -> "Chronic People-Pleasing (Fawn Response)"
+        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
@@ -393,6 +432,11 @@ object ConditionIds {
         DEEP_ROOTED_SHYNESS, EXPRESSION_INSECURITY, SOCIAL_BELONGING_INSECURITY,
         PERFORMANCE_INSECURITY, ANGER_INSECURITY, FAMILY_ORIGIN_INSECURITY,
         SELF_CRITICISM -> "Insecurities & Confidence Deficits"
+        
+        PUBLIC_SPEAKING_PHOBIA -> "Insecurities & Confidence Deficits"
+        
+        PDA, GIFTED_UNDERACHIEVEMENT, INTROVERSION_SUPPRESSION, INVISIBLE_STRUGGLE,
+        ALEXITHYMIA, HSP_OVERWHELM, FAWN_RESPONSE -> "Silent Profiles"
         
         else -> "General"
     }
@@ -474,6 +518,15 @@ object ConditionIds {
         ANGER_INSECURITY -> "Repressed anger or irritability masking underlying vulnerability and insecurity."
         FAMILY_ORIGIN_INSECURITY -> "Trust issues, low self-worth, or anxiety stemming from family background."
         SELF_CRITICISM -> "Harsh self-evaluation, perfectionistic erasures, and self-blaming language."
+        
+        PUBLIC_SPEAKING_PHOBIA -> "Severe anxiety and communication avoidance relating to public speaking."
+        PDA -> "Obsessive avoidance of everyday demands and expectations, driven by an anxiety response."
+        GIFTED_UNDERACHIEVEMENT -> "Co-occurring high intellectual capability with lower-than-expected academic output."
+        INTROVERSION_SUPPRESSION -> "Introversion-driven silence or adaptation leading to underestimation of academic capacity."
+        INVISIBLE_STRUGGLE -> "A high cumulative cognitive/emotional burden from multiple mild-to-moderate active conditions."
+        ALEXITHYMIA -> "Difficulty identifying, describing, and expressing own emotions."
+        HSP_OVERWHELM -> "Hyper-responsiveness to sensory stimuli, environmental inputs, and emotional vibes."
+        FAWN_RESPONSE -> "Chronic people-pleasing, boundary deficits, and conflict avoidance behaviors."
         
         else -> "Neurodevelopmental and cognitive screening profile."
     }
