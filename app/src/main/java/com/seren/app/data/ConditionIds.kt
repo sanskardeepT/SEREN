@@ -1,72 +1,97 @@
 package com.seren.app.data
 
 /**
- * Identifiers and metadata for Batch 1 and Batch 2 conditions.
- * Using string constants instead of enums enables smooth additions of subsequent batches
- * without Room schema migrations.
+ * Identifiers and metadata for the complete 84 conditions.
+ * Aligned with the SEREN Master Research & Technical Blueprint PDF.
  */
 object ConditionIds {
-    // === Batch 1 Conditions ===
-    const val DYSLEXIA = "dyslexia"
-    const val DYSGRAPHIA = "dysgraphia"
-    const val DYSCALCULIA = "dyscalculia"
+    // === 84 Conditions Constants ===
+    const val DYSLEXIA_PHONOLOGICAL = "dyslexia_phonological"
+    const val DYSLEXIA_SURFACE = "dysxelia_surface"
+    const val DYSLEXIA_MIXED = "dyslexia_mixed"
+    const val DYSCALCULIA_CORE = "dyscalculia_core"
+    const val DYSCALCULIA_ACCESS = "dyscalculia_access"
+    const val DYSGRAPHIA_PHONOLOGICAL = "dysgraphia_phonological"
+    const val DYSGRAPHIA_MOTOR = "dysgraphia_motor"
+    const val SLD_DYSLEXIA_DYSCALCULIA = "sld_dyslexia_dyscalculia"
+    const val SLD_DYSLEXIA_DYSGRAPHIA = "sld_dyslexia_dysgraphia"
     const val ADHD_INATTENTIVE = "adhd_inattentive"
     const val ADHD_HYPERACTIVE = "adhd_hyperactive"
     const val ADHD_COMBINED = "adhd_combined"
-    const val STUTTERING = "stuttering"
-    const val CLUTTERING = "cluttering"
-    const val ANOMIA = "anomia"
-    const val APD = "apd"
-
-    // === Batch 2 Conditions ===
-    const val SOCIAL_ANXIETY = "social_anxiety"
-    const val GAD = "gad"
-    const val SELECTIVE_MUTISM = "selective_mutism"
-    const val TEST_ANXIETY = "test_anxiety"
-    const val SEPARATION_ANXIETY = "separation_anxiety"
-    const val SCHOOL_PHOBIA = "school_phobia"
-    const val DEPRESSION = "depression"
-    const val EMOTIONAL_DYSREGULATION = "emotional_dysregulation"
-    const val EXECUTIVE_FUNCTION = "executive_function"
-    const val WORKING_MEMORY = "working_memory"
-
-    // === Batch 3 Conditions ===
+    const val ADHD_ADULT = "adhd_adult"
+    const val ADHD_DYSLEXIA_COMORBID = "adhd_dyslexia_comorbid"
     const val PROCESSING_SPEED = "processing_speed"
-    const val VOICE_DISORDER = "voice_disorder"
-    const val EXPRESSIVE_LANGUAGE = "expressive_language"
-    const val RECEPTIVE_LANGUAGE = "receptive_language"
-    const val PHONOLOGICAL_DISORDER = "phonological_disorder"
-    const val APRAXIA_OF_SPEECH = "apraxia_of_speech"
-    const val NON_VERBAL_LD = "non_verbal_ld"
-    const val TWICE_EXCEPTIONAL = "twice_exceptional"
-    const val ADULT_DYSLEXIA = "adult_dyslexia"
-    const val ADULT_ADHD = "adult_adhd"
-
-    // === Batch 4 Conditions ===
+    const val WORKING_MEMORY = "working_memory"
+    const val DCD = "dcd"
     const val DYSPRAXIA = "dyspraxia"
     const val VMI = "vmi"
-    const val ADULT_ANOMIA = "adult_anomia"
-    const val ADULT_PROCESSING_SPEED = "adult_processing_speed"
-    const val READING_FLUENCY_LAG = "reading_fluency_lag"
-    const val ORTHOGRAPHIC_DEFICIT = "orthographic_deficit"
-    const val RAN_DEFICIT = "ran_deficit"
-    const val SPELLING_DISORDER = "spelling_disorder"
+    const val STUTTERING_REPETITIONS = "stuttering_repetitions"
+    const val STUTTERING_PROLONGATIONS = "stuttering_prolongations"
+    const val STUTTERING_INTERJECTIONS = "stuttering_interjections"
+    const val CLUTTERING = "cluttering"
+    const val DYSARTHRIA = "dysarthria"
+    const val APRAXIA_OF_SPEECH = "apraxia_of_speech"
+    const val EXPRESSIVE_LANGUAGE = "expressive_language"
+    const val RECEPTIVE_LANGUAGE = "receptive_language"
+    const val ANOMIA = "anomia"
+    const val PHONOLOGICAL_DISORDER = "phonological_disorder"
+    const val APD = "apd"
+    const val VOICE_DISORDER = "voice_disorder"
+    const val GAD = "gad"
+    const val SOCIAL_ANXIETY = "social_anxiety"
+    const val SEPARATION_ANXIETY = "separation_anxiety"
+    const val TEST_ANXIETY = "test_anxiety"
+    const val SELECTIVE_MUTISM = "selective_mutism"
+    const val SCHOOL_PHOBIA = "school_phobia"
+    const val DEPRESSION = "depression"
+    const val SOCIAL_WITHDRAWAL = "social_withdrawal"
+    const val INTROVERSION_SUPPRESSION = "introversion_suppression"
+    const val HOME_STRESS = "home_stress"
+    const val BULLYING_VICTIMISATION = "bullying_victimisation"
+    const val TRAUMA_RESPONSE = "trauma_response"
+    const val ASD_SOCIAL = "asd_social"
+    const val ASD_COMMUNICATION = "asd_communication"
+    const val ASD_SENSORY = "asd_sensory"
+    const val TWICE_EXCEPTIONAL = "twice_exceptional"
+    const val HIDDEN_SPATIAL = "hidden_spatial"
+    const val HIDDEN_PATTERN = "hidden_pattern"
+    const val KINESTHETIC_INTEL = "kinesthetic_intel"
+    const val VERBAL_IQ_SUPPRESSED = "verbal_iq_suppressed"
+    const val MATHEMATICAL_ANXIETY = "mathematical_anxiety"
+    const val FACT_RETRIEVAL = "fact_retrieval"
     const val PLACE_VALUE_CONFUSION = "place_value_confusion"
     const val FRACTION_RATIO_DEFICIT = "fraction_ratio_deficit"
-
-    // === Batch 5 Conditions ===
-    const val MASKING = "masking"
-    const val HFA_MASKED = "hfa_masked"
-    const val SOCIAL_COMMUNICATION_DISORDER = "social_communication_disorder"
+    const val READING_COMPREHENSION = "reading_comprehension"
+    const val RAN_DEFICIT = "ran_deficit"
+    const val ORTHOGRAPHIC_PROCESSING = "orthographic_processing"
+    const val READING_FLUENCY = "reading_fluency"
+    const val SPELLING_DISORDER = "spelling_disorder"
+    const val EXECUTIVE_PLANNING = "executive_planning"
+    const val RESPONSE_INHIBITION = "response_inhibition"
+    const val COGNITIVE_FLEXIBILITY = "cognitive_flexibility"
+    const val VERBAL_WORKING_MEMORY = "verbal_working_memory"
+    const val VISUAL_SPATIAL_MEM = "visual_spatial_mem"
+    const val AUDITORY_DISCRIMINATION = "auditory_discrimination"
+    const val VISUAL_DISCRIMINATION = "visual_discrimination"
+    const val TACTILE_PROCESSING = "tactile_processing"
     const val PRAGMATIC_LANGUAGE = "pragmatic_language"
     const val THEORY_OF_MIND = "theory_of_mind"
-    const val SENSORY_PROCESSING = "sensory_processing"
-    const val SENSORY_DEFENSIVENESS = "sensory_defensiveness"
-    const val VESTIBULAR_DIFFICULTY = "vestibular_difficulty"
-    const val PROPRIOCEPTIVE_DIFFICULTY = "proprioceptive_difficulty"
-    const val TRAUMA_SILENCE = "trauma_silence"
+    const val NON_VERBAL_LD = "non_verbal_ld"
+    const val EMOTIONAL_DYSREGULATION = "emotional_dysregulation"
+    const val LOW_FRUSTRATION_TOLERANCE = "low_frustration_tolerance"
+    const val IMPULSIVITY_NON_ADHD = "impulsivity_non_adhd"
+    const val PERFECTIONISM = "perfectionism"
+    const val FINE_MOTOR_DELAY = "fine_motor_delay"
+    const val GROSS_MOTOR_DELAY = "gross_motor_delay"
+    const val HANDEDNESS_CONFUSION = "handedness_confusion"
+    const val ADULT_DYSLEXIA = "adult_dyslexia"
+    const val ADULT_DYSCALCULIA = "adult_dyscalculia"
+    const val ADULT_ADHD = "adult_adhd"
+    const val ADULT_ANOMIA = "adult_anomia"
+    const val ADULT_READING_COMPREHENSION = "adult_reading_comprehension"
+    const val ADULT_PROCESSING_SPEED = "adult_processing_speed"
 
-    // === Batch 6 Conditions ===
+    // === Insecurities Constants ===
     const val BODY_IMAGE_INSECURITY = "body_image_insecurity"
     const val IMPOSTER_SYNDROME = "imposter_syndrome"
     const val REJECTION_SENSITIVITY = "rejection_sensitivity"
@@ -77,8 +102,6 @@ object ConditionIds {
     const val ACADEMIC_TRAUMA = "academic_trauma"
     const val STUTTERING_CONFIDENCE_DEFICIT = "stuttering_confidence_deficit"
     const val DECISION_PARALYSIS = "decision_paralysis"
-
-    // === Batch 7 Conditions ===
     const val FINANCIAL_INSECURITY = "financial_insecurity"
     const val LEADERSHIP_AVOIDANCE = "leadership_avoidance"
     const val CAREER_STAGNATION = "career_stagnation"
@@ -89,183 +112,125 @@ object ConditionIds {
     const val ANGER_INSECURITY = "anger_insecurity"
     const val FAMILY_ORIGIN_INSECURITY = "family_origin_insecurity"
     const val SELF_CRITICISM = "self_criticism"
-
-    // === Batch 8 Conditions ===
     const val PUBLIC_SPEAKING_PHOBIA = "public_speaking_phobia"
     const val PDA = "pda"
-    const val GIFTED_UNDERACHIEVEMENT = "gifted_underachievement"
-    const val INTROVERSION_SUPPRESSION = "introversion_suppression"
-    const val INVISIBLE_STRUGGLE = "invisible_struggle"
     const val ALEXITHYMIA = "alexithymia"
     const val HSP_OVERWHELM = "hsp_overwhelm"
     const val FAWN_RESPONSE = "fawn_response"
 
-    val BATCH_1 = listOf(
-        DYSLEXIA,
-        DYSGRAPHIA,
-        DYSCALCULIA,
-        ADHD_INATTENTIVE,
-        ADHD_HYPERACTIVE,
-        ADHD_COMBINED,
-        STUTTERING,
-        CLUTTERING,
-        ANOMIA,
-        APD
+    val ALL = listOf(
+        DYSLEXIA_PHONOLOGICAL, DYSLEXIA_SURFACE, DYSLEXIA_MIXED, DYSCALCULIA_CORE, DYSCALCULIA_ACCESS,
+        DYSGRAPHIA_PHONOLOGICAL, DYSGRAPHIA_MOTOR, SLD_DYSLEXIA_DYSCALCULIA, SLD_DYSLEXIA_DYSGRAPHIA,
+        ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED, ADHD_ADULT, ADHD_DYSLEXIA_COMORBID,
+        PROCESSING_SPEED, WORKING_MEMORY, DCD, DYSPRAXIA, VMI, STUTTERING_REPETITIONS,
+        STUTTERING_PROLONGATIONS, STUTTERING_INTERJECTIONS, CLUTTERING, DYSARTHRIA, APRAXIA_OF_SPEECH,
+        EXPRESSIVE_LANGUAGE, RECEPTIVE_LANGUAGE, ANOMIA, PHONOLOGICAL_DISORDER, APD, VOICE_DISORDER,
+        GAD, SOCIAL_ANXIETY, SEPARATION_ANXIETY, TEST_ANXIETY, SELECTIVE_MUTISM, SCHOOL_PHOBIA,
+        DEPRESSION, SOCIAL_WITHDRAWAL, INTROVERSION_SUPPRESSION, HOME_STRESS, BULLYING_VICTIMISATION,
+        TRAUMA_RESPONSE, ASD_SOCIAL, ASD_COMMUNICATION, ASD_SENSORY, TWICE_EXCEPTIONAL,
+        HIDDEN_SPATIAL, HIDDEN_PATTERN, KINESTHETIC_INTEL, VERBAL_IQ_SUPPRESSED, MATHEMATICAL_ANXIETY,
+        FACT_RETRIEVAL, PLACE_VALUE_CONFUSION, FRACTION_RATIO_DEFICIT, READING_COMPREHENSION,
+        RAN_DEFICIT, ORTHOGRAPHIC_PROCESSING, READING_FLUENCY, SPELLING_DISORDER, EXECUTIVE_PLANNING,
+        RESPONSE_INHIBITION, COGNITIVE_FLEXIBILITY, VERBAL_WORKING_MEMORY, VISUAL_SPATIAL_MEM,
+        AUDITORY_DISCRIMINATION, VISUAL_DISCRIMINATION, TACTILE_PROCESSING, PRAGMATIC_LANGUAGE,
+        THEORY_OF_MIND, NON_VERBAL_LD, EMOTIONAL_DYSREGULATION, LOW_FRUSTRATION_TOLERANCE,
+        IMPULSIVITY_NON_ADHD, PERFECTIONISM, FINE_MOTOR_DELAY, GROSS_MOTOR_DELAY, HANDEDNESS_CONFUSION,
+        ADULT_DYSLEXIA, ADULT_DYSCALCULIA, ADULT_ADHD, ADULT_ANOMIA, ADULT_READING_COMPREHENSION,
+        ADULT_PROCESSING_SPEED, BODY_IMAGE_INSECURITY, IMPOSTER_SYNDROME, REJECTION_SENSITIVITY,
+        WORKPLACE_INSECURITY, RELATIONSHIP_INSECURITY, FOMO_ANXIETY, DIGITAL_INSECURITY,
+        ACADEMIC_TRAUMA, STUTTERING_CONFIDENCE_DEFICIT, DECISION_PARALYSIS, FINANCIAL_INSECURITY,
+        LEADERSHIP_AVOIDANCE, CAREER_STAGNATION, DEEP_ROOTED_SHYNESS, EXPRESSION_INSECURITY,
+        SOCIAL_BELONGING_INSECURITY, PERFORMANCE_INSECURITY, ANGER_INSECURITY, FAMILY_ORIGIN_INSECURITY,
+        SELF_CRITICISM, PUBLIC_SPEAKING_PHOBIA, PDA, ALEXITHYMIA, HSP_OVERWHELM, FAWN_RESPONSE
     )
 
-    val BATCH_2 = listOf(
-        SOCIAL_ANXIETY,
-        GAD,
-        SELECTIVE_MUTISM,
-        TEST_ANXIETY,
-        SEPARATION_ANXIETY,
-        SCHOOL_PHOBIA,
-        DEPRESSION,
-        EMOTIONAL_DYSREGULATION,
-        EXECUTIVE_FUNCTION,
-        WORKING_MEMORY
-    )
-
-    val BATCH_3 = listOf(
-        PROCESSING_SPEED,
-        VOICE_DISORDER,
-        EXPRESSIVE_LANGUAGE,
-        RECEPTIVE_LANGUAGE,
-        PHONOLOGICAL_DISORDER,
-        APRAXIA_OF_SPEECH,
-        NON_VERBAL_LD,
-        TWICE_EXCEPTIONAL,
-        ADULT_DYSLEXIA,
-        ADULT_ADHD
-    )
-
-    val BATCH_4 = listOf(
-        DYSPRAXIA,
-        VMI,
-        ADULT_ANOMIA,
-        ADULT_PROCESSING_SPEED,
-        READING_FLUENCY_LAG,
-        ORTHOGRAPHIC_DEFICIT,
-        RAN_DEFICIT,
-        SPELLING_DISORDER,
-        PLACE_VALUE_CONFUSION,
-        FRACTION_RATIO_DEFICIT
-    )
-
-    val BATCH_5 = listOf(
-        MASKING,
-        HFA_MASKED,
-        SOCIAL_COMMUNICATION_DISORDER,
-        PRAGMATIC_LANGUAGE,
-        THEORY_OF_MIND,
-        SENSORY_PROCESSING,
-        SENSORY_DEFENSIVENESS,
-        VESTIBULAR_DIFFICULTY,
-        PROPRIOCEPTIVE_DIFFICULTY,
-        TRAUMA_SILENCE
-    )
-
-    val BATCH_6 = listOf(
-        BODY_IMAGE_INSECURITY,
-        IMPOSTER_SYNDROME,
-        REJECTION_SENSITIVITY,
-        WORKPLACE_INSECURITY,
-        RELATIONSHIP_INSECURITY,
-        FOMO_ANXIETY,
-        DIGITAL_INSECURITY,
-        ACADEMIC_TRAUMA,
-        STUTTERING_CONFIDENCE_DEFICIT,
-        DECISION_PARALYSIS
-    )
-
-    val BATCH_7 = listOf(
-        FINANCIAL_INSECURITY,
-        LEADERSHIP_AVOIDANCE,
-        CAREER_STAGNATION,
-        DEEP_ROOTED_SHYNESS,
-        EXPRESSION_INSECURITY,
-        SOCIAL_BELONGING_INSECURITY,
-        PERFORMANCE_INSECURITY,
-        ANGER_INSECURITY,
-        FAMILY_ORIGIN_INSECURITY,
-        SELF_CRITICISM
-    )
-
-    val BATCH_8 = listOf(
-        PUBLIC_SPEAKING_PHOBIA,
-        PDA,
-        GIFTED_UNDERACHIEVEMENT,
-        INTROVERSION_SUPPRESSION,
-        INVISIBLE_STRUGGLE,
-        ALEXITHYMIA,
-        HSP_OVERWHELM,
-        FAWN_RESPONSE
-    )
-
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6 + BATCH_7 + BATCH_8
-
-    /**
-     * Only conditions with at least one clinically defensible signal source
-     * from an existing task screen. Used by ScreeningViewModel for scoring.
-     */
     val ACTIVE = ALL
 
     fun getDisplayName(id: String): String = when (id) {
-        DYSLEXIA -> "Dyslexia"
-        DYSGRAPHIA -> "Dysgraphia"
-        DYSCALCULIA -> "Dyscalculia"
+        DYSLEXIA_PHONOLOGICAL -> "Dyslexia (Phonological)"
+        DYSLEXIA_SURFACE -> "Dyslexia (Surface)"
+        DYSLEXIA_MIXED -> "Dyslexia (Mixed)"
+        DYSCALCULIA_CORE -> "Dyscalculia (Core)"
+        DYSCALCULIA_ACCESS -> "Dyscalculia (Access)"
+        DYSGRAPHIA_PHONOLOGICAL -> "Dysgraphia (Phonological)"
+        DYSGRAPHIA_MOTOR -> "Dysgraphia (Motor)"
+        SLD_DYSLEXIA_DYSCALCULIA -> "Mixed SLD (Dyslexia + Dyscalculia)"
+        SLD_DYSLEXIA_DYSGRAPHIA -> "Mixed SLD (Dyslexia + Dysgraphia)"
         ADHD_INATTENTIVE -> "ADHD – Inattentive Presentation"
         ADHD_HYPERACTIVE -> "ADHD – Hyperactive/Impulsive Presentation"
         ADHD_COMBINED -> "ADHD – Combined Presentation"
-        STUTTERING -> "Stuttering"
-        CLUTTERING -> "Cluttering"
-        ANOMIA -> "Word-Finding Difficulty (Anomia)"
-        APD -> "Auditory Processing Disorder"
-        
-        SOCIAL_ANXIETY -> "Social Anxiety Disorder"
-        GAD -> "Generalised Anxiety Disorder"
-        SELECTIVE_MUTISM -> "Selective Mutism"
-        TEST_ANXIETY -> "Exam & Test Anxiety"
-        SEPARATION_ANXIETY -> "Separation Anxiety Disorder"
-        SCHOOL_PHOBIA -> "Specific Phobia (School)"
-        DEPRESSION -> "Childhood Depression (Masked)"
-        EMOTIONAL_DYSREGULATION -> "Emotional Dysregulation"
-        EXECUTIVE_FUNCTION -> "Executive Function Deficit"
-        WORKING_MEMORY -> "Working Memory Deficit"
-        
+        ADHD_ADULT -> "Adult ADHD"
+        ADHD_DYSLEXIA_COMORBID -> "ADHD + Dyslexia Comorbidity"
         PROCESSING_SPEED -> "Processing Speed Disorder"
-        VOICE_DISORDER -> "Voice Disorder"
+        WORKING_MEMORY -> "Working Memory Deficit"
+        DCD -> "Developmental Coordination Disorder (DCD)"
+        DYSPRAXIA -> "Dyspraxia (Planning)"
+        VMI -> "Visual-Motor Integration Deficit"
+        STUTTERING_REPETITIONS -> "Stuttering (Repetitions)"
+        STUTTERING_PROLONGATIONS -> "Stuttering (Prolongations)"
+        STUTTERING_INTERJECTIONS -> "Stuttering (Interjections)"
+        CLUTTERING -> "Cluttering"
+        DYSARTHRIA -> "Dysarthria"
+        APRAXIA_OF_SPEECH -> "Childhood Apraxia of Speech"
         EXPRESSIVE_LANGUAGE -> "Expressive Language Disorder"
         RECEPTIVE_LANGUAGE -> "Receptive Language Disorder"
+        ANOMIA -> "Word-Finding Difficulty (Anomia)"
         PHONOLOGICAL_DISORDER -> "Phonological Disorder"
-        APRAXIA_OF_SPEECH -> "Childhood Apraxia of Speech"
-        NON_VERBAL_LD -> "Non-Verbal Learning Disability"
+        APD -> "Auditory Processing Disorder"
+        VOICE_DISORDER -> "Voice Disorder"
+        GAD -> "Generalised Anxiety Disorder (GAD)"
+        SOCIAL_ANXIETY -> "Social Anxiety Disorder"
+        SEPARATION_ANXIETY -> "Separation Anxiety Disorder"
+        TEST_ANXIETY -> "Exam & Test Anxiety"
+        SELECTIVE_MUTISM -> "Selective Mutism"
+        SCHOOL_PHOBIA -> "Specific Phobia (School)"
+        DEPRESSION -> "Childhood Depression Indicators"
+        SOCIAL_WITHDRAWAL -> "Social Withdrawal"
+        INTROVERSION_SUPPRESSION -> "Introversion-Driven Academic Suppression"
+        HOME_STRESS -> "Home Environment Stress"
+        BULLYING_VICTIMISATION -> "Bullying Victimisation"
+        TRAUMA_RESPONSE -> "Trauma Response"
+        ASD_SOCIAL -> "Autism Spectrum Disorder (Social)"
+        ASD_COMMUNICATION -> "Autism Spectrum Disorder (Communication)"
+        ASD_SENSORY -> "Autism Spectrum Disorder (Sensory)"
         TWICE_EXCEPTIONAL -> "Twice-Exceptional Profile (2e)"
-        ADULT_DYSLEXIA -> "Adult Dyslexia"
-        ADULT_ADHD -> "Adult ADHD"
-        
-        DYSPRAXIA -> "Developmental Coordination Disorder (Dyspraxia)"
-        VMI -> "Visual-Motor Integration Deficit"
-        ADULT_ANOMIA -> "Adult Word-Finding Difficulty"
-        ADULT_PROCESSING_SPEED -> "Adult Processing Speed Disorder"
-        READING_FLUENCY_LAG -> "Reading Fluency Lag"
-        ORTHOGRAPHIC_DEFICIT -> "Orthographic Processing Deficit"
-        RAN_DEFICIT -> "RAN Naming Deficit"
-        SPELLING_DISORDER -> "Spelling Disorder"
+        HIDDEN_SPATIAL -> "Hidden Spatial Intelligence"
+        HIDDEN_PATTERN -> "Hidden Pattern Recognition"
+        KINESTHETIC_INTEL -> "Kinesthetic Intelligence"
+        VERBAL_IQ_SUPPRESSED -> "Verbal IQ Suppressed by Language Barrier"
+        MATHEMATICAL_ANXIETY -> "Mathematical Anxiety"
+        FACT_RETRIEVAL -> "Arithmetic Fact Retrieval (Isolated)"
         PLACE_VALUE_CONFUSION -> "Place Value Confusion"
         FRACTION_RATIO_DEFICIT -> "Fraction & Ratio Difficulty"
-        
-        MASKING -> "Masking and Camouflaging Profile"
-        HFA_MASKED -> "Masked High-Functioning Autism Profile"
-        SOCIAL_COMMUNICATION_DISORDER -> "Social Communication Disorder"
+        READING_COMPREHENSION -> "Reading Comprehension (No Decoding Deficit)"
+        RAN_DEFICIT -> "RAN Naming Deficit"
+        ORTHOGRAPHIC_PROCESSING -> "Orthographic Processing Deficit"
+        READING_FLUENCY -> "Reading Fluency (No Accuracy Deficit)"
+        SPELLING_DISORDER -> "Spelling Disorder"
+        EXECUTIVE_PLANNING -> "Executive Function: Planning"
+        RESPONSE_INHIBITION -> "Response Inhibition Deficit"
+        COGNITIVE_FLEXIBILITY -> "Cognitive Flexibility Deficit"
+        VERBAL_WORKING_MEMORY -> "Verbal Working Memory"
+        VISUAL_SPATIAL_MEM -> "Visual-Spatial Working Memory"
+        AUDITORY_DISCRIMINATION -> "Auditory Discrimination"
+        VISUAL_DISCRIMINATION -> "Visual Discrimination"
+        TACTILE_PROCESSING -> "Tactile Processing"
         PRAGMATIC_LANGUAGE -> "Pragmatic Language Disorder"
         THEORY_OF_MIND -> "Theory of Mind Deficit"
-        SENSORY_PROCESSING -> "Sensory Processing Disorder"
-        SENSORY_DEFENSIVENESS -> "Sensory Defensiveness Profile"
-        VESTIBULAR_DIFFICULTY -> "Vestibular Processing Difficulty"
-        PROPRIOCEPTIVE_DIFFICULTY -> "Proprioceptive Processing Difficulty"
-        TRAUMA_SILENCE -> "Trauma-Based Silence"
-        
+        NON_VERBAL_LD -> "Non-Verbal Learning Disability"
+        EMOTIONAL_DYSREGULATION -> "Emotional Dysregulation"
+        LOW_FRUSTRATION_TOLERANCE -> "Low Frustration Tolerance"
+        IMPULSIVITY_NON_ADHD -> "Impulsivity (Non-ADHD)"
+        PERFECTIONISM -> "Perfectionism (Maladaptive)"
+        FINE_MOTOR_DELAY -> "Fine Motor Delay"
+        GROSS_MOTOR_DELAY -> "Gross Motor Delay"
+        HANDEDNESS_CONFUSION -> "Handedness Confusion"
+        ADULT_DYSLEXIA -> "Adult Dyslexia"
+        ADULT_DYSCALCULIA -> "Adult Dyscalculia"
+        ADULT_ADHD -> "Adult ADHD"
+        ADULT_ANOMIA -> "Adult Word-Finding"
+        ADULT_READING_COMPREHENSION -> "Reading Comprehension (Adult)"
+        ADULT_PROCESSING_SPEED -> "Adult Processing Speed"
         BODY_IMAGE_INSECURITY -> "Body Image Insecurity"
         IMPOSTER_SYNDROME -> "Imposter Syndrome"
         REJECTION_SENSITIVITY -> "Rejection Sensitivity"
@@ -276,7 +241,6 @@ object ConditionIds {
         ACADEMIC_TRAUMA -> "Academic Trauma"
         STUTTERING_CONFIDENCE_DEFICIT -> "Stuttering-Linked Confidence Deficit"
         DECISION_PARALYSIS -> "Decision Paralysis"
-        
         FINANCIAL_INSECURITY -> "Financial Confidence Insecurity"
         LEADERSHIP_AVOIDANCE -> "Leadership Avoidance Pattern"
         CAREER_STAGNATION -> "Career-Stagnation Confidence Collapse"
@@ -287,146 +251,159 @@ object ConditionIds {
         ANGER_INSECURITY -> "Anger as Hidden Insecurity"
         FAMILY_ORIGIN_INSECURITY -> "Family-Origin Insecurity"
         SELF_CRITICISM -> "Perfectionism-Driven Self-Criticism"
-        
         PUBLIC_SPEAKING_PHOBIA -> "Public Speaking Phobia"
         PDA -> "Pathological Demand Avoidance"
-        GIFTED_UNDERACHIEVEMENT -> "Gifted Underachievement Profile"
-        INTROVERSION_SUPPRESSION -> "Introversion-Driven Academic Suppression"
-        INVISIBLE_STRUGGLE -> "Invisible Struggle Composite Burden"
-        ALEXITHYMIA -> "Alexithymia Profile"
+        ALEXITHYMIA -> "Alexithymia"
         HSP_OVERWHELM -> "Highly Sensitive Person Overwhelm"
         FAWN_RESPONSE -> "Chronic People-Pleasing (Fawn Response)"
-        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
     fun getCategory(id: String): String = when (id) {
-        DYSLEXIA, DYSGRAPHIA, DYSCALCULIA, NON_VERBAL_LD, ADULT_DYSLEXIA,
-        DYSPRAXIA, READING_FLUENCY_LAG, ORTHOGRAPHIC_DEFICIT, SPELLING_DISORDER,
-        PLACE_VALUE_CONFUSION, FRACTION_RATIO_DEFICIT -> "Learning Differences"
-        
-        ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED, APD,
-        EXECUTIVE_FUNCTION, WORKING_MEMORY, PROCESSING_SPEED, ADULT_ADHD,
-        ADULT_PROCESSING_SPEED -> "Attention & Processing"
-        
-        STUTTERING, CLUTTERING, ANOMIA, VOICE_DISORDER, EXPRESSIVE_LANGUAGE, 
-        RECEPTIVE_LANGUAGE, PHONOLOGICAL_DISORDER, APRAXIA_OF_SPEECH,
-        ADULT_ANOMIA, RAN_DEFICIT -> "Speech & Language"
-        
-        SOCIAL_ANXIETY, GAD, SELECTIVE_MUTISM, TEST_ANXIETY, 
-        SEPARATION_ANXIETY, SCHOOL_PHOBIA -> "Anxiety Disorders"
-        
-        DEPRESSION, EMOTIONAL_DYSREGULATION, TRAUMA_SILENCE -> "Emotional & Behavioural"
-        
-        TWICE_EXCEPTIONAL, MASKING, HFA_MASKED, SOCIAL_COMMUNICATION_DISORDER, THEORY_OF_MIND -> "Silent Profiles"
-        
-        VMI, SENSORY_PROCESSING, SENSORY_DEFENSIVENESS, VESTIBULAR_DIFFICULTY, PROPRIOCEPTIVE_DIFFICULTY -> "Sensory & Motor"
-        
-        BODY_IMAGE_INSECURITY, IMPOSTER_SYNDROME, REJECTION_SENSITIVITY,
-        WORKPLACE_INSECURITY, RELATIONSHIP_INSECURITY, FOMO_ANXIETY,
-        DIGITAL_INSECURITY, ACADEMIC_TRAUMA, STUTTERING_CONFIDENCE_DEFICIT,
-        DECISION_PARALYSIS -> "Insecurities & Confidence Deficits"
-        
-        FINANCIAL_INSECURITY, LEADERSHIP_AVOIDANCE, CAREER_STAGNATION,
-        DEEP_ROOTED_SHYNESS, EXPRESSION_INSECURITY, SOCIAL_BELONGING_INSECURITY,
-        PERFORMANCE_INSECURITY, ANGER_INSECURITY, FAMILY_ORIGIN_INSECURITY,
-        SELF_CRITICISM -> "Insecurities & Confidence Deficits"
-        
-        PUBLIC_SPEAKING_PHOBIA -> "Insecurities & Confidence Deficits"
-        
-        PDA, GIFTED_UNDERACHIEVEMENT, INTROVERSION_SUPPRESSION, INVISIBLE_STRUGGLE,
-        ALEXITHYMIA, HSP_OVERWHELM, FAWN_RESPONSE -> "Silent Profiles"
-        
+        DYSLEXIA_PHONOLOGICAL, DYSLEXIA_SURFACE, DYSLEXIA_MIXED, DYSCALCULIA_CORE, DYSCALCULIA_ACCESS,
+        DYSGRAPHIA_PHONOLOGICAL, DYSGRAPHIA_MOTOR, SLD_DYSLEXIA_DYSCALCULIA, SLD_DYSLEXIA_DYSGRAPHIA,
+        NON_VERBAL_LD, ADULT_DYSLEXIA, ADULT_DYSCALCULIA, DCD, DYSPRAXIA, VMI, READING_FLUENCY,
+        SPELLING_DISORDER, PLACE_VALUE_CONFUSION, FRACTION_RATIO_DEFICIT -> "Learning Differences"
+
+        ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED, ADHD_ADULT, ADHD_DYSLEXIA_COMORBID, APD,
+        WORKING_MEMORY, PROCESSING_SPEED, ADULT_ADHD, ADULT_PROCESSING_SPEED, EXECUTIVE_PLANNING,
+        RESPONSE_INHIBITION, COGNITIVE_FLEXIBILITY, VERBAL_WORKING_MEMORY, VISUAL_SPATIAL_MEM,
+        AUDITORY_DISCRIMINATION, VISUAL_DISCRIMINATION, TACTILE_PROCESSING -> "Attention & Processing"
+
+        STUTTERING_REPETITIONS, STUTTERING_PROLONGATIONS, STUTTERING_INTERJECTIONS, CLUTTERING,
+        DYSARTHRIA, APRAXIA_OF_SPEECH, EXPRESSIVE_LANGUAGE, RECEPTIVE_LANGUAGE, ANOMIA,
+        PHONOLOGICAL_DISORDER, VOICE_DISORDER, PRAGMATIC_LANGUAGE, ADULT_ANOMIA -> "Speech & Language"
+
+        GAD, SOCIAL_ANXIETY, SEPARATION_ANXIETY, TEST_ANXIETY, SELECTIVE_MUTISM, SCHOOL_PHOBIA,
+        MATHEMATICAL_ANXIETY -> "Anxiety Disorders"
+
+        DEPRESSION, EMOTIONAL_DYSREGULATION, LOW_FRUSTRATION_TOLERANCE, IMPULSIVITY_NON_ADHD,
+        PERFECTIONISM, FINE_MOTOR_DELAY, GROSS_MOTOR_DELAY, HANDEDNESS_CONFUSION, SOCIAL_WITHDRAWAL,
+        HOME_STRESS, BULLYING_VICTIMISATION, TRAUMA_RESPONSE -> "Emotional & Behavioural"
+
+        TWICE_EXCEPTIONAL, ASD_SOCIAL, ASD_COMMUNICATION, ASD_SENSORY, HIDDEN_SPATIAL, HIDDEN_PATTERN,
+        KINESTHETIC_INTEL, VERBAL_IQ_SUPPRESSED, THEORY_OF_MIND -> "Silent Profiles"
+
+        BODY_IMAGE_INSECURITY, IMPOSTER_SYNDROME, REJECTION_SENSITIVITY, WORKPLACE_INSECURITY,
+        RELATIONSHIP_INSECURITY, FOMO_ANXIETY, DIGITAL_INSECURITY, ACADEMIC_TRAUMA,
+        STUTTERING_CONFIDENCE_DEFICIT, DECISION_PARALYSIS, FINANCIAL_INSECURITY, LEADERSHIP_AVOIDANCE,
+        CAREER_STAGNATION, DEEP_ROOTED_SHYNESS, EXPRESSION_INSECURITY, SOCIAL_BELONGING_INSECURITY,
+        PERFORMANCE_INSECURITY, ANGER_INSECURITY, FAMILY_ORIGIN_INSECURITY, SELF_CRITICISM,
+        PUBLIC_SPEAKING_PHOBIA, PDA, ALEXITHYMIA, HSP_OVERWHELM, FAWN_RESPONSE -> "Insecurities & Confidence Deficits"
+
         else -> "General"
     }
 
     fun getDescription(id: String): String = when (id) {
-        DYSLEXIA -> "Struggle with phonological processing, slow reading, and visual decoding."
-        DYSGRAPHIA -> "Difficulty in fine motor writing skills, consistency, and letter formation."
-        DYSCALCULIA -> "Difficulty grasping numerical values, basic calculations, and number sense."
+        DYSLEXIA_PHONOLOGICAL -> "Struggle with mapping sounds to letters and phonological processing deficits."
+        DYSLEXIA_SURFACE -> "Difficulty processing visual forms of words and sight-word reading speed."
+        DYSLEXIA_MIXED -> "Combined deficits in phonological processing and visual orthographic word decoding."
+        DYSCALCULIA_CORE -> "Atypical number sense, subitizing, and basic arithmetic fact retrieval deficits."
+        DYSCALCULIA_ACCESS -> "Difficulty mapping numerical symbols to spatial quantities."
+        DYSGRAPHIA_PHONOLOGICAL -> "Difficulty spelling and mapping spoken words to written graphemes."
+        DYSGRAPHIA_MOTOR -> "Fine-motor writing delay, poor finger stroke consistency and layout alignment."
+        SLD_DYSLEXIA_DYSCALCULIA -> "Co-occurring reading processing and mathematical counting deficits."
+        SLD_DYSLEXIA_DYSGRAPHIA -> "Co-occurring reading processing and motor copy-writing deficits."
         ADHD_INATTENTIVE -> "Sustained attention deficits, disorganization, and high distractibility."
         ADHD_HYPERACTIVE -> "Deficits in impulse control, response inhibition, and motor restlessness."
         ADHD_COMBINED -> "Co-occurring attentional drift and impulse/hyperactivity indicators."
-        STUTTERING -> "Sound repetitions, speech blocks, or prolongations during verbal output."
+        ADHD_ADULT -> "Adult attentional drift, executive management difficulty, and restlessness."
+        ADHD_DYSLEXIA_COMORBID -> "Co-occurring attention deficit and phonological reading latency."
+        PROCESSING_SPEED -> "Slower manual touch reaction speed and prolonged cognitive action times."
+        WORKING_MEMORY -> "Reduced digit-span recall and spatial sequence memory spans."
+        DCD -> "Motor clumsiness, fine coordination delay, and writing difficulty."
+        DYSPRAXIA -> "Difficulty planning and executing motor task sequences."
+        VMI -> "Difficulty translating visual shapes to manual copying/drawing actions."
+        STUTTERING_REPETITIONS -> "Involuntary repetitions of syllables or sounds during vocal reading."
+        STUTTERING_PROLONGATIONS -> "Involuntary prolongations of speech sounds during reading."
+        STUTTERING_INTERJECTIONS -> "Frequent interjections and vocal breaks in spoken sentences."
         CLUTTERING -> "Extremely rapid speech, irregular rhythm, and speech clarity breakdowns."
-        ANOMIA -> "Word-finding delays, word substitutions, and circumlocutions under low pressure."
-        APD -> "Difficulty separating target speech from noise or processing verbal cues."
-        
-        SOCIAL_ANXIETY -> "Intense worry regarding negative evaluation and gaze-aversion during social tasks."
+        DYSARTHRIA -> "Slurred speech, poor articulation, and speech volume control issues."
+        APRAXIA_OF_SPEECH -> "Speech motor planning delays causing sound distortions."
+        EXPRESSIVE_LANGUAGE -> "Vocabulary limits, structural syntax errors, and verbal output difficulty."
+        RECEPTIVE_LANGUAGE -> "Difficulty comprehending complex verbal instructions and instructions."
+        ANOMIA -> "Word-finding delays and verbal naming pause durations."
+        PHONOLOGICAL_DISORDER -> "Sound production errors and speech substitution patterns."
+        APD -> "Auditory processing delays in identifying speech in background noise."
+        VOICE_DISORDER -> "Acoustic voice tremor, pitch instability, or vocal fatigue."
         GAD -> "Excessive overthinking, performance fatigue, and worry-language patterns."
-        SELECTIVE_MUTISM -> "Failure to speak in specific social settings despite talking normally at home."
-        TEST_ANXIETY -> "Cognitive latency inflation under simulated evaluation or time pressure."
+        SOCIAL_ANXIETY -> "Intense worry regarding social evaluation and gaze-aversion during tasks."
         SEPARATION_ANXIETY -> "Intense distress indicators when parting from parent or guardian figures."
-        SCHOOL_PHOBIA -> "Anxious avoidance patterns relating directly to school activities and settings."
-        DEPRESSION -> "Psychomotor slowing, persistent low energy, and future-negative lexical tokens."
-        EMOTIONAL_DYSREGULATION -> "Rapid random touch responses and frustration patterns on error screens."
-        EXECUTIVE_FUNCTION -> "Switch-cost delays and poor planning efficiency on sorting challenges."
-        WORKING_MEMORY -> "Reduced spatial recall span during complex block sequence reproduction."
-        
-        PROCESSING_SPEED -> "Prolonged cognitive decision latency and slower manual action speed."
-        VOICE_DISORDER -> "Acoustic instability, tremor, or pitch alterations during sustained vocalization."
-        EXPRESSIVE_LANGUAGE -> "Difficulty formulating spoken thoughts, vocabulary limitations, and syntax errors."
-        RECEPTIVE_LANGUAGE -> "Difficulty comprehending complex verbal instructions and semantic relationships."
-        PHONOLOGICAL_DISORDER -> "Errors in producing speech sounds, substitutions, or cluster simplifications."
-        APRAXIA_OF_SPEECH -> "Motor planning deficits causing inconsistent speech sound distortions and pauses."
-        NON_VERBAL_LD -> "Deficits in spatial awareness, tactile drawing coordination, and visual-spatial reasoning."
-        TWICE_EXCEPTIONAL -> "A combined high intellectual capacity with co-occurring learning or processing challenges."
-        ADULT_DYSLEXIA -> "Visual decoding latency, adult phonological processing strategies, and slow reading speed."
-        ADULT_ADHD -> "Adult-specific attentional drift, executive scheduling challenges, and impulsivity markers."
-        
-        DYSPRAXIA -> "Difficulty in fine motor writing, touch input coordination, and spatial planning."
-        VMI -> "Difficulty translating visual inputs to manual drawing strokes or quick screen selections."
-        ADULT_ANOMIA -> "Adult-onset word retrieval delays, speech hesitation, and naming latencies."
-        ADULT_PROCESSING_SPEED -> "Prolonged decision latencies and slower reaction speeds in adult cohorts."
-        READING_FLUENCY_LAG -> "Reduced reading pacing and fluency delays compared to age norms."
-        ORTHOGRAPHIC_DEFICIT -> "Difficulty processing visual forms of words, leading to reading and spelling speed blocks."
-        RAN_DEFICIT -> "Delayed automated vocal naming speed of visual stimuli."
-        SPELLING_DISORDER -> "Consistent graphic spelling errors, omissions, and motor execution pauses."
-        PLACE_VALUE_CONFUSION -> "Confusion of decimal/column representations and comparison latencies of large numbers."
-        FRACTION_RATIO_DEFICIT -> "Difficulty estimating and comparing proportions, fractions, or relative amounts."
-        
-        MASKING -> "Cognitive camouflaging of clinical symptoms via excessive compensatory efforts."
-        HFA_MASKED -> "Co-occurring masked autism spectrum indicators with social adaptation profiles."
-        SOCIAL_COMMUNICATION_DISORDER -> "Pragmatic difficulties in social communication and conversational timing."
-        PRAGMATIC_LANGUAGE -> "Difficulty understanding context-dependent language rules and conversation nuances."
-        THEORY_OF_MIND -> "Difficulty processing perspective-taking cues and social intent markers."
-        SENSORY_PROCESSING -> "Atypical responsiveness to sensory touch inputs and background stimulation."
-        SENSORY_DEFENSIVENESS -> "Averse sensory reactions and visual/auditory distractibility."
-        VESTIBULAR_DIFFICULTY -> "Balance, movement coordination, and tactile motor planning deficits."
-        PROPRIOCEPTIVE_DIFFICULTY -> "Atypical touch feedback, writing stroke pressure, or spatial coordination."
-        TRAUMA_SILENCE -> "Vocal avoidance, low volume, or situational silence linked to emotional stressors."
-        
-        BODY_IMAGE_INSECURITY -> "Worry or anxiety regarding physical appearance and social feedback."
-        IMPOSTER_SYNDROME -> "Cognitive anxiety relating to competence, feeling like a fraud despite success."
-        REJECTION_SENSITIVITY -> "Extreme sensitivity to negative evaluation, feedback, or social exclusion."
-        WORKPLACE_INSECURITY -> "Anxiety regarding performance, career advancement, and job stability."
-        RELATIONSHIP_INSECURITY -> "Interpersonal trust anxiety, attachment concern, and fear of abandonment."
-        FOMO_ANXIETY -> "Social comparison anxiety and fear of missing out on peer group activities."
-        DIGITAL_INSECURITY -> "Anxiety relating to online presence, social media evaluation, and digital interactions."
-        ACADEMIC_TRAUMA -> "Performance fatigue, stress, or avoidance linked to academic evaluative tasks."
-        STUTTERING_CONFIDENCE_DEFICIT -> "Reduced verbal confidence, speech avoidance, and expression anxiety."
-        DECISION_PARALYSIS -> "Prolonged decision latencies, erasures, and difficulty choosing under low pressure."
-        
-        FINANCIAL_INSECURITY -> "Anxiety regarding financial stability, literacy, and planning capability."
-        LEADERSHIP_AVOIDANCE -> "Avoidance of group facilitation, coordination, or decision-making roles."
-        CAREER_STAGNATION -> "Confidence loss relating to professional growth, promotion, or workplace progress."
-        DEEP_ROOTED_SHYNESS -> "Avoidance of voluntary social interaction and heightened interpersonal anxiety."
-        EXPRESSION_INSECURITY -> "Anxiety regarding vocal presentation, public speaking, or self-expression."
-        SOCIAL_BELONGING_INSECURITY -> "Feelings of alienation, exclusion, or fear of not fitting in with peers."
-        PERFORMANCE_INSECURITY -> "Extreme performance anxiety and fear of failure during evaluative tasks."
-        ANGER_INSECURITY -> "Repressed anger or irritability masking underlying vulnerability and insecurity."
-        FAMILY_ORIGIN_INSECURITY -> "Trust issues, low self-worth, or anxiety stemming from family background."
-        SELF_CRITICISM -> "Harsh self-evaluation, perfectionistic erasures, and self-blaming language."
-        
-        PUBLIC_SPEAKING_PHOBIA -> "Severe anxiety and communication avoidance relating to public speaking."
-        PDA -> "Obsessive avoidance of everyday demands and expectations, driven by an anxiety response."
-        GIFTED_UNDERACHIEVEMENT -> "Co-occurring high intellectual capability with lower-than-expected academic output."
-        INTROVERSION_SUPPRESSION -> "Introversion-driven silence or adaptation leading to underestimation of academic capacity."
-        INVISIBLE_STRUGGLE -> "A high cumulative cognitive/emotional burden from multiple mild-to-moderate active conditions."
+        TEST_ANXIETY -> "Cognitive latency inflation under simulated evaluation or time pressure."
+        SELECTIVE_MUTISM -> "Failure to speak in specific social settings despite talking normally at home."
+        SCHOOL_PHOBIA -> "Anxious avoidance patterns relating directly to school activities."
+        DEPRESSION -> "Psychomotor slowing, low energy, and negative self-talk patterns."
+        SOCIAL_WITHDRAWAL -> "Avoidance of oral participation and performance withdrawal."
+        INTROVERSION_SUPPRESSION -> "Introversion-driven silence or adaptation leading to underestimation of capacity."
+        HOME_STRESS -> "Structured stress indicators and tension within the home environment."
+        BULLYING_VICTIMISATION -> "High stress-abandonment spike and withdrawal patterns."
+        TRAUMA_RESPONSE -> "Trauma response, startle response, and emotional shutdown."
+        ASD_SOCIAL -> "Atypical social interaction patterns and communication adaptation profiles."
+        ASD_COMMUNICATION -> "Pragmatic difficulties in conversational timing and adaptation."
+        ASD_SENSORY -> "Atypical responsiveness to sensory touch inputs and background stimulation."
+        TWICE_EXCEPTIONAL -> "Combined high intellectual capacity with co-occurring learning differences."
+        HIDDEN_SPATIAL -> "Strong visual-spatial reasoning and matrix completion capabilities."
+        HIDDEN_PATTERN -> "Rapid visual pattern sequence recognition and logic completion."
+        KINESTHETIC_INTEL -> "High motor copy accuracy despite lower academic test metrics."
+        VERBAL_IQ_SUPPRESSED -> "Speech comprehension vs. oral expression output gap."
+        MATHEMATICAL_ANXIETY -> "Performance collapse specifically during timed math exercises."
+        FACT_RETRIEVAL -> "Prolonged fact-retrieval times without visual magnitude deficits."
+        PLACE_VALUE_CONFUSION -> "Confusion of decimal/column values and number comparison times."
+        FRACTION_RATIO_DEFICIT -> "Difficulty estimating and comparing visual proportions."
+        READING_COMPREHENSION -> "Difficulty answering text comprehension queries despite quick reading speeds."
+        RAN_DEFICIT -> "Delayed naming speed of visual blocks and colors."
+        ORTHOGRAPHIC_PROCESSING -> "Difficulty processing visual forms of words and letters."
+        READING_FLUENCY -> "Reduced reading pacing compared to age-stratified norms."
+        SPELLING_DISORDER -> "Consistent graphic spelling omissions, errors, and motor pauses."
+        EXECUTIVE_PLANNING -> "Multi-step sequencing planning speed and task optimization limits."
+        RESPONSE_INHIBITION -> "Go/No-Go commission error rate and inhibition control deficits."
+        COGNITIVE_FLEXIBILITY -> "Task-switching latency switch cost delays."
+        VERBAL_WORKING_MEMORY -> "Struggle repeating sentences or recalling auditory digit spans."
+        VISUAL_SPATIAL_MEM -> "Spatial sequence block recall span limitations."
+        AUDITORY_DISCRIMINATION -> "Phoneme pair discrimination response times."
+        VISUAL_DISCRIMINATION -> "Shape comparison matching speed and fixation duration."
+        TACTILE_PROCESSING -> "Atypical touchscreen pressure variance."
+        PRAGMATIC_LANGUAGE -> "Difficulty understanding context-dependent language regulations."
+        THEORY_OF_MIND -> "Difficulty processing perspective-taking and social cues."
+        NON_VERBAL_LD -> "Deficits in spatial coordination and drawing alignment."
+        EMOTIONAL_DYSREGULATION -> "Emotional dysregulation and task frustration indicators."
+        LOW_FRUSTRATION_TOLERANCE -> "Error-triggered task abandonment rates."
+        IMPULSIVITY_NON_ADHD -> "Inhibition control errors without attention drift."
+        PERFECTIONISM -> "Frequent self-correction, erase counts, and latency on easy items."
+        FINE_MOTOR_DELAY -> "Stroke velocity delay and writing coordination struggles."
+        GROSS_MOTOR_DELAY -> "Motor coordination delay and spatial planning difficulty."
+        HANDEDNESS_CONFUSION -> "Inconsistent hand stroke coordinates and writing direction."
+        ADULT_DYSLEXIA -> "Visual decoding latency and slow professional reading pacing."
+        ADULT_DYSCALCULIA -> "Adult math comparison and calculation delays."
+        ADULT_ADHD -> "Adult attention drift, executive scheduling blocks, and impulsivity."
+        ADULT_ANOMIA -> "Adult word-finding delays and conversation pauses."
+        ADULT_READING_COMPREHENSION -> "Adult reading comprehension checks."
+        ADULT_PROCESSING_SPEED -> "Adult decision latency and reaction speeds."
+        BODY_IMAGE_INSECURITY -> "Worry regarding physical appearance and social feedback."
+        IMPOSTER_SYNDROME -> "Insecurity relating to competence, feeling like a fraud despite success."
+        REJECTION_SENSITIVITY -> "Extreme sensitivity to negative evaluation, feedback, or exclusion."
+        WORKPLACE_INSECURITY -> "Anxiety regarding performance, career growth, and job stability."
+        RELATIONSHIP_INSECURITY -> "Interpersonal trust anxiety and fear of abandonment."
+        FOMO_ANXIETY -> "Social comparison anxiety and fear of missing out."
+        DIGITAL_INSECURITY -> "Anxiety relating to online presence and social media evaluation."
+        ACADEMIC_TRAUMA -> "Stress or avoidance linked to academic evaluative tasks."
+        STUTTERING_CONFIDENCE_DEFICIT -> "Reduced verbal confidence and expression anxiety."
+        DECISION_PARALYSIS -> "Prolonged decision latencies under choice options."
+        FINANCIAL_INSECURITY -> "Anxiety regarding financial planning and stability."
+        LEADERSHIP_AVOIDANCE -> "Avoidance of group facilitation or decision-making roles."
+        CAREER_STAGNATION -> "Confidence loss relating to professional growth."
+        DEEP_ROOTED_SHYNESS -> "Avoidance of voluntary social interaction and shyness."
+        EXPRESSION_INSECURITY -> "Voice and self-expression insecurity."
+        SOCIAL_BELONGING_INSECURITY -> "Feelings of alienation or fear of not fitting in."
+        PERFORMANCE_INSECURITY -> "Extreme performance anxiety and fear of failure."
+        ANGER_INSECURITY -> "Repressed anger or irritability masking underlying vulnerability."
+        FAMILY_ORIGIN_INSECURITY -> "Trust issues or anxiety stemming from family background."
+        SELF_CRITICISM -> "Harsh self-evaluation and perfectionistic self-criticism."
+        PUBLIC_SPEAKING_PHOBIA -> "Severe communication anxiety relating to public speaking."
+        PDA -> "Obsessive demand avoidance driven by an anxiety response."
         ALEXITHYMIA -> "Difficulty identifying, describing, and expressing own emotions."
-        HSP_OVERWHELM -> "Hyper-responsiveness to sensory stimuli, environmental inputs, and emotional vibes."
-        FAWN_RESPONSE -> "Chronic people-pleasing, boundary deficits, and conflict avoidance behaviors."
-        
-        else -> "Neurodevelopmental and cognitive screening profile."
+        HSP_OVERWHELM -> "Hyper-responsiveness to sensory stimuli and environmental inputs."
+        FAWN_RESPONSE -> "Chronic people-pleasing and boundary deficits."
+        else -> id.replaceFirstChar { it.uppercase() }
     }
 }

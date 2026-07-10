@@ -247,10 +247,13 @@ fun PhonologicalTaskScreen(
                     val risk = 1f - scores[3]
                     
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
-                    onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
-                    onComplete(ConditionIds.APD, risk, rawJson, duration)
+                    onComplete(ConditionIds.DYSLEXIA_PHONOLOGICAL, risk, rawJson, duration)
+                    onComplete(ConditionIds.DYSLEXIA_MIXED, risk, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, risk, rawJson, duration)
+                    onComplete(ConditionIds.RECEPTIVE_LANGUAGE, risk, rawJson, duration)
+                    onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
                     onComplete(ConditionIds.PHONOLOGICAL_DISORDER, risk, rawJson, duration)
+                    onComplete(ConditionIds.APD, risk, rawJson, duration)
                     
                     onNext()
                 },

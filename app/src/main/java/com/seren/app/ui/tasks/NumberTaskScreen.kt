@@ -300,9 +300,10 @@ private fun submitHeuristicResult(
     }
 
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
-    
     // Batch 1 Conditions
-    onComplete(ConditionIds.DYSCALCULIA, riskScore, rawJson, duration)
+    onComplete(ConditionIds.DYSCALCULIA_CORE, riskScore, rawJson, duration)
+    onComplete(ConditionIds.DYSCALCULIA_ACCESS, riskScore, rawJson, duration)
+    onComplete(ConditionIds.SLD_DYSLEXIA_DYSCALCULIA, riskScore, rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
     
     onNext()

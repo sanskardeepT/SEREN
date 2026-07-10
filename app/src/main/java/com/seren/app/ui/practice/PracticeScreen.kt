@@ -83,19 +83,19 @@ fun PracticeScreen(
         val list = mutableListOf<PracticeTaskItem>()
         
         val hasReadingRisk = scores.any { 
-            (it.conditionId == ConditionIds.DYSLEXIA || it.conditionId == ConditionIds.DYSGRAPHIA) && it.riskScore > 40f 
+            (it.conditionId == ConditionIds.DYSLEXIA_PHONOLOGICAL || it.conditionId == ConditionIds.DYSLEXIA_SURFACE || it.conditionId == ConditionIds.DYSLEXIA_MIXED || it.conditionId == ConditionIds.DYSGRAPHIA_PHONOLOGICAL || it.conditionId == ConditionIds.DYSGRAPHIA_MOTOR || it.conditionId == ConditionIds.SLD_DYSLEXIA_DYSGRAPHIA || it.conditionId == ConditionIds.ADULT_DYSLEXIA) && it.riskScore > 40f 
         }
         val hasMathRisk = scores.any { 
-            it.conditionId == ConditionIds.DYSCALCULIA && it.riskScore > 40f 
+            (it.conditionId == ConditionIds.DYSCALCULIA_CORE || it.conditionId == ConditionIds.DYSCALCULIA_ACCESS || it.conditionId == ConditionIds.SLD_DYSLEXIA_DYSCALCULIA || it.conditionId == ConditionIds.ADULT_DYSCALCULIA) && it.riskScore > 40f 
         }
         val hasAttentionRisk = scores.any { 
-            (it.conditionId == ConditionIds.ADHD_INATTENTIVE || it.conditionId == ConditionIds.ADHD_HYPERACTIVE || it.conditionId == ConditionIds.ADHD_COMBINED) && it.riskScore > 40f 
+            (it.conditionId == ConditionIds.ADHD_INATTENTIVE || it.conditionId == ConditionIds.ADHD_HYPERACTIVE || it.conditionId == ConditionIds.ADHD_COMBINED || it.conditionId == ConditionIds.ADHD_ADULT || it.conditionId == ConditionIds.ADHD_DYSLEXIA_COMORBID || it.conditionId == ConditionIds.ADULT_ADHD) && it.riskScore > 40f 
         }
         val hasSpeechRisk = scores.any { 
-            (it.conditionId == ConditionIds.STUTTERING || it.conditionId == ConditionIds.CLUTTERING || it.conditionId == ConditionIds.ANOMIA) && it.riskScore > 40f 
+            (it.conditionId == ConditionIds.STUTTERING_REPETITIONS || it.conditionId == ConditionIds.STUTTERING_PROLONGATIONS || it.conditionId == ConditionIds.STUTTERING_INTERJECTIONS || it.conditionId == ConditionIds.CLUTTERING || it.conditionId == ConditionIds.ANOMIA || it.conditionId == ConditionIds.PHONOLOGICAL_DISORDER || it.conditionId == ConditionIds.APD || it.conditionId == ConditionIds.APRAXIA_OF_SPEECH || it.conditionId == ConditionIds.EXPRESSIVE_LANGUAGE || it.conditionId == ConditionIds.RECEPTIVE_LANGUAGE || it.conditionId == ConditionIds.VOICE_DISORDER || it.conditionId == ConditionIds.DYSARTHRIA || it.conditionId == ConditionIds.ADULT_ANOMIA) && it.riskScore > 40f 
         }
         val hasAnxietyRisk = scores.any {
-            (it.conditionId == ConditionIds.SOCIAL_ANXIETY || it.conditionId == ConditionIds.GAD || it.conditionId == ConditionIds.TEST_ANXIETY || it.conditionId == ConditionIds.SEPARATION_ANXIETY || it.conditionId == ConditionIds.SCHOOL_PHOBIA) && it.riskScore > 40f
+            (it.conditionId == ConditionIds.SOCIAL_ANXIETY || it.conditionId == ConditionIds.GAD || it.conditionId == ConditionIds.TEST_ANXIETY || it.conditionId == ConditionIds.SEPARATION_ANXIETY || it.conditionId == ConditionIds.SCHOOL_PHOBIA || it.conditionId == ConditionIds.MATHEMATICAL_ANXIETY) && it.riskScore > 40f
         }
         val hasDepressionRisk = scores.any {
             it.conditionId == ConditionIds.DEPRESSION && it.riskScore > 40f
@@ -104,7 +104,7 @@ fun PracticeScreen(
             it.conditionId == ConditionIds.EMOTIONAL_DYSREGULATION && it.riskScore > 40f
         }
         val hasExecutiveMemoryRisk = scores.any {
-            (it.conditionId == ConditionIds.EXECUTIVE_FUNCTION || it.conditionId == ConditionIds.WORKING_MEMORY) && it.riskScore > 40f
+            (it.conditionId == ConditionIds.EXECUTIVE_PLANNING || it.conditionId == ConditionIds.WORKING_MEMORY || it.conditionId == ConditionIds.VERBAL_WORKING_MEMORY || it.conditionId == ConditionIds.VISUAL_SPATIAL_MEM) && it.riskScore > 40f
         }
         val hasMutismRisk = scores.any {
             it.conditionId == ConditionIds.SELECTIVE_MUTISM && it.riskScore > 40f

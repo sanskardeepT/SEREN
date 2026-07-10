@@ -259,8 +259,10 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.ADHD_COMBINED, predictions[3], rawJson, duration)
     
     // Batch 3 / Adults / Others
-    onComplete(ConditionIds.ADULT_ADHD, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.ADHD_ADULT, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.ADHD_DYSLEXIA_COMORBID, predictions[3], rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.WORKING_MEMORY, predictions[3], rawJson, duration)
     
     onNext()
 }

@@ -182,51 +182,65 @@ fun QuestionnaireTaskScreen(
 
             // --- Condition scoring routing based on domains ---
             
-            // Batch 2 Anxiety Conditions
+            // Anxiety Domain
             onComplete(ConditionIds.SOCIAL_ANXIETY, anxietyScore, rawJson, duration)
             onComplete(ConditionIds.GAD, anxietyScore, rawJson, duration)
             onComplete(ConditionIds.SELECTIVE_MUTISM, anxietyScore, rawJson, duration)
             onComplete(ConditionIds.TEST_ANXIETY, anxietyScore, rawJson, duration)
             onComplete(ConditionIds.SEPARATION_ANXIETY, anxietyScore, rawJson, duration)
             onComplete(ConditionIds.SCHOOL_PHOBIA, anxietyScore, rawJson, duration)
+            onComplete(ConditionIds.MATHEMATICAL_ANXIETY, anxietyScore, rawJson, duration)
             
-            // Batch 2 Emotional / Behavioral
+            // Emotional Domain
             onComplete(ConditionIds.DEPRESSION, emotionalScore, rawJson, duration)
             onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, emotionalScore, rawJson, duration)
+            onComplete(ConditionIds.TRAUMA_RESPONSE, emotionalScore, rawJson, duration)
+            onComplete(ConditionIds.SOCIAL_WITHDRAWAL, emotionalScore, rawJson, duration)
+            onComplete(ConditionIds.HOME_STRESS, emotionalScore, rawJson, duration)
+            onComplete(ConditionIds.BULLYING_VICTIMISATION, emotionalScore, rawJson, duration)
             
-            // Batch 2 Attention & Memory
-            onComplete(ConditionIds.EXECUTIVE_FUNCTION, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.WORKING_MEMORY, executiveScore, rawJson, duration)
+            // Sensory & Motor Domain
+            onComplete(ConditionIds.ASD_SENSORY, sensoryScore, rawJson, duration)
+            onComplete(ConditionIds.TACTILE_PROCESSING, sensoryScore, rawJson, duration)
+            onComplete(ConditionIds.FINE_MOTOR_DELAY, sensoryScore, rawJson, duration)
+            onComplete(ConditionIds.GROSS_MOTOR_DELAY, sensoryScore, rawJson, duration)
+            onComplete(ConditionIds.HANDEDNESS_CONFUSION, sensoryScore, rawJson, duration)
             
-            // Batch 3 Speech / Language / Learning
-            onComplete(ConditionIds.RECEPTIVE_LANGUAGE, executiveScore, rawJson, duration)
+            // Executive & Memory Domain
+            onComplete(ConditionIds.EXECUTIVE_PLANNING, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.RESPONSE_INHIBITION, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.COGNITIVE_FLEXIBILITY, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.VERBAL_WORKING_MEMORY, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.VISUAL_SPATIAL_MEM, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.AUDITORY_DISCRIMINATION, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.VISUAL_DISCRIMINATION, executiveScore, rawJson, duration)
             onComplete(ConditionIds.NON_VERBAL_LD, executiveScore, rawJson, duration)
-            
-            // Batch 4 subtypes
-            onComplete(ConditionIds.DYSPRAXIA, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.VMI, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_ANOMIA, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_PROCESSING_SPEED, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.READING_FLUENCY_LAG, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.RAN_DEFICIT, executiveScore, rawJson, duration)
-            onComplete(ConditionIds.SPELLING_DISORDER, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.FACT_RETRIEVAL, executiveScore, rawJson, duration)
             onComplete(ConditionIds.PLACE_VALUE_CONFUSION, executiveScore, rawJson, duration)
             onComplete(ConditionIds.FRACTION_RATIO_DEFICIT, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.READING_COMPREHENSION, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.RAN_DEFICIT, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.ORTHOGRAPHIC_PROCESSING, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.READING_FLUENCY, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.SPELLING_DISORDER, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.LOW_FRUSTRATION_TOLERANCE, executiveScore, rawJson, duration)
+            onComplete(ConditionIds.IMPULSIVITY_NON_ADHD, executiveScore, rawJson, duration)
             
-            // Batch 5 subtypes
-            onComplete(ConditionIds.MASKING, insecurityScore, rawJson, duration)
-            onComplete(ConditionIds.HFA_MASKED, insecurityScore, rawJson, duration)
-            onComplete(ConditionIds.SOCIAL_COMMUNICATION_DISORDER, insecurityScore, rawJson, duration)
+            // Insecurities & Silent Profiles Domain
+            onComplete(ConditionIds.TWICE_EXCEPTIONAL, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ASD_SOCIAL, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ASD_COMMUNICATION, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.HIDDEN_SPATIAL, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.HIDDEN_PATTERN, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.KINESTHETIC_INTEL, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.VERBAL_IQ_SUPPRESSED, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.PRAGMATIC_LANGUAGE, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.THEORY_OF_MIND, insecurityScore, rawJson, duration)
-            onComplete(ConditionIds.SENSORY_PROCESSING, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.SENSORY_DEFENSIVENESS, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.VESTIBULAR_DIFFICULTY, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, sensoryScore, rawJson, duration)
-            onComplete(ConditionIds.TRAUMA_SILENCE, emotionalScore, rawJson, duration)
-            
-            // Batch 6 Insecurities
+            onComplete(ConditionIds.INTROVERSION_SUPPRESSION, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ADULT_DYSCALCULIA, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ADULT_ANOMIA, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ADULT_READING_COMPREHENSION, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.ADULT_PROCESSING_SPEED, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.BODY_IMAGE_INSECURITY, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.IMPOSTER_SYNDROME, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.REJECTION_SENSITIVITY, insecurityScore, rawJson, duration)
@@ -237,8 +251,6 @@ fun QuestionnaireTaskScreen(
             onComplete(ConditionIds.ACADEMIC_TRAUMA, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.STUTTERING_CONFIDENCE_DEFICIT, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.DECISION_PARALYSIS, insecurityScore, rawJson, duration)
-            
-            // Batch 7 Insecurities
             onComplete(ConditionIds.FINANCIAL_INSECURITY, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.LEADERSHIP_AVOIDANCE, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.CAREER_STAGNATION, insecurityScore, rawJson, duration)
@@ -249,13 +261,12 @@ fun QuestionnaireTaskScreen(
             onComplete(ConditionIds.ANGER_INSECURITY, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.FAMILY_ORIGIN_INSECURITY, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.SELF_CRITICISM, insecurityScore, rawJson, duration)
-            
-            // Batch 8 Insecurities & Silent Profiles
             onComplete(ConditionIds.PUBLIC_SPEAKING_PHOBIA, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.PDA, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.ALEXITHYMIA, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.HSP_OVERWHELM, insecurityScore, rawJson, duration)
             onComplete(ConditionIds.FAWN_RESPONSE, insecurityScore, rawJson, duration)
+            onComplete(ConditionIds.PERFECTIONISM, insecurityScore, rawJson, duration)
 
             onNext()
         }
