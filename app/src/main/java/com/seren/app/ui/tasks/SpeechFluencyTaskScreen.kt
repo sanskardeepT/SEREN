@@ -267,6 +267,16 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.ACADEMIC_TRAUMA, emotScores[1], rawJson, duration)
                     onComplete(ConditionIds.STUTTERING_CONFIDENCE_DEFICIT, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.DECISION_PARALYSIS, emotScores[2], rawJson, duration)
+                    onComplete(ConditionIds.FINANCIAL_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.LEADERSHIP_AVOIDANCE, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.CAREER_STAGNATION, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.DEEP_ROOTED_SHYNESS, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.EXPRESSION_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.SOCIAL_BELONGING_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.PERFORMANCE_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.ANGER_INSECURITY, emotScores[3], rawJson, duration)
+                    onComplete(ConditionIds.FAMILY_ORIGIN_INSECURITY, emotScores[1], rawJson, duration)
+                    onComplete(ConditionIds.SELF_CRITICISM, emotScores[2], rawJson, duration)
                     
                     // Batch 2 Conditions
                     onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)

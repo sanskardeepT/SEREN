@@ -271,6 +271,8 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.SENSORY_PROCESSING, predictions[2], rawJson, duration)
     onComplete(ConditionIds.SENSORY_DEFENSIVENESS, predictions[2], rawJson, duration)
     onComplete(ConditionIds.DECISION_PARALYSIS, predictions[1], rawJson, duration)
+    onComplete(ConditionIds.SELF_CRITICISM, predictions[2], rawJson, duration)
+    onComplete(ConditionIds.PERFORMANCE_INSECURITY, predictions[1], rawJson, duration)
     
     onNext()
 }

@@ -200,6 +200,7 @@ fun HandwritingTaskScreen(
                     onComplete(ConditionIds.SENSORY_PROCESSING, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.VESTIBULAR_DIFFICULTY, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.SELF_CRITICISM, reversalScore, rawJson, duration)
                     
                     onNext()
                 },

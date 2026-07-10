@@ -78,6 +78,18 @@ object ConditionIds {
     const val STUTTERING_CONFIDENCE_DEFICIT = "stuttering_confidence_deficit"
     const val DECISION_PARALYSIS = "decision_paralysis"
 
+    // === Batch 7 Conditions ===
+    const val FINANCIAL_INSECURITY = "financial_insecurity"
+    const val LEADERSHIP_AVOIDANCE = "leadership_avoidance"
+    const val CAREER_STAGNATION = "career_stagnation"
+    const val DEEP_ROOTED_SHYNESS = "deep_rooted_shyness"
+    const val EXPRESSION_INSECURITY = "expression_insecurity"
+    const val SOCIAL_BELONGING_INSECURITY = "social_belonging_insecurity"
+    const val PERFORMANCE_INSECURITY = "performance_insecurity"
+    const val ANGER_INSECURITY = "anger_insecurity"
+    const val FAMILY_ORIGIN_INSECURITY = "family_origin_insecurity"
+    const val SELF_CRITICISM = "self_criticism"
+
     val BATCH_1 = listOf(
         DYSLEXIA,
         DYSGRAPHIA,
@@ -156,7 +168,20 @@ object ConditionIds {
         DECISION_PARALYSIS
     )
 
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6
+    val BATCH_7 = listOf(
+        FINANCIAL_INSECURITY,
+        LEADERSHIP_AVOIDANCE,
+        CAREER_STAGNATION,
+        DEEP_ROOTED_SHYNESS,
+        EXPRESSION_INSECURITY,
+        SOCIAL_BELONGING_INSECURITY,
+        PERFORMANCE_INSECURITY,
+        ANGER_INSECURITY,
+        FAMILY_ORIGIN_INSECURITY,
+        SELF_CRITICISM
+    )
+
+    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5 + BATCH_6 + BATCH_7
 
     /**
      * Only conditions with at least one clinically defensible signal source
@@ -242,7 +267,18 @@ object ConditionIds {
         DIGITAL_INSECURITY,
         ACADEMIC_TRAUMA,
         STUTTERING_CONFIDENCE_DEFICIT,
-        DECISION_PARALYSIS
+        DECISION_PARALYSIS,
+        // Batch 7 integrations
+        FINANCIAL_INSECURITY,
+        LEADERSHIP_AVOIDANCE,
+        CAREER_STAGNATION,
+        DEEP_ROOTED_SHYNESS,
+        EXPRESSION_INSECURITY,
+        SOCIAL_BELONGING_INSECURITY,
+        PERFORMANCE_INSECURITY,
+        ANGER_INSECURITY,
+        FAMILY_ORIGIN_INSECURITY,
+        SELF_CRITICISM
     )
 
     fun getDisplayName(id: String): String = when (id) {
@@ -312,6 +348,17 @@ object ConditionIds {
         STUTTERING_CONFIDENCE_DEFICIT -> "Stuttering-Linked Confidence Deficit"
         DECISION_PARALYSIS -> "Decision Paralysis"
         
+        FINANCIAL_INSECURITY -> "Financial Confidence Insecurity"
+        LEADERSHIP_AVOIDANCE -> "Leadership Avoidance Pattern"
+        CAREER_STAGNATION -> "Career-Stagnation Confidence Collapse"
+        DEEP_ROOTED_SHYNESS -> "Deep-Rooted Shyness"
+        EXPRESSION_INSECURITY -> "Voice and Expression Insecurity"
+        SOCIAL_BELONGING_INSECURITY -> "Social Belonging Insecurity"
+        PERFORMANCE_INSECURITY -> "Performance/Achievement Insecurity"
+        ANGER_INSECURITY -> "Anger as Hidden Insecurity"
+        FAMILY_ORIGIN_INSECURITY -> "Family-Origin Insecurity"
+        SELF_CRITICISM -> "Perfectionism-Driven Self-Criticism"
+        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
@@ -341,6 +388,11 @@ object ConditionIds {
         WORKPLACE_INSECURITY, RELATIONSHIP_INSECURITY, FOMO_ANXIETY,
         DIGITAL_INSECURITY, ACADEMIC_TRAUMA, STUTTERING_CONFIDENCE_DEFICIT,
         DECISION_PARALYSIS -> "Insecurities & Confidence Deficits"
+        
+        FINANCIAL_INSECURITY, LEADERSHIP_AVOIDANCE, CAREER_STAGNATION,
+        DEEP_ROOTED_SHYNESS, EXPRESSION_INSECURITY, SOCIAL_BELONGING_INSECURITY,
+        PERFORMANCE_INSECURITY, ANGER_INSECURITY, FAMILY_ORIGIN_INSECURITY,
+        SELF_CRITICISM -> "Insecurities & Confidence Deficits"
         
         else -> "General"
     }
@@ -411,6 +463,17 @@ object ConditionIds {
         ACADEMIC_TRAUMA -> "Performance fatigue, stress, or avoidance linked to academic evaluative tasks."
         STUTTERING_CONFIDENCE_DEFICIT -> "Reduced verbal confidence, speech avoidance, and expression anxiety."
         DECISION_PARALYSIS -> "Prolonged decision latencies, erasures, and difficulty choosing under low pressure."
+        
+        FINANCIAL_INSECURITY -> "Anxiety regarding financial stability, literacy, and planning capability."
+        LEADERSHIP_AVOIDANCE -> "Avoidance of group facilitation, coordination, or decision-making roles."
+        CAREER_STAGNATION -> "Confidence loss relating to professional growth, promotion, or workplace progress."
+        DEEP_ROOTED_SHYNESS -> "Avoidance of voluntary social interaction and heightened interpersonal anxiety."
+        EXPRESSION_INSECURITY -> "Anxiety regarding vocal presentation, public speaking, or self-expression."
+        SOCIAL_BELONGING_INSECURITY -> "Feelings of alienation, exclusion, or fear of not fitting in with peers."
+        PERFORMANCE_INSECURITY -> "Extreme performance anxiety and fear of failure during evaluative tasks."
+        ANGER_INSECURITY -> "Repressed anger or irritability masking underlying vulnerability and insecurity."
+        FAMILY_ORIGIN_INSECURITY -> "Trust issues, low self-worth, or anxiety stemming from family background."
+        SELF_CRITICISM -> "Harsh self-evaluation, perfectionistic erasures, and self-blaming language."
         
         else -> "Neurodevelopmental and cognitive screening profile."
     }
