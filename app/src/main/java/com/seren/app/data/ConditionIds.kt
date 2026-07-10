@@ -42,6 +42,18 @@ object ConditionIds {
     const val ADULT_DYSLEXIA = "adult_dyslexia"
     const val ADULT_ADHD = "adult_adhd"
 
+    // === Batch 4 Conditions ===
+    const val DYSPRAXIA = "dyspraxia"
+    const val VMI = "vmi"
+    const val ADULT_ANOMIA = "adult_anomia"
+    const val ADULT_PROCESSING_SPEED = "adult_processing_speed"
+    const val READING_FLUENCY_LAG = "reading_fluency_lag"
+    const val ORTHOGRAPHIC_DEFICIT = "orthographic_deficit"
+    const val RAN_DEFICIT = "ran_deficit"
+    const val SPELLING_DISORDER = "spelling_disorder"
+    const val PLACE_VALUE_CONFUSION = "place_value_confusion"
+    const val FRACTION_RATIO_DEFICIT = "fraction_ratio_deficit"
+
     val BATCH_1 = listOf(
         DYSLEXIA,
         DYSGRAPHIA,
@@ -81,7 +93,20 @@ object ConditionIds {
         ADULT_ADHD
     )
 
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3
+    val BATCH_4 = listOf(
+        DYSPRAXIA,
+        VMI,
+        ADULT_ANOMIA,
+        ADULT_PROCESSING_SPEED,
+        READING_FLUENCY_LAG,
+        ORTHOGRAPHIC_DEFICIT,
+        RAN_DEFICIT,
+        SPELLING_DISORDER,
+        PLACE_VALUE_CONFUSION,
+        FRACTION_RATIO_DEFICIT
+    )
+
+    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4
 
     /**
      * Only conditions with at least one clinically defensible signal source
@@ -134,7 +159,18 @@ object ConditionIds {
         // Batch 3 missing integrations
         RECEPTIVE_LANGUAGE,
         NON_VERBAL_LD,
-        TWICE_EXCEPTIONAL
+        TWICE_EXCEPTIONAL,
+        // Batch 4 integrations
+        DYSPRAXIA,
+        VMI,
+        ADULT_ANOMIA,
+        ADULT_PROCESSING_SPEED,
+        READING_FLUENCY_LAG,
+        ORTHOGRAPHIC_DEFICIT,
+        RAN_DEFICIT,
+        SPELLING_DISORDER,
+        PLACE_VALUE_CONFUSION,
+        FRACTION_RATIO_DEFICIT
     )
 
     fun getDisplayName(id: String): String = when (id) {
@@ -171,17 +207,32 @@ object ConditionIds {
         ADULT_DYSLEXIA -> "Adult Dyslexia"
         ADULT_ADHD -> "Adult ADHD"
         
+        DYSPRAXIA -> "Developmental Coordination Disorder (Dyspraxia)"
+        VMI -> "Visual-Motor Integration Deficit"
+        ADULT_ANOMIA -> "Adult Word-Finding Difficulty"
+        ADULT_PROCESSING_SPEED -> "Adult Processing Speed Disorder"
+        READING_FLUENCY_LAG -> "Reading Fluency Lag"
+        ORTHOGRAPHIC_DEFICIT -> "Orthographic Processing Deficit"
+        RAN_DEFICIT -> "RAN Naming Deficit"
+        SPELLING_DISORDER -> "Spelling Disorder"
+        PLACE_VALUE_CONFUSION -> "Place Value Confusion"
+        FRACTION_RATIO_DEFICIT -> "Fraction & Ratio Difficulty"
+        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
     fun getCategory(id: String): String = when (id) {
-        DYSLEXIA, DYSGRAPHIA, DYSCALCULIA, NON_VERBAL_LD, ADULT_DYSLEXIA -> "Learning Differences"
+        DYSLEXIA, DYSGRAPHIA, DYSCALCULIA, NON_VERBAL_LD, ADULT_DYSLEXIA,
+        DYSPRAXIA, READING_FLUENCY_LAG, ORTHOGRAPHIC_DEFICIT, SPELLING_DISORDER,
+        PLACE_VALUE_CONFUSION, FRACTION_RATIO_DEFICIT -> "Learning Differences"
         
         ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED, APD,
-        EXECUTIVE_FUNCTION, WORKING_MEMORY, PROCESSING_SPEED, ADULT_ADHD -> "Attention & Processing"
+        EXECUTIVE_FUNCTION, WORKING_MEMORY, PROCESSING_SPEED, ADULT_ADHD,
+        ADULT_PROCESSING_SPEED -> "Attention & Processing"
         
         STUTTERING, CLUTTERING, ANOMIA, VOICE_DISORDER, EXPRESSIVE_LANGUAGE, 
-        RECEPTIVE_LANGUAGE, PHONOLOGICAL_DISORDER, APRAXIA_OF_SPEECH -> "Speech & Language"
+        RECEPTIVE_LANGUAGE, PHONOLOGICAL_DISORDER, APRAXIA_OF_SPEECH,
+        ADULT_ANOMIA, RAN_DEFICIT -> "Speech & Language"
         
         SOCIAL_ANXIETY, GAD, SELECTIVE_MUTISM, TEST_ANXIETY, 
         SEPARATION_ANXIETY, SCHOOL_PHOBIA -> "Anxiety Disorders"
@@ -189,6 +240,8 @@ object ConditionIds {
         DEPRESSION, EMOTIONAL_DYSREGULATION -> "Emotional & Behavioural"
         
         TWICE_EXCEPTIONAL -> "Silent Profiles"
+        
+        VMI -> "Sensory & Motor"
         
         else -> "General"
     }
@@ -226,6 +279,17 @@ object ConditionIds {
         TWICE_EXCEPTIONAL -> "A combined high intellectual capacity with co-occurring learning or processing challenges."
         ADULT_DYSLEXIA -> "Visual decoding latency, adult phonological processing strategies, and slow reading speed."
         ADULT_ADHD -> "Adult-specific attentional drift, executive scheduling challenges, and impulsivity markers."
+        
+        DYSPRAXIA -> "Difficulty in fine motor writing, touch input coordination, and spatial planning."
+        VMI -> "Difficulty translating visual inputs to manual drawing strokes or quick screen selections."
+        ADULT_ANOMIA -> "Adult-onset word retrieval delays, speech hesitation, and naming latencies."
+        ADULT_PROCESSING_SPEED -> "Prolonged decision latencies and slower reaction speeds in adult cohorts."
+        READING_FLUENCY_LAG -> "Reduced reading pacing and fluency delays compared to age norms."
+        ORTHOGRAPHIC_DEFICIT -> "Difficulty processing visual forms of words, leading to reading and spelling speed blocks."
+        RAN_DEFICIT -> "Delayed automated vocal naming speed of visual stimuli."
+        SPELLING_DISORDER -> "Consistent graphic spelling errors, omissions, and motor execution pauses."
+        PLACE_VALUE_CONFUSION -> "Confusion of decimal/column representations and comparison latencies of large numbers."
+        FRACTION_RATIO_DEFICIT -> "Difficulty estimating and comparing proportions, fractions, or relative amounts."
         
         else -> "Neurodevelopmental and cognitive screening profile."
     }

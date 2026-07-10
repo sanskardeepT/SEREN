@@ -266,6 +266,8 @@ private fun submitAttentionResults(
     // Batch 3 / Adults / Others
     onComplete(ConditionIds.ADULT_ADHD, predictions[3], rawJson, duration)
     onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.VMI, predictions[2] * 0.8f, rawJson, duration)
+    onComplete(ConditionIds.ADULT_PROCESSING_SPEED, predictions[3], rawJson, duration)
     
     onNext()
 }

@@ -193,6 +193,10 @@ fun HandwritingTaskScreen(
                     onComplete(ConditionIds.DYSLEXIA, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.DYSGRAPHIA, reversalScore, rawJson, duration) // Dysgraphia overlaps same task inputs
                     onComplete(ConditionIds.NON_VERBAL_LD, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.DYSPRAXIA, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.VMI, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.SPELLING_DISORDER, reversalScore, rawJson, duration)
                     
                     onNext()
                 },

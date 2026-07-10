@@ -322,6 +322,10 @@ private fun submitHeuristicResult(
     onComplete(ConditionIds.WORKING_MEMORY, memoryScore, rawJson, duration)
     onComplete(ConditionIds.EXECUTIVE_FUNCTION, execScore, rawJson, duration)
     onComplete(ConditionIds.NON_VERBAL_LD, execScore, rawJson, duration)
+    onComplete(ConditionIds.DYSPRAXIA, execScore, rawJson, duration)
+    onComplete(ConditionIds.ADULT_PROCESSING_SPEED, riskScore, rawJson, duration)
+    onComplete(ConditionIds.PLACE_VALUE_CONFUSION, riskScore, rawJson, duration)
+    onComplete(ConditionIds.FRACTION_RATIO_DEFICIT, riskScore, rawJson, duration)
     
     onNext()
 }

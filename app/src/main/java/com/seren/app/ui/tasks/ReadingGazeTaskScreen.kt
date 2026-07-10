@@ -127,6 +127,8 @@ fun ReadingGazeTaskScreen(
                 onComplete(ConditionIds.DYSLEXIA, riskScore, rawJson, duration)
                 onComplete(ConditionIds.ADULT_DYSLEXIA, riskScore, rawJson, duration)
                 onComplete(ConditionIds.RECEPTIVE_LANGUAGE, riskScore, rawJson, duration)
+                onComplete(ConditionIds.READING_FLUENCY_LAG, riskScore, rawJson, duration)
+                onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, riskScore, rawJson, duration)
                 
                 onNext()
             },

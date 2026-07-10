@@ -252,6 +252,7 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.VOICE_DISORDER, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.ADULT_ANOMIA, disfluencyScore, rawJson, duration)
                     
                     // Batch 2 Conditions
                     onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)
