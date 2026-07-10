@@ -40,8 +40,8 @@
 
 ---
 
-## Batch 3 ✦ CURRENT — Additional Speech/Language, Adult Variants & Processing
-**Status**: ⏳ Pending
+## Batch 3 — Additional Speech/Language, Adult Variants & Processing
+**Status**: ✅ Completed & Integrated
 
 | # | Condition | Category |
 |---|---|---|
@@ -59,7 +59,7 @@
 ---
 
 ## Batch 4 — Motor, Visual-Motor, Adult Extensions & Math Subtypes
-**Status**: ⏳ Pending
+**Status**: ✅ Completed & Integrated
 
 | # | Condition | Category |
 |---|---|---|
@@ -77,7 +77,7 @@
 ---
 
 ## Batch 5 — Masking, Social Communication & Sensory (Phase 3 conditions, partial dataset support via ABIDE/ChildVox)
-**Status**: ⏳ Pending
+**Status**: ✅ Completed & Integrated
 
 | # | Condition | Category |
 |---|---|---|
@@ -94,10 +94,20 @@
 
 ---
 
-## Batch 6+ — Insecurities & Confidence Deficits + Remaining Silent Profiles
-**Status**: ⏳ Pending
+## Batch 6 — Insecurities & Confidence Deficits (Part 1)
+**Status**: ✅ Completed & Integrated
 
-> ⚠️ **No dedicated public dataset exists for these conditions** (per Dataset Blueprint Section 6.7). These get built as validated-questionnaire + NLP self-report modules on EmotNet, not new trained sub-models. All 21 Insecurities + remaining Silent Profiles conditions go here, split across 3–4 batches of 10.
+---
+
+## Batch 7 — Insecurities & Confidence Deficits (Part 2)
+**Status**: ✅ Completed & Integrated
+
+---
+
+## Batch 8 — Remaining Insecurities & Silent Profiles (Final)
+**Status**: ✅ Completed & Integrated
+
+> ⚠️ **No dedicated public dataset exists for these conditions** (per Dataset Blueprint Section 6.7). These get built as validated-questionnaire + NLP self-report modules on EmotNet, not new trained sub-models. All 21 Insecurities + remaining Silent Profiles conditions go here, split across Batches 6 to 8.
 
 ### Insecurities & Confidence Deficits (21 conditions):
 Body Image Insecurity • Imposter Syndrome • Rejection Sensitivity • Workplace/Career Insecurity • Relationship Insecurity • FOMO/Social Comparison Anxiety • Digital/Online Social Insecurity • Academic Trauma • Stuttering-Linked Confidence Deficit • Decision Paralysis • Financial Confidence Insecurity • Leadership Avoidance Pattern • Career-Stagnation Confidence Collapse • Deep-Rooted Shyness • Voice and Expression Insecurity • Social Belonging Insecurity • Performance/Achievement Insecurity • Anger as Hidden Insecurity • Family-Origin Insecurities • Perfectionism-Driven Self-Criticism • Public Speaking Phobia
