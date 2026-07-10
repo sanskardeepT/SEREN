@@ -62,16 +62,16 @@ fun ConsentScreen(
     viewModel: ConsentViewModel = viewModel()
 ) {
     val isConsentSaved by viewModel.isConsentSaved.collectAsState()
-    var currentStep by remember { mutableStateOf(1) } // 1: Splash/Welcome, 2: Role Selection, 3: Consent/Privacy
+    var currentStep by remember { mutableStateOf(1) } // 1: Splash/Welcome, 2: Role Selection, 3: Consent/Privacy, 4: Parental Verification
     var selectedRole by remember { mutableStateOf<String?>(null) } // "parent", "teen", "adult"
     var selectedChildAgeGroup by remember { mutableStateOf<String?>(null) } // AgeGroup.CHILD_5_8 or AgeGroup.CHILD_9_12
-
+ 
     LaunchedEffect(isConsentSaved) {
         if (isConsentSaved) {
             onNavigateToHome()
         }
     }
-
+ 
     when (currentStep) {
         1 -> WelcomeSlide(onNext = { currentStep = 2 })
         2 -> RoleSelectorScreen(
@@ -85,17 +85,26 @@ fun ConsentScreen(
         3 -> ConsentPrivacyScreen(
             onBack = { currentStep = 2 },
             onAccept = {
-                val ageBand = when (selectedRole) {
-                    "parent" -> selectedChildAgeGroup ?: AgeGroup.CHILD_9_12
-                    "teen" -> AgeGroup.TEEN_13_19
-                    else -> AgeGroup.ADULT_20_PLUS
+                if (selectedRole == "parent") {
+                    currentStep = 4
+                } else {
+                    val ageBand = when (selectedRole) {
+                        "teen" -> AgeGroup.TEEN_13_19
+                        else -> AgeGroup.ADULT_20_PLUS
+                    }
+                    val name = when (selectedRole) {
+                        "teen" -> "Teen Explorer"
+                        else -> "Adult Explorer"
+                    }
+                    viewModel.saveConsent(name, ageBand)
                 }
-                val name = when (selectedRole) {
-                    "parent" -> "Parent Explorer"
-                    "teen" -> "Teen Explorer"
-                    else -> "Adult Explorer"
-                }
-                viewModel.saveConsent(name, ageBand)
+            }
+        )
+        4 -> ParentalVerificationScreen(
+            onBack = { currentStep = 3 },
+            onVerified = {
+                val ageBand = selectedChildAgeGroup ?: AgeGroup.CHILD_9_12
+                viewModel.saveConsent("Parent Explorer", ageBand)
             }
         )
     }
@@ -533,6 +542,128 @@ fun ConsentPrivacyScreen(
                 )
             ) {
                 Text(text = "Accept & Continue", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+fun ParentalVerificationScreen(
+    onBack: () -> Unit,
+    onVerified: () -> Unit
+) {
+    var answerText by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
+    
+    // Generate a fixed random equation for verification
+    val num1 = remember { 14 }
+    val num2 = remember { 19 }
+    val correctAnswer = num1 + num2
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        Text(
+            text = "Parent Verification Check",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+        )
+
+        Text(
+            text = "To comply with COPPA regulations and ensure child safety, a parent or guardian must verify their authorization to proceed with this cognitive screening.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            lineHeight = 22.sp
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Please solve this question to confirm you are an adult:",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = "$num1 + $num2 = ?",
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+
+        androidx.compose.material3.OutlinedTextField(
+            value = answerText,
+            onValueChange = {
+                answerText = it
+                showError = false
+            },
+            label = { Text("Your Answer") },
+            placeholder = { Text("Enter total") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            isError = showError
+        )
+
+        if (showError) {
+            Text(
+                text = "Incorrect answer. Please try again.",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier.weight(1f).height(56.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black)
+            ) {
+                Text(text = "Cancel", fontWeight = FontWeight.Bold)
+            }
+
+            Button(
+                onClick = {
+                    val ansVal = answerText.trim().toIntOrNull()
+                    if (ansVal == correctAnswer) {
+                        onVerified()
+                    } else {
+                        showError = true
+                    }
+                },
+                modifier = Modifier.weight(1.5f).height(56.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text(text = "Verify & Continue", fontWeight = FontWeight.Bold)
             }
         }
     }

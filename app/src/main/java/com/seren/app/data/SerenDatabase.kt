@@ -37,6 +37,12 @@ abstract class SerenDatabase : RoomDatabase() {
                     SerenDatabase::class.java,
                     "seren_database"
                 )
+                
+                // Securely encrypt database with SQLCipher SupportFactory
+                val passphraseBytes = com.seren.app.data.security.SecurityHelper.getOrCreateDatabasePassphrase(context)
+                val factory = net.sqlcipher.database.SupportFactory(passphraseBytes)
+                builder.openHelperFactory(factory)
+
                 // Only allow destructive migration in debug builds.
                 // In release, a missing migration will crash — forcing us to write proper migrations.
                 val isDebug = (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
