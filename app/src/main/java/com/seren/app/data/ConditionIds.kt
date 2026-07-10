@@ -54,6 +54,18 @@ object ConditionIds {
     const val PLACE_VALUE_CONFUSION = "place_value_confusion"
     const val FRACTION_RATIO_DEFICIT = "fraction_ratio_deficit"
 
+    // === Batch 5 Conditions ===
+    const val MASKING = "masking"
+    const val HFA_MASKED = "hfa_masked"
+    const val SOCIAL_COMMUNICATION_DISORDER = "social_communication_disorder"
+    const val PRAGMATIC_LANGUAGE = "pragmatic_language"
+    const val THEORY_OF_MIND = "theory_of_mind"
+    const val SENSORY_PROCESSING = "sensory_processing"
+    const val SENSORY_DEFENSIVENESS = "sensory_defensiveness"
+    const val VESTIBULAR_DIFFICULTY = "vestibular_difficulty"
+    const val PROPRIOCEPTIVE_DIFFICULTY = "proprioceptive_difficulty"
+    const val TRAUMA_SILENCE = "trauma_silence"
+
     val BATCH_1 = listOf(
         DYSLEXIA,
         DYSGRAPHIA,
@@ -106,7 +118,20 @@ object ConditionIds {
         FRACTION_RATIO_DEFICIT
     )
 
-    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4
+    val BATCH_5 = listOf(
+        MASKING,
+        HFA_MASKED,
+        SOCIAL_COMMUNICATION_DISORDER,
+        PRAGMATIC_LANGUAGE,
+        THEORY_OF_MIND,
+        SENSORY_PROCESSING,
+        SENSORY_DEFENSIVENESS,
+        VESTIBULAR_DIFFICULTY,
+        PROPRIOCEPTIVE_DIFFICULTY,
+        TRAUMA_SILENCE
+    )
+
+    val ALL = BATCH_1 + BATCH_2 + BATCH_3 + BATCH_4 + BATCH_5
 
     /**
      * Only conditions with at least one clinically defensible signal source
@@ -170,7 +195,18 @@ object ConditionIds {
         RAN_DEFICIT,
         SPELLING_DISORDER,
         PLACE_VALUE_CONFUSION,
-        FRACTION_RATIO_DEFICIT
+        FRACTION_RATIO_DEFICIT,
+        // Batch 5 integrations
+        MASKING,
+        HFA_MASKED,
+        SOCIAL_COMMUNICATION_DISORDER,
+        PRAGMATIC_LANGUAGE,
+        THEORY_OF_MIND,
+        SENSORY_PROCESSING,
+        SENSORY_DEFENSIVENESS,
+        VESTIBULAR_DIFFICULTY,
+        PROPRIOCEPTIVE_DIFFICULTY,
+        TRAUMA_SILENCE
     )
 
     fun getDisplayName(id: String): String = when (id) {
@@ -218,6 +254,17 @@ object ConditionIds {
         PLACE_VALUE_CONFUSION -> "Place Value Confusion"
         FRACTION_RATIO_DEFICIT -> "Fraction & Ratio Difficulty"
         
+        MASKING -> "Masking and Camouflaging Profile"
+        HFA_MASKED -> "Masked High-Functioning Autism Profile"
+        SOCIAL_COMMUNICATION_DISORDER -> "Social Communication Disorder"
+        PRAGMATIC_LANGUAGE -> "Pragmatic Language Disorder"
+        THEORY_OF_MIND -> "Theory of Mind Deficit"
+        SENSORY_PROCESSING -> "Sensory Processing Disorder"
+        SENSORY_DEFENSIVENESS -> "Sensory Defensiveness Profile"
+        VESTIBULAR_DIFFICULTY -> "Vestibular Processing Difficulty"
+        PROPRIOCEPTIVE_DIFFICULTY -> "Proprioceptive Processing Difficulty"
+        TRAUMA_SILENCE -> "Trauma-Based Silence"
+        
         else -> id.replaceFirstChar { it.uppercase() }
     }
 
@@ -237,11 +284,11 @@ object ConditionIds {
         SOCIAL_ANXIETY, GAD, SELECTIVE_MUTISM, TEST_ANXIETY, 
         SEPARATION_ANXIETY, SCHOOL_PHOBIA -> "Anxiety Disorders"
         
-        DEPRESSION, EMOTIONAL_DYSREGULATION -> "Emotional & Behavioural"
+        DEPRESSION, EMOTIONAL_DYSREGULATION, TRAUMA_SILENCE -> "Emotional & Behavioural"
         
-        TWICE_EXCEPTIONAL -> "Silent Profiles"
+        TWICE_EXCEPTIONAL, MASKING, HFA_MASKED, SOCIAL_COMMUNICATION_DISORDER, THEORY_OF_MIND -> "Silent Profiles"
         
-        VMI -> "Sensory & Motor"
+        VMI, SENSORY_PROCESSING, SENSORY_DEFENSIVENESS, VESTIBULAR_DIFFICULTY, PROPRIOCEPTIVE_DIFFICULTY -> "Sensory & Motor"
         
         else -> "General"
     }
@@ -290,6 +337,17 @@ object ConditionIds {
         SPELLING_DISORDER -> "Consistent graphic spelling errors, omissions, and motor execution pauses."
         PLACE_VALUE_CONFUSION -> "Confusion of decimal/column representations and comparison latencies of large numbers."
         FRACTION_RATIO_DEFICIT -> "Difficulty estimating and comparing proportions, fractions, or relative amounts."
+        
+        MASKING -> "Cognitive camouflaging of clinical symptoms via excessive compensatory efforts."
+        HFA_MASKED -> "Co-occurring masked autism spectrum indicators with social adaptation profiles."
+        SOCIAL_COMMUNICATION_DISORDER -> "Pragmatic difficulties in social communication and conversational timing."
+        PRAGMATIC_LANGUAGE -> "Difficulty understanding context-dependent language rules and conversation nuances."
+        THEORY_OF_MIND -> "Difficulty processing perspective-taking cues and social intent markers."
+        SENSORY_PROCESSING -> "Atypical responsiveness to sensory touch inputs and background stimulation."
+        SENSORY_DEFENSIVENESS -> "Averse sensory reactions and visual/auditory distractibility."
+        VESTIBULAR_DIFFICULTY -> "Balance, movement coordination, and tactile motor planning deficits."
+        PROPRIOCEPTIVE_DIFFICULTY -> "Atypical touch feedback, writing stroke pressure, or spatial coordination."
+        TRAUMA_SILENCE -> "Vocal avoidance, low volume, or situational silence linked to emotional stressors."
         
         else -> "Neurodevelopmental and cognitive screening profile."
     }

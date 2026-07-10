@@ -146,11 +146,44 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
             val cooccurringDifference = maxOf(dyslexiaScore, adhdScore)
             val twiceExceptionalScore = (highCognitiveCapacity * cooccurringDifference / 100f).coerceIn(0f, 100f)
 
+            // Extract anxiety / mutism / memory scores for Batch 5 composites
+            val socialAnxietyScore = mappedScores.find { it.conditionId == ConditionIds.SOCIAL_ANXIETY }?.riskScore ?: 0f
+            val gadScore = mappedScores.find { it.conditionId == ConditionIds.GAD }?.riskScore ?: 0f
+            val testAnxietyScore = mappedScores.find { it.conditionId == ConditionIds.TEST_ANXIETY }?.riskScore ?: 0f
+            val selectiveMutismScore = mappedScores.find { it.conditionId == ConditionIds.SELECTIVE_MUTISM }?.riskScore ?: 0f
+            val workingMemoryScore = mappedScores.find { it.conditionId == ConditionIds.WORKING_MEMORY }?.riskScore ?: 0f
+
+            // Masking: low math/ADHD risk combined with high GAD, social anxiety, or test anxiety
+            val maskingScore = ((100f - minOf(dyscalculiaScore, adhdScore)) * maxOf(socialAnxietyScore, gadScore, testAnxietyScore) / 100f).coerceIn(0f, 100f)
+
+            // HFA Masked: high social anxiety/mutism combined with executive/memory deficits
+            val hfaMaskedScore = (maxOf(socialAnxietyScore, selectiveMutismScore) * maxOf(execScore, workingMemoryScore) / 100f).coerceIn(0f, 100f)
+
             mappedScores.add(
                 ConditionScore(
                     sessionId = currentSessionId,
                     conditionId = ConditionIds.TWICE_EXCEPTIONAL,
                     riskScore = twiceExceptionalScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 2
+                )
+            )
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.MASKING,
+                    riskScore = maskingScore,
+                    confidenceLevel = ConfidenceLevel.MEDIUM,
+                    modalitiesUsed = 2
+                )
+            )
+
+            mappedScores.add(
+                ConditionScore(
+                    sessionId = currentSessionId,
+                    conditionId = ConditionIds.HFA_MASKED,
+                    riskScore = hfaMaskedScore,
                     confidenceLevel = ConfidenceLevel.MEDIUM,
                     modalitiesUsed = 2
                 )

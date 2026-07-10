@@ -326,6 +326,7 @@ private fun submitHeuristicResult(
     onComplete(ConditionIds.ADULT_PROCESSING_SPEED, riskScore, rawJson, duration)
     onComplete(ConditionIds.PLACE_VALUE_CONFUSION, riskScore, rawJson, duration)
     onComplete(ConditionIds.FRACTION_RATIO_DEFICIT, riskScore, rawJson, duration)
+    onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, execScore, rawJson, duration)
     
     onNext()
 }

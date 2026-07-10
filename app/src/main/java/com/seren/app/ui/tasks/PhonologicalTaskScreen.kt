@@ -253,6 +253,8 @@ fun PhonologicalTaskScreen(
                     onComplete(ConditionIds.PHONOLOGICAL_DISORDER, risk, rawJson, duration)
                     onComplete(ConditionIds.ADULT_ANOMIA, risk, rawJson, duration)
                     onComplete(ConditionIds.RAN_DEFICIT, risk, rawJson, duration)
+                    onComplete(ConditionIds.PRAGMATIC_LANGUAGE, risk, rawJson, duration)
+                    onComplete(ConditionIds.TRAUMA_SILENCE, risk, rawJson, duration)
                     
                     onNext()
                 },

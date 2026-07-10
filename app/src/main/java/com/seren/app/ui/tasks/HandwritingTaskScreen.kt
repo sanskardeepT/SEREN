@@ -197,6 +197,9 @@ fun HandwritingTaskScreen(
                     onComplete(ConditionIds.VMI, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.ORTHOGRAPHIC_DEFICIT, reversalScore, rawJson, duration)
                     onComplete(ConditionIds.SPELLING_DISORDER, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.SENSORY_PROCESSING, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.VESTIBULAR_DIFFICULTY, reversalScore, rawJson, duration)
+                    onComplete(ConditionIds.PROPRIOCEPTIVE_DIFFICULTY, reversalScore, rawJson, duration)
                     
                     onNext()
                 },

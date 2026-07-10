@@ -268,6 +268,8 @@ private fun submitAttentionResults(
     onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
     onComplete(ConditionIds.VMI, predictions[2] * 0.8f, rawJson, duration)
     onComplete(ConditionIds.ADULT_PROCESSING_SPEED, predictions[3], rawJson, duration)
+    onComplete(ConditionIds.SENSORY_PROCESSING, predictions[2], rawJson, duration)
+    onComplete(ConditionIds.SENSORY_DEFENSIVENESS, predictions[2], rawJson, duration)
     
     onNext()
 }

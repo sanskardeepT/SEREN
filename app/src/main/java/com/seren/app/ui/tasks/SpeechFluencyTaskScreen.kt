@@ -253,6 +253,10 @@ fun SpeechFluencyTaskScreen(
                     onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
                     onComplete(ConditionIds.ADULT_ANOMIA, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.SOCIAL_COMMUNICATION_DISORDER, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.PRAGMATIC_LANGUAGE, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.THEORY_OF_MIND, disfluencyScore, rawJson, duration)
+                    onComplete(ConditionIds.TRAUMA_SILENCE, disfluencyScore, rawJson, duration)
                     
                     // Batch 2 Conditions
                     onComplete(ConditionIds.SOCIAL_ANXIETY, emotScores[1], rawJson, duration)
