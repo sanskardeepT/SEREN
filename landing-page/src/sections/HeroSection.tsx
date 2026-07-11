@@ -64,19 +64,14 @@ export default function HeroSection({ onOpenWaitlist }: HeroSectionProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="mb-12"
+          className="mb-8 flex flex-col items-center"
         >
           <h1 className="sr-only">SEREN — Every Child is a Star</h1>
-          <span
-            className="text-4xl md:text-5xl font-bold tracking-[0.35em] text-white/90"
-            style={{ fontFamily: "var(--font-heading)" }}
-            aria-hidden="true"
-          >
-            SEREN
-          </span>
-          <p className="tagline text-white/35 mt-2" style={{ letterSpacing: '0.25em' }}>
-            Every Child is a Star
-          </p>
+          <img
+            src="/logo.png"
+            alt="SEREN Logo"
+            className="h-36 md:h-44 w-auto object-contain select-none pointer-events-none"
+          />
         </motion.div>
 
         {/* Headline */}

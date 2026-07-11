@@ -47,16 +47,23 @@ export default function Navbar() {
             }`}
           >
             {/* Logo */}
-            <a href="#" className="flex flex-col items-start group" aria-label="SEREN - Home">
-              <span
-                className="text-xl font-bold tracking-[0.2em] text-white"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                SEREN
-              </span>
-              <span className="tagline text-white/50 group-hover:text-gold transition-colors duration-300" style={{ fontSize: '0.55rem', letterSpacing: '0.2em' }}>
-                Every Child is a Star
-              </span>
+            <a href="#" className="flex items-center gap-3 group" aria-label="SEREN - Home">
+              <img
+                src="/logo_icon.png"
+                alt="SEREN Logo"
+                className="h-10 w-10 object-contain group-hover:scale-105 transition-all duration-300"
+              />
+              <div className="flex flex-col items-start">
+                <span
+                  className="text-xl font-bold tracking-[0.2em] text-white leading-none"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  SEREN
+                </span>
+                <span className="tagline text-white/50 group-hover:text-gold transition-colors duration-300" style={{ fontSize: '0.55rem', letterSpacing: '0.2em', marginTop: '3px' }}>
+                  Every Child is a Star
+                </span>
+              </div>
             </a>
 
             {/* Desktop Links */}
