@@ -2,6 +2,7 @@ package com.seren.app.ui.practice
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +54,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seren.app.data.ConditionIds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.mutableStateListOf
 
 @Composable
 fun PracticeScreen(
@@ -71,6 +75,7 @@ fun PracticeScreen(
     // Trackers for completed exercises inside this session
     var completedExercises by remember { mutableStateOf(0) }
     val totalRequiredExercises = 2
+    val completedTaskTitles = remember { mutableStateListOf<String>() }
 
     LaunchedEffect(isPracticeSaved) {
         if (isPracticeSaved) {
@@ -269,7 +274,7 @@ fun PracticeScreen(
 
             // Lists targeted exercises
             recommendations.forEach { task ->
-                var taskDone by remember { mutableStateOf(false) }
+                val taskDone = task.title in completedTaskTitles
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -319,18 +324,6 @@ fun PracticeScreen(
                                     activeExerciseName = task.title
                                     exerciseTimerActive = true
                                     exerciseProgress = 0f
-                                    
-                                    // Start simulated timer sequence
-                                    scope.launch {
-                                        for (i in 1..10) {
-                                            delay(150)
-                                            exerciseProgress = i.toFloat() / 10f
-                                        }
-                                        delay(100)
-                                        exerciseTimerActive = false
-                                        taskDone = true
-                                        completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
-                                    }
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.secondary,
@@ -374,7 +367,7 @@ fun PracticeScreen(
 
     // Practice Simulation progress dialog modal
     if (exerciseTimerActive && activeExerciseName != null) {
-        Dialog(onDismissRequest = {}) {
+        Dialog(onDismissRequest = { exerciseTimerActive = false }) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -388,28 +381,256 @@ fun PracticeScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = "Training: $activeExerciseName",
+                        text = activeExerciseName!!,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
-                    Text(
-                        text = "Follow on-screen cues and focus on accuracy rather than speed.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    
-                    LinearProgressIndicator(
-                        progress = { exerciseProgress },
-                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    
-                    Text(
-                        text = "${(exerciseProgress * 100).toInt()}% Done",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
+
+                    when (activeExerciseName) {
+                        "Breathing Focus Space" -> {
+                            var breathCycle by remember { mutableStateOf(1) }
+                            var isHolding by remember { mutableStateOf(false) }
+
+                            Text(
+                                text = if (isHolding) "Hold and breathe slowly..." else "Press and Hold to Inhale",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(if (isHolding) 140.dp else 90.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
+                                    .clickable {
+                                        isHolding = !isHolding
+                                        if (!isHolding) {
+                                            breathCycle++
+                                            if (breathCycle > 3) {
+                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                exerciseTimerActive = false
+                                            }
+                                        }
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = if (isHolding) "Release" else "Hold",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Text(
+                                text = "Breaths Complete: ${breathCycle - 1} / 3",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+
+                        "Subitizing Count" -> {
+                            var dotCount by remember { mutableStateOf((2..6).random()) }
+                            var correctAnswers by remember { mutableStateOf(0) }
+
+                            Text(
+                                text = "Pop/Tap the correct count below:",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(120.dp)
+                                    .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    repeat(dotCount) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(12.dp)
+                                                .background(MaterialTheme.colorScheme.primary, CircleShape)
+                                        )
+                                    }
+                                }
+                            }
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                listOf(2, 3, 4, 5, 6).forEach { num ->
+                                    Button(
+                                        onClick = {
+                                            if (num == dotCount) {
+                                                correctAnswers++
+                                                if (correctAnswers >= 3) {
+                                                    completedTaskTitles.add(activeExerciseName!!)
+                                                    completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                    exerciseTimerActive = false
+                                                } else {
+                                                    dotCount = (2..6).random()
+                                                }
+                                            }
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.secondary
+                                        )
+                                    ) {
+                                        Text(num.toString(), fontSize = 12.sp)
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = "Correct: $correctAnswers / 3",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+
+                        "Sort the Stars (Switch)" -> {
+                            var shape by remember { mutableStateOf(listOf("Star", "Circle").random()) }
+                            var color by remember { mutableStateOf(listOf("Red", "Blue").random()) }
+                            var rule by remember { mutableStateOf(listOf("Color", "Shape").random()) }
+                            var matchScore by remember { mutableStateOf(0) }
+
+                            Text(
+                                text = "Sorting Rule: Match by $rule",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "$color $shape",
+                                    color = if (color == "Red") Color.Red else Color.Cyan,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Button(
+                                    onClick = {
+                                        val isCorrect = if (rule == "Color") color == "Red" else shape == "Star"
+                                        if (isCorrect) {
+                                            matchScore++
+                                            if (matchScore >= 3) {
+                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                exerciseTimerActive = false
+                                            } else {
+                                                shape = listOf("Star", "Circle").random()
+                                                color = listOf("Red", "Blue").random()
+                                                rule = listOf("Color", "Shape").random()
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    Text("Red/Star", fontSize = 10.sp)
+                                }
+
+                                Button(
+                                    onClick = {
+                                        val isCorrect = if (rule == "Color") color == "Blue" else shape == "Circle"
+                                        if (isCorrect) {
+                                            matchScore++
+                                            if (matchScore >= 3) {
+                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                exerciseTimerActive = false
+                                            } else {
+                                                shape = listOf("Star", "Circle").random()
+                                                color = listOf("Red", "Blue").random()
+                                                rule = listOf("Color", "Shape").random()
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    Text("Blue/Circle", fontSize = 10.sp)
+                                }
+                            }
+
+                            Text(
+                                text = "Score: $matchScore / 3",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+
+                        "Worry Externalisation (CBT)" -> {
+                            var worryText by remember { mutableStateOf("") }
+                            var isReleasing by remember { mutableStateOf(false) }
+
+                            if (!isReleasing) {
+                                Text(
+                                    text = "Write your worry below and tap release to throw it to the stars.",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+
+                                OutlinedTextField(
+                                    value = worryText,
+                                    onValueChange = { worryText = it },
+                                    placeholder = { Text("Write your worry here...") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+
+                                Button(
+                                    onClick = {
+                                        isReleasing = true
+                                        scope.launch {
+                                            delay(1500)
+                                            completedTaskTitles.add(activeExerciseName!!)
+                                            completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                            exerciseTimerActive = false
+                                        }
+                                    },
+                                    enabled = worryText.isNotBlank()
+                                ) {
+                                    Text("Release to Universe 🚀")
+                                }
+                            } else {
+                                Text(
+                                    text = "Releasing worry into the cosmic sky...",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                LinearProgressIndicator(
+                                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp))
+                                )
+                            }
+                        }
+
+                        else -> {
+                            // Default interactive task tracker
+                            Text(
+                                text = "Tap complete to log practice.",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Button(
+                                onClick = {
+                                    completedTaskTitles.add(activeExerciseName!!)
+                                    completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                    exerciseTimerActive = false
+                                }
+                            ) {
+                                Text("Complete Exercise")
+                            }
+                        }
+                    }
                 }
             }
         }
