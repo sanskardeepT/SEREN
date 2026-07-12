@@ -54,7 +54,7 @@ fun AttentionTaskScreen(
     val startTime = remember { System.currentTimeMillis() }
     
     var trialIndex by remember { mutableStateOf(0) }
-    val totalTrials = 12
+    val totalTrials = 24
     var currentLetter by remember { mutableStateOf("A") }
     var letterVisible by remember { mutableStateOf(true) }
     
@@ -226,8 +226,8 @@ private fun submitAttentionResults(
     val duration = System.currentTimeMillis() - startTime
     
     // Normalize metrics
-    val missRate = misses.toFloat() / 9f // 9 Go trials on average
-    val commRate = falseAlarms.toFloat() / 3f // 3 No-Go trials on average
+    val missRate = misses.toFloat() / 18f // 18 Go trials on average
+    val commRate = falseAlarms.toFloat() / 6f // 6 No-Go trials on average
     val rtMean = if (responseTimes.isNotEmpty()) responseTimes.average() else 350.0
     val rtStd = if (responseTimes.size > 1) {
         val mean = rtMean

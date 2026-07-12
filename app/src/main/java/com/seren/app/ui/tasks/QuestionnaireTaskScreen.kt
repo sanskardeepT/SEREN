@@ -144,14 +144,21 @@ fun QuestionnaireTaskScreen(
 
     var currentIndex by remember { mutableStateOf(0) }
     val responses = remember { mutableStateListOf<Int>() }
+    var questionStartTime by remember { mutableStateOf(System.currentTimeMillis()) }
+    var showSpamAlert by remember { mutableStateOf(false) }
 
     val handleAnswer = { score: Int ->
-        responses.add(score)
-        if (currentIndex < questions.size - 1) {
-            currentIndex++
+        val now = System.currentTimeMillis()
+        if (now - questionStartTime < 3000) {
+            showSpamAlert = true
         } else {
-            // Process all questionnaire-based condition scores
-            val duration = System.currentTimeMillis() - startTime
+            responses.add(score)
+            questionStartTime = now
+            if (currentIndex < questions.size - 1) {
+                currentIndex++
+            } else {
+                // Process all questionnaire-based condition scores
+                val duration = System.currentTimeMillis() - startTime
             
             // Calculate domain scores (average response divided by 2 to map to 0f - 1f)
             val domainAverages = mutableMapOf<String, Float>()
@@ -295,6 +302,7 @@ fun QuestionnaireTaskScreen(
             onNext()
         }
     }
+}
 
     val currentQuestion = questions[currentIndex]
     val questionText = if (userRole.lowercase() == "parent") {
@@ -429,6 +437,19 @@ fun QuestionnaireTaskScreen(
             ) {
                 Text("Always / Very True", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
             }
+        }
+
+        if (showSpamAlert) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { showSpamAlert = false },
+                title = { Text("Careful Reading Required", fontWeight = FontWeight.Bold) },
+                text = { Text("Please read the question and response options carefully. Minimum time of 3 seconds per item is required.") },
+                confirmButton = {
+                    Button(onClick = { showSpamAlert = false }) {
+                        Text("Resume")
+                    }
+                }
+            )
         }
     }
 }

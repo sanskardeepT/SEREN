@@ -40,6 +40,7 @@ fun ReadingGazeTaskScreen(
     val context = LocalContext.current
     val tfLiteManager = remember { TfLiteManager(context) }
     val startTime = remember { System.currentTimeMillis() }
+    var showSpamAlert by remember { mutableStateOf(false) }
 
     val passage = """
         The little boy went to the forest to find his lost dog. 
@@ -111,6 +112,10 @@ fun ReadingGazeTaskScreen(
         Button(
             onClick = {
                 val duration = System.currentTimeMillis() - startTime
+                if (duration < 20000) {
+                    showSpamAlert = true
+                    return@Button
+                }
                 
                 val wordCount = passage.split("\\s+".toRegex()).filter { it.isNotBlank() }.size
                 val durationSeconds = duration / 1000f
@@ -161,6 +166,19 @@ fun ReadingGazeTaskScreen(
             )
         ) {
             Text(text = "Complete Silent Reading", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        }
+
+        if (showSpamAlert) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { showSpamAlert = false },
+                title = { Text("Too Rapid Reading", fontWeight = FontWeight.Bold) },
+                text = { Text("It is physically impossible to read this passage in under 20 seconds. Please read the passage carefully and then tap Complete.") },
+                confirmButton = {
+                    Button(onClick = { showSpamAlert = false }) {
+                        Text("Resume Reading")
+                    }
+                }
+            )
         }
     }
 }
