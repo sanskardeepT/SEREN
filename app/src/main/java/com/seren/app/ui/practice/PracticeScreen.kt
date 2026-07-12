@@ -145,6 +145,7 @@ fun PracticeScreen(
         if (hasExecutiveMemoryRisk) {
             list.add(PracticeTaskItem("Sort the Stars (Switch)", "Practice rapid task-switching speed and categorization.", "Executive Control Training"))
             list.add(PracticeTaskItem("Constellation Tracer (Memory)", "Trace dynamic visual star sequences from memory.", "Working Memory Training"))
+            list.add(PracticeTaskItem("Tap Away (Arrow Escape)", "Clear the screen by tapping arrows in the correct unblocked order.", "Executive Planning Booster"))
         }
 
         // Fill up to default if list size is small (Neurotypical brain booster mode)
@@ -157,6 +158,9 @@ fun PracticeScreen(
             }
             if (list.none { it.title == "Constellation Tracer (Memory)" }) {
                 list.add(PracticeTaskItem("Constellation Tracer (Memory)", "Trace dynamic visual star sequences from memory.", "Intuition and Memory Booster"))
+            }
+            if (list.none { it.title == "Tap Away (Arrow Escape)" }) {
+                list.add(PracticeTaskItem("Tap Away (Arrow Escape)", "Clear the screen by tapping arrows in the correct unblocked order.", "Executive Planning Booster"))
             }
         }
         list
@@ -809,6 +813,116 @@ fun PracticeScreen(
                             )
                         }
 
+                        "Tap Away (Arrow Escape)" -> {
+                            val arrows = remember {
+                                mutableStateListOf(
+                                    PracticeGameArrow(1, 0, 0, PracticeArrowDirection.RIGHT),
+                                    PracticeGameArrow(2, 1, 0, PracticeArrowDirection.UP),
+                                    PracticeGameArrow(3, 2, 0, PracticeArrowDirection.LEFT),
+                                    PracticeGameArrow(4, 0, 1, PracticeArrowDirection.DOWN),
+                                    PracticeGameArrow(5, 1, 1, PracticeArrowDirection.RIGHT),
+                                    PracticeGameArrow(6, 2, 1, PracticeArrowDirection.UP),
+                                    PracticeGameArrow(7, 0, 2, PracticeArrowDirection.RIGHT),
+                                    PracticeGameArrow(8, 1, 2, PracticeArrowDirection.DOWN),
+                                    PracticeGameArrow(9, 2, 2, PracticeArrowDirection.LEFT)
+                                )
+                            }
+                            var errorStateId by remember { mutableStateOf<Int?>(null) }
+                            
+                            // Check if a specific arrow is blocked
+                            fun isArrowBlocked(arrow: PracticeGameArrow): Boolean {
+                                return when (arrow.dir) {
+                                    PracticeArrowDirection.UP -> {
+                                        arrows.any { it.id != arrow.id && it.x == arrow.x && it.y < arrow.y }
+                                    }
+                                    PracticeArrowDirection.DOWN -> {
+                                        arrows.any { it.id != arrow.id && it.x == arrow.x && it.y > arrow.y }
+                                    }
+                                    PracticeArrowDirection.LEFT -> {
+                                        arrows.any { it.id != arrow.id && it.y == arrow.y && it.x < arrow.x }
+                                    }
+                                    PracticeArrowDirection.RIGHT -> {
+                                        arrows.any { it.id != arrow.id && it.y == arrow.y && it.x > arrow.x }
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = "Tap Arrows pointing outward with no obstacles in their path!",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
+
+                            // Renders 3x3 grid
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                for (row in 0..2) {
+                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        for (col in 0..2) {
+                                            val arrow = arrows.find { it.x == col && it.y == row }
+                                            if (arrow != null) {
+                                                val isBlocked = isArrowBlocked(arrow)
+                                                val symbol = when (arrow.dir) {
+                                                    PracticeArrowDirection.UP -> "▲"
+                                                    PracticeArrowDirection.DOWN -> "▼"
+                                                    PracticeArrowDirection.LEFT -> "◀"
+                                                    PracticeArrowDirection.RIGHT -> "▶"
+                                                }
+                                                val isError = errorStateId == arrow.id
+                                                val boxColor = when {
+                                                    isError -> Color.Red
+                                                    isBlocked -> MaterialTheme.colorScheme.surfaceVariant
+                                                    else -> MaterialTheme.colorScheme.primary
+                                                }
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(50.dp)
+                                                        .clip(RoundedCornerShape(8.dp))
+                                                        .background(boxColor)
+                                                        .clickable {
+                                                            if (!isBlocked) {
+                                                                arrows.remove(arrow)
+                                                                if (arrows.isEmpty()) {
+                                                                    completedTaskTitles.add(activeExerciseName!!)
+                                                                    completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                                    exerciseTimerActive = false
+                                                                }
+                                                            } else {
+                                                                // Show shake error red state
+                                                                scope.launch {
+                                                                    errorStateId = arrow.id
+                                                                    delay(400)
+                                                                    errorStateId = null
+                                                                }
+                                                            }
+                                                        },
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Text(
+                                                        text = symbol,
+                                                        color = Color.White,
+                                                        fontWeight = FontWeight.Bold,
+                                                        fontSize = 18.sp
+                                                    )
+                                                }
+                                            } else {
+                                                Box(modifier = Modifier.size(50.dp))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = "Remaining Arrows: ${arrows.size} / 9",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+
                         else -> {
                             // Default interactive task tracker
                             Text(
@@ -837,4 +951,15 @@ data class PracticeTaskItem(
     val title: String,
     val description: String,
     val reason: String
+)
+
+enum class PracticeArrowDirection {
+    UP, DOWN, LEFT, RIGHT
+}
+
+data class PracticeGameArrow(
+    val id: Int,
+    val x: Int,
+    val y: Int,
+    val dir: PracticeArrowDirection
 )
