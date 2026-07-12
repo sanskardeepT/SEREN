@@ -116,13 +116,14 @@ fun PracticeScreen(
         }
 
         if (hasReadingRisk) {
-            list.add(PracticeTaskItem("Phoneme Segmentation", "Drag & connect matching phonemes to read sentences.", "Dyslexia Indicator Module"))
+            list.add(PracticeTaskItem("Word Spellcaster (RPG)", "Spell words to defeat monsters and build phonic structures.", "Dyslexia RPG Module"))
             list.add(PracticeTaskItem("Letter-Formation Canvas", "Copy Hindi characters highlighting kinematics alignment.", "Dysgraphia Indicator Module"))
         }
         if (hasMathRisk) {
             list.add(PracticeTaskItem("Subitizing Count", "Identify dot groups rapidly to improve number sense.", "Dyscalculia Indicator Module"))
         }
         if (hasAttentionRisk) {
+            list.add(PracticeTaskItem("Neon Reflex (Runner)", "Tap to jump over obstacles in sync with neon pacing.", "ADHD Pacing Module"))
             list.add(PracticeTaskItem("Breathing Focus Space", "Follow the expanding circle triggers to train focus.", "ADHD Attention Module"))
         }
         if (hasSpeechRisk) {
@@ -143,16 +144,19 @@ fun PracticeScreen(
         }
         if (hasExecutiveMemoryRisk) {
             list.add(PracticeTaskItem("Sort the Stars (Switch)", "Practice rapid task-switching speed and categorization.", "Executive Control Training"))
-            list.add(PracticeTaskItem("Memory Castle (Corsi)", "Recall spatial block patterns sequences to train memory spans.", "Working Memory Training"))
+            list.add(PracticeTaskItem("Constellation Tracer (Memory)", "Trace dynamic visual star sequences from memory.", "Working Memory Training"))
         }
 
-        // Fill up to default if list size is small
+        // Fill up to default if list size is small (Neurotypical brain booster mode)
         if (list.size < 2) {
-            if (list.none { it.title == "Phoneme Segmentation" }) {
-                list.add(PracticeTaskItem("Phoneme Segmentation", "Empower decoding loops with phonological games.", "Foundational Phonics"))
+            if (list.none { it.title == "Word Spellcaster (RPG)" }) {
+                list.add(PracticeTaskItem("Word Spellcaster (RPG)", "Spell words to defeat monsters and build phonic structures.", "Dyslexia RPG Module"))
             }
-            if (list.none { it.title == "Breathing Focus Space" }) {
-                list.add(PracticeTaskItem("Breathing Focus Space", "Train sustained attention spans.", "Focus Training"))
+            if (list.none { it.title == "Neon Reflex (Runner)" }) {
+                list.add(PracticeTaskItem("Neon Reflex (Runner)", "Tap to jump over obstacles in sync with neon pacing.", "ADHD Pacing Module"))
+            }
+            if (list.none { it.title == "Constellation Tracer (Memory)" }) {
+                list.add(PracticeTaskItem("Constellation Tracer (Memory)", "Trace dynamic visual star sequences from memory.", "Intuition and Memory Booster"))
             }
         }
         list
@@ -611,6 +615,198 @@ fun PracticeScreen(
                                     modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp))
                                 )
                             }
+                        }
+
+                        "Word Spellcaster (RPG)" -> {
+                            var monsterHealth by remember { mutableStateOf(3) }
+                            val targetWord = "CAT"
+                            var spelledWord by remember { mutableStateOf("") }
+                            val shuffledLetters = remember { listOf("T", "C", "A") }
+                            
+                            Text(
+                                text = "Monster Health: 👾 " + "❤️".repeat(monsterHealth),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.Red
+                            )
+                            
+                            Text(
+                                text = "Spell target: $targetWord",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Text(
+                                text = "Your Spell: $spelledWord",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                shuffledLetters.forEach { letter ->
+                                    val isUsed = spelledWord.contains(letter)
+                                    Button(
+                                        onClick = {
+                                            if (!isUsed) {
+                                                val nextSpelled = spelledWord + letter
+                                                if (targetWord.startsWith(nextSpelled)) {
+                                                    spelledWord = nextSpelled
+                                                    if (spelledWord == targetWord) {
+                                                        monsterHealth--
+                                                        if (monsterHealth <= 0) {
+                                                            completedTaskTitles.add(activeExerciseName!!)
+                                                            completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                            exerciseTimerActive = false
+                                                        } else {
+                                                            spelledWord = ""
+                                                        }
+                                                    }
+                                                } else {
+                                                    spelledWord = ""
+                                                }
+                                            }
+                                        },
+                                        enabled = !isUsed
+                                    ) {
+                                        Text(letter)
+                                    }
+                                }
+                            }
+                        }
+
+                        "Neon Reflex (Runner)" -> {
+                            var runnerScore by remember { mutableStateOf(0) }
+                            var targetAction by remember { mutableStateOf(listOf("JUMP", "FREEZE").random()) }
+                            
+                            Text(
+                                text = "Target Action: $targetAction",
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                                color = if (targetAction == "JUMP") Color.Green else Color.Red
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Button(
+                                    onClick = {
+                                        if (targetAction == "JUMP") {
+                                            runnerScore++
+                                            if (runnerScore >= 4) {
+                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                exerciseTimerActive = false
+                                            } else {
+                                                targetAction = listOf("JUMP", "FREEZE").random()
+                                            }
+                                        } else {
+                                            runnerScore = maxOf(0, runnerScore - 1)
+                                        }
+                                    }
+                                ) {
+                                    Text("JUMP 🏃", fontSize = 10.sp)
+                                }
+
+                                Button(
+                                    onClick = {
+                                        if (targetAction == "FREEZE") {
+                                            runnerScore++
+                                            if (runnerScore >= 4) {
+                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                exerciseTimerActive = false
+                                            } else {
+                                                targetAction = listOf("JUMP", "FREEZE").random()
+                                            }
+                                        } else {
+                                            runnerScore = maxOf(0, runnerScore - 1)
+                                        }
+                                    }
+                                ) {
+                                    Text("FREEZE ❄️", fontSize = 10.sp)
+                                }
+                            }
+
+                            Text(
+                                text = "Combos Score: $runnerScore / 4",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+
+                        "Constellation Tracer (Memory)" -> {
+                            val targetPath = remember { listOf(2, 4, 1) }
+                            val userPath = remember { mutableStateListOf<Int>() }
+                            var isShowingSequence by remember { mutableStateOf(true) }
+                            var sequenceCount by remember { mutableStateOf(0) }
+
+                            LaunchedEffect(isShowingSequence) {
+                                if (isShowingSequence) {
+                                    delay(2000)
+                                    isShowingSequence = false
+                                }
+                            }
+
+                            Text(
+                                text = if (isShowingSequence) "Memorize: Star 2 -> Star 4 -> Star 1" else "Trace the Path!",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                listOf(1, 2, 3, 4).forEach { id ->
+                                    val isSelected = id in userPath
+                                    val colorBg = when {
+                                        isShowingSequence && id == 2 -> Color.Yellow
+                                        isShowingSequence && id == 4 -> Color.Yellow
+                                        isShowingSequence && id == 1 -> Color.Yellow
+                                        isSelected -> MaterialTheme.colorScheme.secondary
+                                        else -> MaterialTheme.colorScheme.surfaceVariant
+                                    }
+                                    
+                                    Box(
+                                        modifier = Modifier
+                                            .size(50.dp)
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(colorBg)
+                                            .clickable(!isShowingSequence) {
+                                                if (!isSelected) {
+                                                    userPath.add(id)
+                                                    val currentIndex = userPath.size - 1
+                                                    if (userPath[currentIndex] == targetPath[currentIndex]) {
+                                                        if (userPath.size == targetPath.size) {
+                                                            sequenceCount++
+                                                            if (sequenceCount >= 2) {
+                                                                completedTaskTitles.add(activeExerciseName!!)
+                                                                completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
+                                                                exerciseTimerActive = false
+                                                            } else {
+                                                                userPath.clear()
+                                                                isShowingSequence = true
+                                                            }
+                                                        }
+                                                    } else {
+                                                        userPath.clear()
+                                                    }
+                                                }
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text("*", fontWeight = FontWeight.Bold, color = Color.White)
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = "Path Sequence Complete: $sequenceCount / 2",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
                         }
 
                         else -> {
