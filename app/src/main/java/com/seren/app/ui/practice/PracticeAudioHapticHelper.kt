@@ -20,34 +20,48 @@ object PracticeAudioHapticHelper {
     }
 
     fun playSuccessFeedback(context: Context) {
-        // Play clean success chime (Proprietary Acknowledgment Tone)
+        PracticeAudioAssetManager.playVoicePrompt(context, "voice_success")
+    }
+
+    fun playErrorFeedback(context: Context) {
+        PracticeAudioAssetManager.playVoicePrompt(context, "voice_error")
+    }
+
+    fun playTickFeedback(context: Context) {
+        PracticeAudioAssetManager.playVoicePrompt(context, "voice_unblocked")
+    }
+
+    // Sound-only synthesis methods for fallback
+    fun playSuccessChimeOnly() {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 150)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        vibrate(context, 20) // Crisp tick
     }
 
-    fun playErrorFeedback(context: Context) {
-        // Play error buzz (CDMA negative acknowledgment tone)
+    fun playErrorBuzzOnly() {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_PROP_NACK, 250)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        // Double vibration buzz
-        vibratePattern(context, longArrayOf(0, 80, 40, 80))
     }
 
-    fun playTickFeedback(context: Context) {
-        // Play short click/tick (CDMA pip tone)
+    fun playTickChimeOnly() {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_CDMA_PIP, 50)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        vibrate(context, 10) // Micro-tick
+    }
+
+    fun triggerHapticTick(context: Context) {
+        vibrate(context, 20)
+    }
+
+    fun triggerHapticError(context: Context) {
+        vibratePattern(context, longArrayOf(0, 80, 40, 80))
     }
 
     private fun vibrate(context: Context, durationMs: Long) {

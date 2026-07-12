@@ -79,6 +79,24 @@ fun PracticeScreen(
     val totalRequiredExercises = 2
     val completedTaskTitles = remember { mutableStateListOf<String>() }
 
+    LaunchedEffect(Unit) {
+        PracticeAudioAssetManager.initializeSounds(context)
+    }
+
+    LaunchedEffect(activeExerciseName) {
+        if (activeExerciseName != null) {
+            val musicTrackName = when (activeExerciseName) {
+                "Breathing Focus Space" -> "music_ambient_breathing"
+                "Neon Reflex (Runner)" -> "music_fast_runner"
+                "Tap Away (Arrow Escape)" -> "music_planning_puzzle"
+                else -> "music_general_practice"
+            }
+            PracticeAudioAssetManager.playBackgroundMusic(context, musicTrackName)
+        } else {
+            PracticeAudioAssetManager.stopBackgroundMusic()
+        }
+    }
+
     LaunchedEffect(isPracticeSaved) {
         if (isPracticeSaved) {
             onNavigateBack()
