@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,8 +56,17 @@ fun ReportScreen(
     val session by viewModel.session.collectAsState()
     val scores by viewModel.scores.collectAsState()
 
+    val context = LocalContext.current
+
     LaunchedEffect(sessionId) {
         viewModel.loadSessionData(sessionId)
+    }
+
+    LaunchedEffect(session, scores) {
+        val s = session
+        if (s != null && scores.isNotEmpty()) {
+            ReportPdfHelper.generateAndSharePdf(context, sessionId, s.completedAt ?: System.currentTimeMillis(), scores)
+        }
     }
 
     val dateFormatter = remember { SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault()) }
@@ -176,6 +186,30 @@ fun ReportScreen(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    session?.let { s ->
+                        ReportPdfHelper.generateAndSharePdf(context, sessionId, s.completedAt ?: System.currentTimeMillis(), scores)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text(
+                    text = "Resend Report to Parents' WhatsApp",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 onClick = onNavigateBack,
