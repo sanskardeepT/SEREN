@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -67,6 +68,7 @@ fun PracticeScreen(
     val streakCount by viewModel.streakCount.collectAsState()
     val isPracticeSaved by viewModel.isPracticeSaved.collectAsState()
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var activeExerciseName by remember { mutableStateOf<String?>(null) }
     var exerciseTimerActive by remember { mutableStateOf(false) }
@@ -416,10 +418,15 @@ fun PracticeScreen(
                                         if (!isHolding) {
                                             breathCycle++
                                             if (breathCycle > 3) {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 completedTaskTitles.add(activeExerciseName!!)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
+                                            } else {
+                                                PracticeAudioHapticHelper.playTickFeedback(context)
                                             }
+                                        } else {
+                                            PracticeAudioHapticHelper.playTickFeedback(context)
                                         }
                                     },
                                 contentAlignment = Alignment.Center
@@ -477,12 +484,16 @@ fun PracticeScreen(
                                             if (num == dotCount) {
                                                 correctAnswers++
                                                 if (correctAnswers >= 3) {
+                                                    PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                     completedTaskTitles.add(activeExerciseName!!)
                                                     completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                     exerciseTimerActive = false
                                                 } else {
+                                                    PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                     dotCount = (2..6).random()
                                                 }
+                                            } else {
+                                                PracticeAudioHapticHelper.playErrorFeedback(context)
                                             }
                                         },
                                         colors = ButtonDefaults.buttonColors(
@@ -536,14 +547,18 @@ fun PracticeScreen(
                                         if (isCorrect) {
                                             matchScore++
                                             if (matchScore >= 3) {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 completedTaskTitles.add(activeExerciseName!!)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 shape = listOf("Star", "Circle").random()
                                                 color = listOf("Red", "Blue").random()
                                                 rule = listOf("Color", "Shape").random()
                                             }
+                                        } else {
+                                            PracticeAudioHapticHelper.playErrorFeedback(context)
                                         }
                                     }
                                 ) {
@@ -556,14 +571,18 @@ fun PracticeScreen(
                                         if (isCorrect) {
                                             matchScore++
                                             if (matchScore >= 3) {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 completedTaskTitles.add(activeExerciseName!!)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 shape = listOf("Star", "Circle").random()
                                                 color = listOf("Red", "Blue").random()
                                                 rule = listOf("Color", "Shape").random()
                                             }
+                                        } else {
+                                            PracticeAudioHapticHelper.playErrorFeedback(context)
                                         }
                                     }
                                 ) {
@@ -598,6 +617,7 @@ fun PracticeScreen(
                                 Button(
                                     onClick = {
                                         isReleasing = true
+                                        PracticeAudioHapticHelper.playSuccessFeedback(context)
                                         scope.launch {
                                             delay(1500)
                                             completedTaskTitles.add(activeExerciseName!!)
@@ -660,14 +680,19 @@ fun PracticeScreen(
                                                     if (spelledWord == targetWord) {
                                                         monsterHealth--
                                                         if (monsterHealth <= 0) {
+                                                            PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                             completedTaskTitles.add(activeExerciseName!!)
                                                             completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                             exerciseTimerActive = false
                                                         } else {
+                                                            PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                             spelledWord = ""
                                                         }
+                                                    } else {
+                                                        PracticeAudioHapticHelper.playTickFeedback(context)
                                                     }
                                                 } else {
+                                                    PracticeAudioHapticHelper.playErrorFeedback(context)
                                                     spelledWord = ""
                                                 }
                                             }
@@ -699,13 +724,16 @@ fun PracticeScreen(
                                         if (targetAction == "JUMP") {
                                             runnerScore++
                                             if (runnerScore >= 4) {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 completedTaskTitles.add(activeExerciseName!!)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 targetAction = listOf("JUMP", "FREEZE").random()
                                             }
                                         } else {
+                                            PracticeAudioHapticHelper.playErrorFeedback(context)
                                             runnerScore = maxOf(0, runnerScore - 1)
                                         }
                                     }
@@ -718,13 +746,16 @@ fun PracticeScreen(
                                         if (targetAction == "FREEZE") {
                                             runnerScore++
                                             if (runnerScore >= 4) {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 completedTaskTitles.add(activeExerciseName!!)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
+                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                 targetAction = listOf("JUMP", "FREEZE").random()
                                             }
                                         } else {
+                                            PracticeAudioHapticHelper.playErrorFeedback(context)
                                             runnerScore = maxOf(0, runnerScore - 1)
                                         }
                                     }
@@ -748,7 +779,12 @@ fun PracticeScreen(
 
                             LaunchedEffect(isShowingSequence) {
                                 if (isShowingSequence) {
-                                    delay(2000)
+                                    PracticeAudioHapticHelper.playTickFeedback(context)
+                                    delay(500)
+                                    PracticeAudioHapticHelper.playTickFeedback(context)
+                                    delay(500)
+                                    PracticeAudioHapticHelper.playTickFeedback(context)
+                                    delay(1000)
                                     isShowingSequence = false
                                 }
                             }
@@ -786,15 +822,20 @@ fun PracticeScreen(
                                                         if (userPath.size == targetPath.size) {
                                                             sequenceCount++
                                                             if (sequenceCount >= 2) {
+                                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                                 completedTaskTitles.add(activeExerciseName!!)
                                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                                 exerciseTimerActive = false
                                                             } else {
+                                                                PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                                 userPath.clear()
                                                                 isShowingSequence = true
                                                             }
+                                                        } else {
+                                                            PracticeAudioHapticHelper.playTickFeedback(context)
                                                         }
                                                     } else {
+                                                        PracticeAudioHapticHelper.playErrorFeedback(context)
                                                         userPath.clear()
                                                     }
                                                 }
@@ -886,12 +927,16 @@ fun PracticeScreen(
                                                             if (!isBlocked) {
                                                                 arrows.remove(arrow)
                                                                 if (arrows.isEmpty()) {
+                                                                    PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                                     completedTaskTitles.add(activeExerciseName!!)
                                                                     completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                                     exerciseTimerActive = false
+                                                                } else {
+                                                                    PracticeAudioHapticHelper.playSuccessFeedback(context)
                                                                 }
                                                             } else {
                                                                 // Show shake error red state
+                                                                PracticeAudioHapticHelper.playErrorFeedback(context)
                                                                 scope.launch {
                                                                     errorStateId = arrow.id
                                                                     delay(400)
