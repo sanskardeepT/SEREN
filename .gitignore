@@ -17,7 +17,7 @@
 *.dex
 
 # ML model files (large, tracked via Git LFS or downloaded separately)
-*.tflite
+# *.tflite
 
 # Training artifacts
 /training/output/
