@@ -1,0 +1,45 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1784007737.029229    2369 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1784007737.074583    2369 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1784007739.101829    2369 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+E0000 00:00:1784007740.035610    2369 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+TensorFlow version: 2.21.0
+
+--- Training AttentNet ---
+Converting and exporting seren_attentnet.tflite...
+Saved artifact at '/tmp/tmptdfr4gus'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 4), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 4), dtype=tf.float32, name=None)
+Captures:
+  140049056968624: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140048550573712: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140048550573888: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140048550817888: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140048550814544: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140048550817712: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140048550820352: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140048550821232: TensorSpec(shape=(), dtype=tf.resource, name=None)
+W0000 00:00:1784007742.420461    2369 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1784007742.420483    2369 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1784007742.420712    2369 reader.cc:83] Reading SavedModel from: /tmp/tmptdfr4gus
+I0000 00:00:1784007742.421122    2369 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1784007742.421133    2369 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmptdfr4gus
+I0000 00:00:1784007742.424811    2369 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
+I0000 00:00:1784007742.425569    2369 loader.cc:236] Restoring SavedModel bundle.
+I0000 00:00:1784007742.447343    2369 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmptdfr4gus
+I0000 00:00:1784007742.454438    2369 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 33733 microseconds.
+I0000 00:00:1784007742.463594    2369 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+Successfully saved seren_attentnet.tflite (Size: 8.86 KB)
+Traceback (most recent call last):
+  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 409, in <module>
+    main()
+  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 91, in main
+    path = convert_and_save(attentnet_model, "seren_attentnet.tflite")
+  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 36, in convert_and_save
+    assert file_size > 15000, f"FAILED: {filename} is too small ({file_size} bytes). Stub graph detected!"
+AssertionError: FAILED: seren_attentnet.tflite is too small (9072 bytes). Stub graph detected!
