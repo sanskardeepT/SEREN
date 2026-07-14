@@ -12,7 +12,7 @@ def main():
     os.makedirs(assets_dir, exist_ok=True)
     
     # Helper to convert Keras model to float16 quantized TFLite
-    def convert_and_save(model, filename):
+    def convert_and_save(model, filename, min_size_bytes=4000):
         print(f"Converting and exporting {filename}...")
         converter = tf.lite.TFLiteConverter.from_keras_model(model)
         converter.optimizations = [tf.lite.Optimize.DEFAULT]
@@ -33,7 +33,7 @@ def main():
         
         file_size = os.path.getsize(filepath)
         print(f"Successfully saved {filename} (Size: {file_size / 1024:.2f} KB)")
-        assert file_size > 15000, f"FAILED: {filename} is too small ({file_size} bytes). Stub graph detected!"
+        assert file_size > min_size_bytes, f"FAILED: {filename} is too small ({file_size} bytes). Stub graph detected!"
         return filepath
 
     # ----------------------------------------------------
@@ -215,7 +215,7 @@ def main():
     drawnet_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     drawnet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=15, batch_size=16, verbose=0)
     
-    path = convert_and_save(drawnet_model, "seren_drawnet.tflite")
+    path = convert_and_save(drawnet_model, "seren_drawnet.tflite", min_size_bytes=40000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
@@ -271,7 +271,7 @@ def main():
     emotnet_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     emotnet_model.fit([X_ids_train, X_mask_train], y_train, validation_data=([X_ids_val, X_mask_val], y_val), epochs=20, batch_size=32, verbose=0)
     
-    path = convert_and_save(emotnet_model, "seren_emotnet.tflite")
+    path = convert_and_save(emotnet_model, "seren_emotnet.tflite", min_size_bytes=200000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
@@ -333,7 +333,7 @@ def main():
     phonnet_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     phonnet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=15, batch_size=16, verbose=0)
     
-    path = convert_and_save(phonnet_model, "seren_phonnet.tflite")
+    path = convert_and_save(phonnet_model, "seren_phonnet.tflite", min_size_bytes=40000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
@@ -383,7 +383,7 @@ def main():
     gazenet_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     gazenet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=10, batch_size=16, verbose=0)
     
-    path = convert_and_save(gazenet_model, "seren_gazenet.tflite")
+    path = convert_and_save(gazenet_model, "seren_gazenet.tflite", min_size_bytes=80000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
