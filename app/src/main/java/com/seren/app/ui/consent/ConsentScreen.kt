@@ -455,7 +455,14 @@ fun ConsentPrivacyScreen(
         3. 100% On-Device Processing & Privacy Policy
         To comply with the Digital Personal Data Protection (DPDP) Act of India and guarantee complete privacy, all sensitive data—including voice recordings, drawing inputs, touch statistics, and task results—are processed and stored 100% on-device. No audio recordings, drawings, or raw interaction logs are ever uploaded to external servers, cloud services, or third parties.
         
-        4. Consent Affirmation
+        4. Inquiries & Data Privacy Support Contact
+        For any inquiries regarding data protection, app integrations, or technical support, please contact the Founder directly:
+        
+        Founder & Data Officer: Sanskardeep Talikote
+        Phone: +91 94039 10943
+        Email: sanskardeepbtalikote19@gmail.com
+        
+        5. Consent Affirmation
         By tapping "Accept", you provide explicit, voluntary, and informed consent for this application to access necessary on-device sensors (such as the microphone for voice analysis and the touchscreen for drawing/interaction analysis) and process this information locally on your device in accordance with the terms stated above. You retain the right to withdraw this consent at any time by uninstalling the application.
     """.trimIndent()
 
