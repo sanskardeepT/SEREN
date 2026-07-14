@@ -71,6 +71,7 @@ Designed using Yukai Chou's **Octalysis Gamification framework** to keep users (
 ### 7. 🔒 Consent & Security (DPDP Compliant)
 *   **Parental Consent Screen**: DPDP-compliant parent/guardian consent checkbox flow detailing data usage and rights before beginning screening.
 *   **Local Encryption**: Implements secure local storage patterns with AES-GCM encryption for all sensitive child profiles and clinical files (`SecurityHelper.kt`).
+*   **100% Offline / Zero Network Calls**: The client does not request `INTERNET` permission and has zero outbound channels. All in-app update checks (UpdateManager) have been completely removed to ensure complete offline safety.
 
 ---
 

@@ -55,5 +55,5 @@ The following advanced modalities described in the theoretical research paper ar
 The shipped app requires minimal device permissions to maintain a strict, privacy-first, offline-only profile:
 * `android.permission.RECORD_AUDIO`: Required for vocal fluency analysis (PhonNet).
 * `android.permission.VIBRATE`: Required for continuous performance task anti-spam pacing feedback.
-* **No `INTERNET` permission**: The application has zero outbound data channels, guaranteeing 100% on-device data sovereignty.
+* **No `INTERNET` permission / Zero Network Calls**: The application has zero outbound data channels and all network update-checking logic (previously `UpdateManager`) has been completely removed to guarantee 100% on-device data sovereignty and privacy.
 * **No `CAMERA` permission**: Shipped client does not request camera access.

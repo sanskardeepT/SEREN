@@ -36,5 +36,12 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Detect if any model fell back to synthetic in the training logs
+          COMMIT_MSG="chore(ml): [REAL DATASET] retrained clinical models"
+          if grep -qi "Falling back to" training.log || grep -qi "synthetic" training.log; then
+            COMMIT_MSG="chore(ml): [SYNTHETIC FALLBACK - NO REAL DATASET IN CI] retrained models or logs"
+          fi
+          
           git add training.log app/src/main/assets/*.tflite || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(ml): log training results or failures" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "$COMMIT_MSG" && git push)
