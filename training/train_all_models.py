@@ -263,7 +263,13 @@ def main():
     attention_mask = layers.Input(shape=(64,), dtype=tf.int32, name="attention_mask")
     embedding_layer = layers.Embedding(input_dim=30000, output_dim=16)
     emb = embedding_layer(input_ids)
-    x = layers.GlobalAveragePooling1D()(emb)
+    
+    # Cast and reshape attention mask to multiply embeddings (formally connects input and drops pad tokens)
+    mask_float = layers.Cast(dtype="float32")(attention_mask)
+    mask_float = layers.Reshape((64, 1))(mask_float)
+    emb_masked = layers.Multiply()([emb, mask_float])
+    
+    x = layers.GlobalAveragePooling1D()(emb_masked)
     x = layers.Dense(32, activation='relu')(x)
     outputs = layers.Dense(4, activation='softmax')(x)
     
