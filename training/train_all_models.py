@@ -18,13 +18,7 @@ def main():
         converter.optimizations = [tf.lite.Optimize.DEFAULT]
         converter.target_spec.supported_types = [tf.float16]
         
-        # LSTM needs select ops
-        if "gazenet" in filename or "emotnet" in filename:
-            converter.target_spec.supported_ops = [
-                tf.lite.OpsSet.TFLITE_BUILTINS,
-                tf.lite.OpsSet.SELECT_TF_OPS
-            ]
-            converter._experimental_lower_tensor_list_ops = False
+        pass
         
         tflite_model = converter.convert()
         filepath = os.path.join(assets_dir, filename)
@@ -388,8 +382,8 @@ def main():
     X_val, y_val = generate_synthetic_gaze(60)
 
     gaze_input = layers.Input(shape=(100, 6), dtype=tf.float32, name="gaze_input")
-    x = layers.LSTM(64, return_sequences=True, recurrent_dropout=0.1)(gaze_input)
-    x = layers.LSTM(32, recurrent_dropout=0.1)(x)
+    x = layers.LSTM(64, return_sequences=True, dropout=0.2)(gaze_input)
+    x = layers.LSTM(32, dropout=0.2)(x)
     x = layers.Dropout(0.2)(x)
     x = layers.Dense(16, activation='relu')(x)
     outputs = layers.Dense(1, activation='sigmoid')(x)
