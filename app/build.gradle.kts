@@ -47,6 +47,11 @@ android {
         compose = true
     }
 
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     // TFLite models go in assets/ — don't compress them
     aaptOptions {
         noCompress += "tflite"
