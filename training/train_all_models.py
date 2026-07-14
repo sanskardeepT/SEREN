@@ -291,11 +291,20 @@ def main():
     inp3 = np.zeros((1, 64), dtype=np.int32)
     inp3[0, 0:10] = 3000
     mask = np.ones((1, 64), dtype=np.int32)
+    # Map input names to indices
+    input_dict = {}
+    for detail in input_details:
+        name = detail['name']
+        if 'input_ids' in name:
+            input_dict['input_ids'] = detail['index']
+        elif 'attention_mask' in name:
+            input_dict['attention_mask'] = detail['index']
+            
     test_inputs = [inp1, inp2, inp3]
     outputs = []
     for ids in test_inputs:
-        interpreter.set_tensor(input_details[0]['index'], ids)
-        interpreter.set_tensor(input_details[1]['index'], mask)
+        interpreter.set_tensor(input_dict['input_ids'], ids)
+        interpreter.set_tensor(input_dict['attention_mask'], mask)
         interpreter.invoke()
         outputs.append(interpreter.get_tensor(output_details[0]['index']).flatten())
     max_std = np.max(np.std(outputs, axis=0))
