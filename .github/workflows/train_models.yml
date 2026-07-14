@@ -1,0 +1,39 @@
+name: Train and Export ML Models
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'training/**'
+      - '.github/workflows/train_models.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install tensorflow numpy pandas scikit-learn
+
+      - name: Run training script
+        run: |
+          python training/train_all_models.py
+
+      - name: Commit and push TFLite models
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/assets/*.tflite
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(ml): update trained TFLite models via GitHub Actions" && git push)
