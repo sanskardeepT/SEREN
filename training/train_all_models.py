@@ -382,8 +382,10 @@ def main():
     X_val, y_val = generate_synthetic_gaze(60)
 
     gaze_input = layers.Input(shape=(100, 6), dtype=tf.float32, name="gaze_input")
-    x = layers.LSTM(64, return_sequences=True, dropout=0.2)(gaze_input)
-    x = layers.LSTM(32, dropout=0.2)(x)
+    x = layers.Conv1D(16, 5, activation='relu')(gaze_input)
+    x = layers.MaxPooling1D(2)(x)
+    x = layers.Conv1D(32, 3, activation='relu')(x)
+    x = layers.GlobalAveragePooling1D()(x)
     x = layers.Dropout(0.2)(x)
     x = layers.Dense(16, activation='relu')(x)
     outputs = layers.Dense(1, activation='sigmoid')(x)
@@ -392,7 +394,7 @@ def main():
     gazenet_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     gazenet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=10, batch_size=16, verbose=0)
     
-    path = convert_and_save(gazenet_model, "seren_gazenet.tflite", min_size_bytes=40000)
+    path = convert_and_save(gazenet_model, "seren_gazenet.tflite", min_size_bytes=5000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
