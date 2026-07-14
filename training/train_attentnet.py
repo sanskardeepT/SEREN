@@ -1,13 +1,9 @@
-# Install packages
-
-
 import os
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
 print("TensorFlow version:", tf.__version__)
 print("GPU Available:", tf.config.list_physical_devices('GPU'))
@@ -60,20 +56,20 @@ def load_or_synthesize_behavioral_data(num_samples=1000):
             
         features.append([miss, comm, rt_var, gaze])
         
-    return np.array(features), np.array(labels)
+    return np.array(features, dtype=np.float32), np.array(labels)
 
-X, y = load_or_synthesize_behavioral_data()
-X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+X_raw, y = load_or_synthesize_behavioral_data()
+X_train_raw, X_val_raw, y_train, y_val = train_test_split(X_raw, y, test_size=0.2, random_state=42)
 
-# Scale inputs to standard range
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_val = scaler.transform(X_val)
+print("Preprocessed raw data shapes:", X_train_raw.shape, y_train.shape)
 
-print("Preprocessed data shapes:", X_train.shape, y_train.shape)
+# Create and adapt the normalizer layer inside Keras graph
+normalizer = layers.Normalization(axis=-1)
+normalizer.adapt(X_train_raw)
 
 model = tf.keras.Sequential([
     layers.Input(shape=(4,)),
+    normalizer, # Scaling layer embedded directly in the graph!
     layers.Dense(64, activation='relu'),
     layers.Dropout(0.2),
     layers.Dense(32, activation='relu'),
@@ -90,12 +86,13 @@ model.compile(
 print(model.summary())
 
 history = model.fit(
-    X_train, y_train,
-    validation_data=(X_val, y_val),
+    X_train_raw, y_train,
+    validation_data=(X_val_raw, y_val),
     epochs=15,
     batch_size=32
 )
 
+# Export to TFLite
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.target_spec.supported_types = [tf.float16]
@@ -108,3 +105,30 @@ with open(output_path, 'wb') as f:
 print(f"TFLite model successfully exported to: {output_path}")
 print(f"File size: {os.path.getsize(output_path) / 1024:.2f} KB")
 
+# --- Behavioral Validation Check ---
+print("\n--- Running Behavioral Validation Check ---")
+interpreter = tf.lite.Interpreter(model_path=output_path)
+interpreter.allocate_tensors()
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+test_inputs = [
+    np.array([[0.05, 0.05, 0.08, 0.03]], dtype=np.float32),  # typical
+    np.array([[0.30, 0.05, 0.25, 0.35]], dtype=np.float32),  # inattentive
+    np.array([[0.05, 0.35, 0.20, 0.05]], dtype=np.float32)   # hyperactive
+]
+
+outputs = []
+for inp in test_inputs:
+    interpreter.set_tensor(input_details[0]['index'], inp)
+    interpreter.invoke()
+    out = interpreter.get_tensor(output_details[0]['index'])
+    outputs.append(out.flatten())
+    print(f"Input: {inp.flatten()} -> Output probabilities: {out.flatten()}")
+
+outputs = np.array(outputs)
+std_devs = np.std(outputs, axis=0)
+max_std = np.max(std_devs)
+print(f"Max standard deviation across outputs: {max_std:.4f}")
+assert max_std > 0.05, "FAILED: Model outputs are identical or saturated! The weights might not be trained correctly."
+print("PASSED: Model behavioral check succeeded.")
