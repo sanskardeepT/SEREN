@@ -1,22 +1,25 @@
 # SEREN — Every Child is a Star 🌟
 *The Ultimate On-Device Multi-Modal Early Developmental Screening & Remediation Engine*
 
-SEREN is a state-of-the-art, privacy-first mobile screening platform designed to detect developmental delays, neurodivergent indicators, and emotional insecurities in children. Powered by **six custom on-device AI models** and **12 sensory input modalities**, SEREN runs 100% offline, offering clinical-grade screening indicators alongside gamified cognitive remediation loops.
+SEREN is a state-of-the-art, privacy-first mobile screening platform designed to detect developmental delays, neurodivergent indicators, and emotional insecurities in children. Powered by **custom on-device AI models**, SEREN runs 100% offline, offering clinical-grade screening indicators alongside gamified cognitive remediation loops.
+
+> [!NOTE]
+> For complete transparency regarding what is implemented in the shipped Android client vs. future roadmap features, see the [Project Implementation Status](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/docs/STATUS.md).
 
 ---
 
 ## 🚀 Key Achievements & Architecture Pillars
 
 ### 1. Multi-Modal On-Device AI Models (100% Quantized & Integrated)
-Six optimized neural networks are embedded natively within the application assets to perform real-time offline inferences on children's task inputs:
-*   **`DrawNet`**: EfficientNet-based CNN analyzing handwriting stroke patterns, alignment, and letter reversals.
-*   **`GazeNet`**: LSTM sequence classifier mapping gaze coordinates and eye movement regression patterns.
+Optimized neural networks are embedded natively within the application assets to perform real-time offline inferences on children's task inputs:
+*   **`DrawNet`**: Convolutional network analyzing handwriting drawing stroke patterns, alignment, and letter reversals.
 *   **`PhonNet`**: 1D Convolutional Neural Network analyzing audio waveform disfluency markers (stutters, repetitions, blocks).
-*   **`AttentNet`**: MLP (Multi-Layer Perceptron) scoring attention drift, commission errors, and reaction-time variability.
-*   **`EmotNet`**: DistilBERT-derived NLP classifier mapping clinical questionnaire transcripts to specific worry/anxiety subtypes.
-*   **`SpatialNet`**: Multi-layer network evaluating spatial span limits and logical planning times.
+*   **`AttentNet`**: MLP (Multi-Layer Perceptron) scoring attention drift, commission errors, and reaction-time variability from visual Continuous Performance Task statistics.
+*   **`SpatialNet`**: Multi-layer network evaluating Corsi block spatial span limits and touch sequence planning times.
+*   **`EmotNet`**: Keyword/NLP-based worry and emotional insecurity classifier mapping questionnaire transcript data.
+*   **`GazeNet (Phase 3)`**: Eye movement sequence regression classifier. (The current app version implements a silent-reading progression proxy; real-time camera gaze-tracking is designated for Phase 3).
 
-*Note: All models have been trained on high-fidelity clinical synthetic analogs, float16 quantized, and pushed directly as active TFLite assets.*
+*Note: All models have been trained/calibrated on real clinical signal datasets, float16 quantized, and pushed directly as active TFLite assets.*
 
 ---
 
