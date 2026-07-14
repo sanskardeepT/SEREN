@@ -1,0 +1,8 @@
+{
+  "latestVersionCode": 2,
+  "latestVersionName": "0.3.1",
+  "downloadUrl": "https://getseren.vercel.app/downloads/seren-latest.apk",
+  "playStoreUrl": "market://details?id=com.seren.app",
+  "forceUpdate": true,
+  "releaseNotes": "Critical updates including localized support contacts and visual PDF domain charts."
+}
