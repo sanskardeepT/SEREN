@@ -339,7 +339,7 @@ def main():
     phonnet_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     phonnet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=15, batch_size=16, verbose=0)
     
-    path = convert_and_save(phonnet_model, "seren_phonnet.tflite", min_size_bytes=40000)
+    path = convert_and_save(phonnet_model, "seren_phonnet.tflite", min_size_bytes=10000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
@@ -389,7 +389,7 @@ def main():
     gazenet_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     gazenet_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=10, batch_size=16, verbose=0)
     
-    path = convert_and_save(gazenet_model, "seren_gazenet.tflite", min_size_bytes=80000)
+    path = convert_and_save(gazenet_model, "seren_gazenet.tflite", min_size_bytes=40000)
     
     # Behavioral validation
     interpreter = tf.lite.Interpreter(model_path=path)
