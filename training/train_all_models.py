@@ -42,8 +42,8 @@ def compute_eeg_stats(filepath):
         
         tbr = 1.5
         if len(theta_idx) > 0 and len(beta_idx) > 0:
-            theta_power = np.trapz(psd[theta_idx], freqs[theta_idx])
-            beta_power = np.trapz(psd[beta_idx], freqs[beta_idx])
+            theta_power = np.sum(psd[theta_idx])
+            beta_power = np.sum(psd[beta_idx])
             if beta_power > 0:
                 tbr = theta_power / beta_power
                 
