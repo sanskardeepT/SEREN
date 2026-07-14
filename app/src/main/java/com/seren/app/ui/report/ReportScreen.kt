@@ -315,13 +315,27 @@ fun ConditionReportCard(score: ConditionScore) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
+                val isEmotNet = isEmotNetOnly(score.conditionId)
                 Text(
-                    text = "Confidence: ${score.confidenceLevel.uppercase()}",
+                    text = if (isEmotNet) "PROVISIONAL (Unvalidated)" else "Confidence: ${score.confidenceLevel.uppercase()}",
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = if (isEmotNet) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
                 )
             }
         }
     }
+}
+
+private fun isEmotNetOnly(conditionId: String): Boolean {
+    return conditionId == "gad" ||
+           conditionId == "separation_anxiety" ||
+           conditionId == "school_phobia" ||
+           conditionId == "imposter_syndrome" ||
+           conditionId == "body_image_insecurity" ||
+           conditionId == "perfectionism" ||
+           conditionId == "workplace_insecurity" ||
+           conditionId == "relationship_insecurity" ||
+           conditionId == "fomo_anxiety" ||
+           conditionId.contains("insecurity")
 }

@@ -210,7 +210,8 @@ object ReportPdfHelper {
                     
                     paint.color = Color.parseColor("#475569")
                     paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-                    canvas.drawText(score.confidenceLevel.uppercase(), 380f, yPos + 14f, paint)
+                    val confLabel = if (isEmotNetOnly(score.conditionId)) "PROVISIONAL*" else score.confidenceLevel.uppercase()
+                    canvas.drawText(confLabel, 380f, yPos + 14f, paint)
                     
                     val cat = ConditionIds.getCategory(score.conditionId)
                     val shortCat = if (cat.length > 15) cat.take(13) + ".." else cat
@@ -222,6 +223,16 @@ object ReportPdfHelper {
                     
                     yPos += 22f
                 }
+            }
+            
+            // Draw footnote for provisional unvalidated emotional conditions
+            val hasEmotNetOnly = highRiskScores.any { isEmotNetOnly(it.conditionId) }
+            if (hasEmotNetOnly) {
+                paint.color = Color.parseColor("#EF4444")
+                paint.textSize = 7.5f
+                paint.typeface = Typeface.create("sans-serif", Typeface.ITALIC)
+                canvas.drawText("* Provisional: Questionnaire-based emotional/insecurity profiles are not yet clinically validated.", 35f, yPos + 10f, paint)
+                yPos += 12f
             }
             
             // 6. Draw Recovery Recommendations Panel
@@ -414,5 +425,18 @@ object ReportPdfHelper {
             }
         }
         return domainScores.maxOfOrNull { it.riskScore.toInt() } ?: 0
+    }
+
+    private fun isEmotNetOnly(conditionId: String): Boolean {
+        return conditionId == "gad" ||
+               conditionId == "separation_anxiety" ||
+               conditionId == "school_phobia" ||
+               conditionId == "imposter_syndrome" ||
+               conditionId == "body_image_insecurity" ||
+               conditionId == "perfectionism" ||
+               conditionId == "workplace_insecurity" ||
+               conditionId == "relationship_insecurity" ||
+               conditionId == "fomo_anxiety" ||
+               conditionId.contains("insecurity")
     }
 }

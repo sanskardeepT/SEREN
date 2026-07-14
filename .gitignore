@@ -34,3 +34,11 @@ docs/extract_pdfs.py
 # OS files
 Thumbs.db
 desktop.ini
+
+# Kotlin compilation errors & Local founder settings leaks
+.kotlin/
+inst_user_settings.tmp
+
+# Raw local datasets
+data/
+dataset/
