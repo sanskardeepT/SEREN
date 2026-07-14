@@ -265,7 +265,7 @@ def main():
     emb = embedding_layer(input_ids)
     
     # Cast and reshape attention mask to multiply embeddings (formally connects input and drops pad tokens)
-    mask_float = tf.cast(attention_mask, tf.float32)
+    mask_float = layers.Lambda(lambda x: tf.cast(x, tf.float32))(attention_mask)
     mask_float = layers.Reshape((64, 1))(mask_float)
     emb_masked = layers.Multiply()([emb, mask_float])
     
