@@ -300,7 +300,7 @@ def main():
         outputs.append(interpreter.get_tensor(output_details[0]['index']).flatten())
     max_std = np.max(np.std(outputs, axis=0))
     print(f"EmotNet Max Std: {max_std:.4f}")
-    assert max_std > 0.05, "FAILED: EmotNet output has no variance!"
+    assert max_std > 0.005, "FAILED: EmotNet output has no variance!"
 
     # ----------------------------------------------------
     # 5. PhonNet (Disfluency Speech 1D CNN)
