@@ -1,41 +1,41 @@
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1784010389.693335    2138 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-I0000 00:00:1784010389.693535    2138 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
-I0000 00:00:1784010389.728823    2138 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX512_FP16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 AMX_FP16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+I0000 00:00:1784010752.635867    2349 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1784010752.636099    2349 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1784010752.680306    2349 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1784010392.216197    2138 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-I0000 00:00:1784010392.216437    2138 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
-E0000 00:00:1784010393.243499    2138 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+I0000 00:00:1784010754.713140    2349 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1784010754.713480    2349 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+E0000 00:00:1784010755.598287    2349 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 TensorFlow version: 2.21.0
 
 --- Training AttentNet ---
 Converting and exporting seren_attentnet.tflite...
-Saved artifact at '/tmp/tmpwo7l9x25'. The following endpoints are available:
+Saved artifact at '/tmp/tmpi94kdg9r'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 4), dtype=tf.float32, name='keras_tensor')
 Output Type:
   TensorSpec(shape=(None, 4), dtype=tf.float32, name=None)
 Captures:
-  140399051714480: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
-  140398546548368: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
-  140398546548544: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543351904: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543348560: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543351728: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543354368: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543355248: TensorSpec(shape=(), dtype=tf.resource, name=None)
-W0000 00:00:1784010394.977165    2138 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
-W0000 00:00:1784010394.977180    2138 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
-I0000 00:00:1784010394.977448    2138 reader.cc:83] Reading SavedModel from: /tmp/tmpwo7l9x25
-I0000 00:00:1784010394.977771    2138 reader.cc:52] Reading meta graph with tags { serve }
-I0000 00:00:1784010394.977779    2138 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpwo7l9x25
-I0000 00:00:1784010394.980378    2138 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
-I0000 00:00:1784010394.980916    2138 loader.cc:236] Restoring SavedModel bundle.
-I0000 00:00:1784010394.999136    2138 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpwo7l9x25
-I0000 00:00:1784010395.004011    2138 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 26568 microseconds.
-I0000 00:00:1784010395.010630    2138 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+  140429112373168: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140428605912720: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140428605912896: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428606173280: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428606169936: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428606173104: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428606175744: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428606176624: TensorSpec(shape=(), dtype=tf.resource, name=None)
+W0000 00:00:1784010758.144647    2349 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1784010758.144670    2349 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1784010758.144951    2349 reader.cc:83] Reading SavedModel from: /tmp/tmpi94kdg9r
+I0000 00:00:1784010758.145395    2349 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1784010758.145404    2349 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpi94kdg9r
+I0000 00:00:1784010758.148906    2349 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
+I0000 00:00:1784010758.149685    2349 loader.cc:236] Restoring SavedModel bundle.
+I0000 00:00:1784010758.175610    2349 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpi94kdg9r
+I0000 00:00:1784010758.182815    2349 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 37872 microseconds.
+I0000 00:00:1784010758.191909    2349 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
 /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
@@ -44,33 +44,33 @@ I0000 00:00:1784010395.010630    2138 dump_mlir_util.cc:269] disabling MLIR cras
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
 Successfully saved seren_attentnet.tflite (Size: 8.86 KB)
-AttentNet Max Std: 0.4712
+AttentNet Max Std: 0.4711
 
 --- Training SpatialNet ---
 Converting and exporting seren_spatialnet.tflite...
-Saved artifact at '/tmp/tmpr_u2ivtr'. The following endpoints are available:
+Saved artifact at '/tmp/tmpbodkbf4q'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 4), dtype=tf.float32, name='keras_tensor_7')
 Output Type:
   TensorSpec(shape=(None, 4), dtype=tf.float32, name=None)
 Captures:
-  140400312292928: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
-  140399025468720: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
-  140398543761504: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398543761856: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398525569808: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398395668288: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398395666528: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398395667584: TensorSpec(shape=(), dtype=tf.resource, name=None)
-W0000 00:00:1784010396.642688    2138 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
-W0000 00:00:1784010396.642705    2138 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
-I0000 00:00:1784010396.642808    2138 reader.cc:83] Reading SavedModel from: /tmp/tmpr_u2ivtr
-I0000 00:00:1784010396.643086    2138 reader.cc:52] Reading meta graph with tags { serve }
-I0000 00:00:1784010396.643090    2138 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpr_u2ivtr
-I0000 00:00:1784010396.645536    2138 loader.cc:236] Restoring SavedModel bundle.
-I0000 00:00:1784010396.661918    2138 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpr_u2ivtr
-I0000 00:00:1784010396.666643    2138 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 23840 microseconds.
+  140428198052432: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140429078139952: TensorSpec(shape=(1, 4), dtype=tf.float32, name=None)
+  140428187196880: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428187201456: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140429108170064: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428187196176: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428187197760: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140428521031456: TensorSpec(shape=(), dtype=tf.resource, name=None)
+W0000 00:00:1784010760.645640    2349 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1784010760.645666    2349 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1784010760.645804    2349 reader.cc:83] Reading SavedModel from: /tmp/tmpbodkbf4q
+I0000 00:00:1784010760.646248    2349 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1784010760.646254    2349 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpbodkbf4q
+I0000 00:00:1784010760.649719    2349 loader.cc:236] Restoring SavedModel bundle.
+I0000 00:00:1784010760.672848    2349 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpbodkbf4q
+I0000 00:00:1784010760.680176    2349 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 34381 microseconds.
 /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
@@ -78,35 +78,35 @@ I0000 00:00:1784010396.666643    2138 loader.cc:471] SavedModel load for tags { 
     
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 Successfully saved seren_spatialnet.tflite (Size: 8.96 KB)
-SpatialNet Max Std: 0.4714
+SpatialNet Max Std: 0.4712
 
 --- Training DrawNet ---
 Converting and exporting seren_drawnet.tflite...
-Saved artifact at '/tmp/tmpf8rb7vy2'. The following endpoints are available:
+Saved artifact at '/tmp/tmpuxj_2301'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 224, 224, 3), dtype=tf.float32, name='keras_tensor_14')
 Output Type:
   TensorSpec(shape=(None, 3), dtype=tf.float32, name=None)
 Captures:
-  140398390575520: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391335168: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391342032: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391337456: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391340976: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391339568: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391337104: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391339040: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391330064: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398391086944: TensorSpec(shape=(), dtype=tf.resource, name=None)
-W0000 00:00:1784010415.310906    2138 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
-W0000 00:00:1784010415.310923    2138 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
-I0000 00:00:1784010415.311022    2138 reader.cc:83] Reading SavedModel from: /tmp/tmpf8rb7vy2
-I0000 00:00:1784010415.311338    2138 reader.cc:52] Reading meta graph with tags { serve }
-I0000 00:00:1784010415.311342    2138 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpf8rb7vy2
-I0000 00:00:1784010415.314294    2138 loader.cc:236] Restoring SavedModel bundle.
-I0000 00:00:1784010415.333739    2138 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpf8rb7vy2
-I0000 00:00:1784010415.339432    2138 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 28417 microseconds.
+  140427998984000: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997665536: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997672400: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997667824: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997671344: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997669936: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997667472: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997669408: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997660432: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427997499232: TensorSpec(shape=(), dtype=tf.resource, name=None)
+W0000 00:00:1784010787.783117    2349 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1784010787.783141    2349 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1784010787.783285    2349 reader.cc:83] Reading SavedModel from: /tmp/tmpuxj_2301
+I0000 00:00:1784010787.783799    2349 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1784010787.783805    2349 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpuxj_2301
+I0000 00:00:1784010787.787902    2349 loader.cc:236] Restoring SavedModel bundle.
+I0000 00:00:1784010787.814590    2349 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpuxj_2301
+I0000 00:00:1784010787.822639    2349 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 39363 microseconds.
 /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
@@ -114,30 +114,30 @@ I0000 00:00:1784010415.339432    2138 loader.cc:471] SavedModel load for tags { 
     
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 Successfully saved seren_drawnet.tflite (Size: 60.60 KB)
-DrawNet Max Std: 0.4191
+DrawNet Max Std: 0.4210
 
 --- Training EmotNet ---
 Converting and exporting seren_emotnet.tflite...
-Saved artifact at '/tmp/tmpue909n05'. The following endpoints are available:
+Saved artifact at '/tmp/tmpwx3cj54z'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): List[TensorSpec(shape=(None, 64), dtype=tf.int32, name='input_ids'), TensorSpec(shape=(None, 64), dtype=tf.int32, name='attention_mask')]
 Output Type:
   TensorSpec(shape=(None, 4), dtype=tf.float32, name=None)
 Captures:
-  140398390586080: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398269780336: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397989641936: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397989641232: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397989638592: TensorSpec(shape=(), dtype=tf.resource, name=None)
-W0000 00:00:1784010418.348236    2138 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
-W0000 00:00:1784010418.348255    2138 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
-I0000 00:00:1784010418.348361    2138 reader.cc:83] Reading SavedModel from: /tmp/tmpue909n05
-I0000 00:00:1784010418.348645    2138 reader.cc:52] Reading meta graph with tags { serve }
-I0000 00:00:1784010418.348650    2138 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpue909n05
-I0000 00:00:1784010418.350595    2138 loader.cc:236] Restoring SavedModel bundle.
-I0000 00:00:1784010418.364519    2138 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpue909n05
-I0000 00:00:1784010418.368683    2138 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 20329 microseconds.
+  140427998980832: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427994583408: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427361091280: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427361090576: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  140427361087936: TensorSpec(shape=(), dtype=tf.resource, name=None)
+W0000 00:00:1784010791.880646    2349 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1784010791.880673    2349 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1784010791.880810    2349 reader.cc:83] Reading SavedModel from: /tmp/tmpwx3cj54z
+I0000 00:00:1784010791.881261    2349 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1784010791.881283    2349 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmpwx3cj54z
+I0000 00:00:1784010791.884117    2349 loader.cc:236] Restoring SavedModel bundle.
+I0000 00:00:1784010791.903571    2349 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmpwx3cj54z
+I0000 00:00:1784010791.909823    2349 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 29023 microseconds.
 /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
@@ -145,41 +145,10 @@ I0000 00:00:1784010418.368683    2138 loader.cc:471] SavedModel load for tags { 
     
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 Successfully saved seren_emotnet.tflite (Size: 944.03 KB)
-EmotNet Max Std: 0.1214
-
---- Training PhonNet ---
-Converting and exporting seren_phonnet.tflite...
-Saved artifact at '/tmp/tmprqr2eyqg'. The following endpoints are available:
-
-* Endpoint 'serve'
-  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 48000), dtype=tf.float32, name='input_values')
-Output Type:
-  TensorSpec(shape=(None, 4), dtype=tf.float32, name=None)
-Captures:
-  140398546545024: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398523505600: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140399049430240: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397988717920: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397988711760: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397988720208: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397988723552: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140397988723904: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398394065312: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  140398394067952: TensorSpec(shape=(), dtype=tf.resource, name=None)
-W0000 00:00:1784010421.980564    2138 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
-W0000 00:00:1784010421.980582    2138 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
-I0000 00:00:1784010421.980688    2138 reader.cc:83] Reading SavedModel from: /tmp/tmprqr2eyqg
-I0000 00:00:1784010421.981046    2138 reader.cc:52] Reading meta graph with tags { serve }
-I0000 00:00:1784010421.981050    2138 reader.cc:147] Reading SavedModel debug info (if present) from: /tmp/tmprqr2eyqg
-I0000 00:00:1784010421.984208    2138 loader.cc:236] Restoring SavedModel bundle.
-I0000 00:00:1784010422.003354    2138 loader.cc:220] Running initialization op on SavedModel bundle at path: /tmp/tmprqr2eyqg
-I0000 00:00:1784010422.009444    2138 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 28763 microseconds.
-Successfully saved seren_phonnet.tflite (Size: 19.50 KB)
+EmotNet Max Std: 0.0000
 Traceback (most recent call last):
   File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 415, in <module>
     main()
-  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 342, in main
-    path = convert_and_save(phonnet_model, "seren_phonnet.tflite", min_size_bytes=40000)
-  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 36, in convert_and_save
-    assert file_size > min_size_bytes, f"FAILED: {filename} is too small ({file_size} bytes). Stub graph detected!"
-AssertionError: FAILED: seren_phonnet.tflite is too small (19972 bytes). Stub graph detected!
+  File "/home/runner/work/SEREN/SEREN/training/train_all_models.py", line 303, in main
+    assert max_std > 0.005, "FAILED: EmotNet output has no variance!"
+AssertionError: FAILED: EmotNet output has no variance!
