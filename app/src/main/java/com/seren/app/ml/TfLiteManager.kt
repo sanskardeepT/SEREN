@@ -81,7 +81,11 @@ class TfLiteManager private constructor(private val context: Context) {
             val startOffset = assetFileDescriptor.startOffset
             val declaredLength = assetFileDescriptor.declaredLength
             val buffer: MappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-            Interpreter(buffer)
+            val options = Interpreter.Options().apply {
+                setNumThreads(4)
+                setUseXNNPACK(true)
+            }
+            Interpreter(buffer, options)
         } catch (e: Exception) {
             Log.w("TfLiteManager", "Model file $fileName not found or corrupt: ${e.message}. Using heuristic fallback.")
             null

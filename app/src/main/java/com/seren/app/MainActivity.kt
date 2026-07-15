@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.seren.app.ml.TfLiteManager
 import com.seren.app.ui.theme.SerenTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +15,15 @@ class MainActivity : ComponentActivity() {
             SerenTheme {
                 SerenApp()
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            TfLiteManager.getInstance(applicationContext).close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
