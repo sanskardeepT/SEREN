@@ -98,6 +98,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 3] representing probabilities for Normal, Reversal, Corrected.
      */
     fun runDrawNet(inputImage: Array<Array<Array<FloatArray>>>): FloatArray {
+        require(inputImage.size == 1 && inputImage[0].size == 224 && inputImage[0][0].size == 224 && inputImage[0][0][0].size == 3) {
+            "DrawNet input image tensor must be of shape [1, 224, 224, 3]"
+        }
         val interpreter = getDrawNetInterpreter()
         val output = Array(1) { FloatArray(3) }
         
@@ -121,6 +124,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 1] representing dyslexia risk probability (0.0 to 1.0).
      */
     fun runGazeNet(gazeSequence: Array<Array<FloatArray>>): Float {
+        require(gazeSequence.size == 1 && gazeSequence[0].size == 100 && gazeSequence[0][0].size == 6) {
+            "GazeNet input gaze sequence tensor must be of shape [1, 100, 6]"
+        }
         val interpreter = getGazeNetInterpreter()
         val output = Array(1) { FloatArray(1) }
         
@@ -144,6 +150,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Repetition, Prolongation, Block, Fluent.
      */
     fun runPhonNet(audioData: FloatArray): FloatArray {
+        require(audioData.size == 48000) {
+            "PhonNet input audio sequence must be exactly 48000 samples (3 seconds at 16kHz)"
+        }
         val interpreter = getPhonNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
@@ -168,6 +177,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Inattentive, Hyperactive, Combined.
      */
     fun runAttentNet(behaviorStats: FloatArray): FloatArray {
+        require(behaviorStats.size == 4) {
+            "AttentNet input behaviorStats must be of size 4"
+        }
         val interpreter = getAttentNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
@@ -191,6 +203,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Worry, Perfectionism, Sadness.
      */
     fun runEmotNet(textInput: String): FloatArray {
+        require(textInput.isNotBlank()) {
+            "EmotNet input text must not be empty or blank"
+        }
         val interpreter = getEmotNetInterpreter()
         
         val output = Array(1) { FloatArray(4) }
@@ -223,6 +238,9 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Memory Deficit, Executive Deficit, Combined.
      */
     fun runSpatialNet(spatialStats: FloatArray): FloatArray {
+        require(spatialStats.size == 4) {
+            "SpatialNet input spatialStats must be of size 4"
+        }
         val interpreter = getSpatialNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
