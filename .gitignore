@@ -40,5 +40,5 @@ desktop.ini
 inst_user_settings.tmp
 
 # Raw local datasets
-data/
-dataset/
+/data/
+/dataset/
