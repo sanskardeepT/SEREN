@@ -4,6 +4,7 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import android.util.Log
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -32,7 +33,7 @@ object SecurityHelper {
                 return decryptPassphrase(encryptedBytes, iv)
             } catch (e: Exception) {
                 // If decryption fails (e.g. key invalidated), fallback to generating a new key
-                e.printStackTrace()
+                Log.e("SecurityHelper", "Decryption of DB passphrase failed", e)
             }
         }
 
@@ -47,7 +48,7 @@ object SecurityHelper {
                 .putString(IV_KEY, Base64.encodeToString(encryptionResult.iv, Base64.DEFAULT))
                 .apply()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("SecurityHelper", "Encryption of new DB passphrase failed", e)
             // In case keystore encryption fails, return a secure random fallback (in-memory only for this session)
             return rawPassphrase
         }

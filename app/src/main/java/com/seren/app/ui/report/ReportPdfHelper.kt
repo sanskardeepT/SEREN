@@ -366,7 +366,7 @@ object ReportPdfHelper {
             }
             
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("ReportPdfHelper", "Failed to build or share report", e)
             Toast.makeText(context, "Failed to build or share report: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
         }
     }

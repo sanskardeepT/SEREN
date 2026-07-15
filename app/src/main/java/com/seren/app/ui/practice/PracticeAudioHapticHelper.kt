@@ -3,6 +3,7 @@ package com.seren.app.ui.practice
 import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.util.Log
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -15,7 +16,7 @@ object PracticeAudioHapticHelper {
         try {
             toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 85) // 85% volume
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error initializing ToneGenerator", e)
         }
     }
 
@@ -36,7 +37,7 @@ object PracticeAudioHapticHelper {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_PROP_ACK, 150)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error playing success chime", e)
         }
     }
 
@@ -44,7 +45,7 @@ object PracticeAudioHapticHelper {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_PROP_NACK, 250)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error playing error buzz", e)
         }
     }
 
@@ -52,7 +53,7 @@ object PracticeAudioHapticHelper {
         try {
             toneGenerator?.startTone(ToneGenerator.TONE_CDMA_PIP, 50)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error playing tick chime", e)
         }
     }
 
@@ -74,7 +75,7 @@ object PracticeAudioHapticHelper {
                 vibrator.vibrate(durationMs)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error playing haptic vibrate", e)
         }
     }
 
@@ -88,7 +89,7 @@ object PracticeAudioHapticHelper {
                 vibrator.vibrate(pattern, -1)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioHapticHelper", "Error playing haptic pattern", e)
         }
     }
 

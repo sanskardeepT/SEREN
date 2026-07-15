@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         try {
             TfLiteManager.getInstance(applicationContext).close()
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("MainActivity", "Error closing TfLiteManager", e)
         }
     }
 }

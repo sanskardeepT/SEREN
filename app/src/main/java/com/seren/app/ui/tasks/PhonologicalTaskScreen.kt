@@ -2,6 +2,7 @@ package com.seren.app.ui.tasks
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.util.Log
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -119,7 +120,7 @@ fun PhonologicalTaskScreen(
                     }
                     try { record.stop() } catch (e: Exception) {}
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("PhonologicalTask", "Error during audio recording stream loop", e)
                 } finally {
                     record.release()
                     activeRecord = null
@@ -222,7 +223,7 @@ fun PhonologicalTaskScreen(
                     try {
                         activeRecord?.stop()
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Log.e("PhonologicalTask", "Error stopping active record instance", e)
                     }
                     recordingJob?.cancel()
                     

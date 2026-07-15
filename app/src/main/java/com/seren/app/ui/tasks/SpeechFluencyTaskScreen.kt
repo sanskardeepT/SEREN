@@ -2,6 +2,7 @@ package com.seren.app.ui.tasks
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.util.Log
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -110,7 +111,7 @@ fun SpeechFluencyTaskScreen(
                     }
                     try { record.stop() } catch (e: Exception) {}
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("SpeechFluencyTask", "Error during speech audio recording loop", e)
                 } finally {
                     record.release()
                     activeRecord = null
@@ -213,7 +214,7 @@ fun SpeechFluencyTaskScreen(
                     try {
                         activeRecord?.stop()
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Log.e("SpeechFluencyTask", "Error stopping speech record instance", e)
                     }
                     recordingJob?.cancel()
                     

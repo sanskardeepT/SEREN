@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
+import android.util.Log
 
 object PracticeAudioAssetManager {
     private var mediaPlayer: MediaPlayer? = null
@@ -33,7 +34,7 @@ object PracticeAudioAssetManager {
                         soundMap[key] = soundId
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("PracticeAudioAssetManager", "Error loading sound asset: $key", e)
                 }
             }
         }
@@ -80,7 +81,7 @@ object PracticeAudioAssetManager {
                     start()
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("PracticeAudioAssetManager", "Error playing background music: $musicName", e)
             }
         }
     }
@@ -91,7 +92,7 @@ object PracticeAudioAssetManager {
             mediaPlayer?.release()
             mediaPlayer = null
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("PracticeAudioAssetManager", "Error stopping background music", e)
         }
     }
 }
