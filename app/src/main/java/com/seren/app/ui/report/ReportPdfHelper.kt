@@ -359,6 +359,7 @@ object ReportPdfHelper {
                 context.startActivity(sendIntent)
             } catch (ex: Exception) {
                 // Fallback to general sharing chooser if WhatsApp package is missing
+                sendIntent.setPackage(null)
                 val chooser = Intent.createChooser(sendIntent, "Share report via:")
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(chooser)

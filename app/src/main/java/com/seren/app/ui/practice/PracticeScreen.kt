@@ -35,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,7 +84,7 @@ fun PracticeScreen(
         PracticeAudioAssetManager.initializeSounds(context)
     }
 
-    LaunchedEffect(activeExerciseName) {
+    DisposableEffect(activeExerciseName) {
         if (activeExerciseName != null) {
             val musicTrackName = when (activeExerciseName) {
                 "Breathing Focus Space" -> "music_ambient_breathing"
@@ -93,6 +94,9 @@ fun PracticeScreen(
             }
             PracticeAudioAssetManager.playBackgroundMusic(context, musicTrackName)
         } else {
+            PracticeAudioAssetManager.stopBackgroundMusic()
+        }
+        onDispose {
             PracticeAudioAssetManager.stopBackgroundMusic()
         }
     }
