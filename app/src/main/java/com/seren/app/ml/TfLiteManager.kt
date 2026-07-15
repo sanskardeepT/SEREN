@@ -7,6 +7,8 @@ import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -14,7 +16,7 @@ import java.nio.channels.FileChannel
  * Contains safety fallbacks: if model assets are missing, runs heuristic rules
  * to prevent crashes and return consistent screening indicators.
  */
-class TfLiteManager(private val context: Context) {
+class TfLiteManager private constructor(private val context: Context) {
 
     private var drawnetInterpreter: Interpreter? = null
     private var gazenetInterpreter: Interpreter? = null
@@ -234,6 +236,30 @@ class TfLiteManager(private val context: Context) {
         return HeuristicScorers.scoreSpatialNet(spatialStats)
     }
 
+    suspend fun runDrawNetAsync(inputImage: Array<Array<Array<FloatArray>>>): FloatArray = withContext(Dispatchers.Default) {
+        runDrawNet(inputImage)
+    }
+
+    suspend fun runGazeNetAsync(gazeSequence: Array<Array<FloatArray>>): Float = withContext(Dispatchers.Default) {
+        runGazeNet(gazeSequence)
+    }
+
+    suspend fun runPhonNetAsync(audioData: FloatArray): FloatArray = withContext(Dispatchers.Default) {
+        runPhonNet(audioData)
+    }
+
+    suspend fun runAttentNetAsync(behaviorStats: FloatArray): FloatArray = withContext(Dispatchers.Default) {
+        runAttentNet(behaviorStats)
+    }
+
+    suspend fun runEmotNetAsync(textInput: String): FloatArray = withContext(Dispatchers.Default) {
+        runEmotNet(textInput)
+    }
+
+    suspend fun runSpatialNetAsync(spatialStats: FloatArray): FloatArray = withContext(Dispatchers.Default) {
+        runSpatialNet(spatialStats)
+    }
+
     @Synchronized
     fun close() {
         try {
@@ -257,5 +283,14 @@ class TfLiteManager(private val context: Context) {
 
     companion object {
         private const val TAG = "TfLiteManager"
+
+        @Volatile
+        private var INSTANCE: TfLiteManager? = null
+
+        fun getInstance(context: Context): TfLiteManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: TfLiteManager(context.applicationContext).also { INSTANCE = it }
+            }
+        }
     }
 }

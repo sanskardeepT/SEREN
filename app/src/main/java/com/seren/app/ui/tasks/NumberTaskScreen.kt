@@ -45,7 +45,7 @@ fun NumberTaskScreen(
     onNext: () -> Unit
 ) {
     val context = LocalContext.current
-    val tfLiteManager = remember { TfLiteManager(context) }
+    val tfLiteManager = remember { TfLiteManager.getInstance(context) }
     var step by remember { mutableStateOf(1) } // Step 1: dot subitizing, Step 2: comparison
     val startTime = remember { mutableStateOf(System.currentTimeMillis()) }
     var showSpamAlert by remember { mutableStateOf(false) }

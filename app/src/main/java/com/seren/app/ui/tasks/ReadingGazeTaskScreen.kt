@@ -38,7 +38,7 @@ fun ReadingGazeTaskScreen(
     onNext: () -> Unit
 ) {
     val context = LocalContext.current
-    val tfLiteManager = remember { TfLiteManager(context) }
+    val tfLiteManager = remember { TfLiteManager.getInstance(context) }
     val startTime = remember { System.currentTimeMillis() }
     var showSpamAlert by remember { mutableStateOf(false) }
 

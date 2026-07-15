@@ -55,7 +55,7 @@ fun HandwritingTaskScreen(
     onNext: () -> Unit
 ) {
     val context = LocalContext.current
-    val tfLiteManager = remember { TfLiteManager(context) }
+    val tfLiteManager = remember { TfLiteManager.getInstance(context) }
     
     val points = remember { mutableStateListOf<Offset>() }
     var startTime by remember { mutableStateOf(System.currentTimeMillis()) }
