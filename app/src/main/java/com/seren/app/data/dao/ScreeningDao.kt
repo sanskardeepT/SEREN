@@ -39,6 +39,17 @@ interface ScreeningDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertConditionScores(scores: List<ConditionScore>)
 
+    @Transaction
+    suspend fun saveSessionResults(
+        sessionId: Long,
+        scores: List<ConditionScore>,
+        completedAt: Long,
+        status: String
+    ) {
+        insertConditionScores(scores)
+        updateSessionStatus(sessionId, completedAt, status)
+    }
+
     @Query("SELECT * FROM condition_scores WHERE sessionId = :sessionId")
     fun getConditionScoresForSessionFlow(sessionId: Long): Flow<List<ConditionScore>>
 

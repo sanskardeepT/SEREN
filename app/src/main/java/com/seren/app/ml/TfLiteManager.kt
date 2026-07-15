@@ -23,13 +23,52 @@ class TfLiteManager(private val context: Context) {
     private var emotnetInterpreter: Interpreter? = null
     private var spatialnetInterpreter: Interpreter? = null
 
-    init {
-        drawnetInterpreter = loadModelFromAssets("seren_drawnet.tflite")
-        gazenetInterpreter = loadModelFromAssets("seren_gazenet.tflite")
-        phonnetInterpreter = loadModelFromAssets("seren_phonnet.tflite")
-        attentnetInterpreter = loadModelFromAssets("seren_attentnet.tflite")
-        emotnetInterpreter = loadModelFromAssets("seren_emotnet.tflite")
-        spatialnetInterpreter = loadModelFromAssets("seren_spatialnet.tflite")
+    @Synchronized
+    private fun getDrawNetInterpreter(): Interpreter? {
+        if (drawnetInterpreter == null) {
+            drawnetInterpreter = loadModelFromAssets("seren_drawnet.tflite")
+        }
+        return drawnetInterpreter
+    }
+
+    @Synchronized
+    private fun getGazeNetInterpreter(): Interpreter? {
+        if (gazenetInterpreter == null) {
+            gazenetInterpreter = loadModelFromAssets("seren_gazenet.tflite")
+        }
+        return gazenetInterpreter
+    }
+
+    @Synchronized
+    private fun getPhonNetInterpreter(): Interpreter? {
+        if (phonnetInterpreter == null) {
+            phonnetInterpreter = loadModelFromAssets("seren_phonnet.tflite")
+        }
+        return phonnetInterpreter
+    }
+
+    @Synchronized
+    private fun getAttentNetInterpreter(): Interpreter? {
+        if (attentnetInterpreter == null) {
+            attentnetInterpreter = loadModelFromAssets("seren_attentnet.tflite")
+        }
+        return attentnetInterpreter
+    }
+
+    @Synchronized
+    private fun getEmotNetInterpreter(): Interpreter? {
+        if (emotnetInterpreter == null) {
+            emotnetInterpreter = loadModelFromAssets("seren_emotnet.tflite")
+        }
+        return emotnetInterpreter
+    }
+
+    @Synchronized
+    private fun getSpatialNetInterpreter(): Interpreter? {
+        if (spatialnetInterpreter == null) {
+            spatialnetInterpreter = loadModelFromAssets("seren_spatialnet.tflite")
+        }
+        return spatialnetInterpreter
     }
 
     private fun loadModelFromAssets(fileName: String): Interpreter? {
@@ -53,7 +92,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 3] representing probabilities for Normal, Reversal, Corrected.
      */
     fun runDrawNet(inputImage: Array<Array<Array<FloatArray>>>): FloatArray {
-        val interpreter = drawnetInterpreter
+        val interpreter = getDrawNetInterpreter()
         val output = Array(1) { FloatArray(3) }
         
         if (interpreter != null) {
@@ -76,7 +115,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 1] representing dyslexia risk probability (0.0 to 1.0).
      */
     fun runGazeNet(gazeSequence: Array<Array<FloatArray>>): Float {
-        val interpreter = gazenetInterpreter
+        val interpreter = getGazeNetInterpreter()
         val output = Array(1) { FloatArray(1) }
         
         if (interpreter != null) {
@@ -99,7 +138,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Repetition, Prolongation, Block, Fluent.
      */
     fun runPhonNet(audioData: FloatArray): FloatArray {
-        val interpreter = phonnetInterpreter
+        val interpreter = getPhonNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
         if (interpreter != null) {
@@ -123,7 +162,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Inattentive, Hyperactive, Combined.
      */
     fun runAttentNet(behaviorStats: FloatArray): FloatArray {
-        val interpreter = attentnetInterpreter
+        val interpreter = getAttentNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
         if (interpreter != null) {
@@ -146,7 +185,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Worry, Perfectionism, Sadness.
      */
     fun runEmotNet(textInput: String): FloatArray {
-        val interpreter = emotnetInterpreter
+        val interpreter = getEmotNetInterpreter()
         
         val output = Array(1) { FloatArray(4) }
         if (interpreter != null) {
@@ -178,7 +217,7 @@ class TfLiteManager(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Control, Memory Deficit, Executive Deficit, Combined.
      */
     fun runSpatialNet(spatialStats: FloatArray): FloatArray {
-        val interpreter = spatialnetInterpreter
+        val interpreter = getSpatialNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
         if (interpreter != null) {
@@ -193,6 +232,27 @@ class TfLiteManager(private val context: Context) {
         
         Log.i(TAG, "SpatialNet: FALLBACK — using heuristic scorer (no trained model loaded).")
         return HeuristicScorers.scoreSpatialNet(spatialStats)
+    }
+
+    @Synchronized
+    fun close() {
+        try {
+            drawnetInterpreter?.close()
+            gazenetInterpreter?.close()
+            phonnetInterpreter?.close()
+            attentnetInterpreter?.close()
+            emotnetInterpreter?.close()
+            spatialnetInterpreter?.close()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error closing TFLite interpreters: ${e.message}")
+        } finally {
+            drawnetInterpreter = null
+            gazenetInterpreter = null
+            phonnetInterpreter = null
+            attentnetInterpreter = null
+            emotnetInterpreter = null
+            spatialnetInterpreter = null
+        }
     }
 
     companion object {

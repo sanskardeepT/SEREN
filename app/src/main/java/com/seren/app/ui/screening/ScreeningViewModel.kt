@@ -135,12 +135,10 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
                 )
             }
 
-            // Save to database
-            screeningDao.insertConditionScores(finalScores)
-            
-            // Mark session as complete
-            screeningDao.updateSessionStatus(
+            // Save to database and mark session as complete inside a transaction
+            screeningDao.saveSessionResults(
                 sessionId = currentSessionId,
+                scores = finalScores,
                 completedAt = System.currentTimeMillis(),
                 status = SessionStatus.COMPLETED
             )
