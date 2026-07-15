@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a0009e3c1262a9f411bd4a96aded1247",
+    "identityHash": "9b1d904f004e43875e0a1db0898a4a91",
     "entities": [
       {
         "tableName": "user_profiles",
@@ -110,6 +110,17 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_screening_sessions_userId` ON `${TABLE_NAME}` (`userId`)"
+          },
+          {
+            "name": "index_screening_sessions_status_sessionType_completedAt",
+            "unique": false,
+            "columnNames": [
+              "status",
+              "sessionType",
+              "completedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_screening_sessions_status_sessionType_completedAt` ON `${TABLE_NAME}` (`status`, `sessionType`, `completedAt`)"
           }
         ],
         "foreignKeys": [
@@ -292,7 +303,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0009e3c1262a9f411bd4a96aded1247')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9b1d904f004e43875e0a1db0898a4a91')"
     ]
   }
 }

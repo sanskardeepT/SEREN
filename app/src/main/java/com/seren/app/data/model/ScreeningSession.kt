@@ -18,7 +18,10 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["userId"])]
+    indices = [
+        Index(value = ["userId"]),
+        Index(value = ["status", "sessionType", "completedAt"])
+    ]
 )
 data class ScreeningSession(
     @PrimaryKey(autoGenerate = true)
