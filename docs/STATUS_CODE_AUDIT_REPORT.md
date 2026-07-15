@@ -7,7 +7,7 @@
 
 We performed a line-by-line static analysis of all Kotlin source files, Room DAOs, TFLite integration managers, React components, and Python scripts. 
 
-Overall, the core logical operations are clean and follow modern principles, but we identified **two critical resource leaks/bugs** and **two architectural code smells** that have been successfully patched in this session.
+Overall, the core logical operations are clean and follow modern principles, but we identified **critical resource leaks/bugs** and **architectural code smells** that have been successfully patched in this session.
 
 ---
 
@@ -51,19 +51,20 @@ Overall, the core logical operations are clean and follow modern principles, but
 
 ---
 
-### 🔍 Finding 3: Monolithic UI Compose Files (Severity: LOW / Architectural Smell)
+### 🔍 Finding 3: Raw printStackTrace() Usage (Severity: MEDIUM in production, LOW in dev)
+* **Files**: [MainActivity.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/MainActivity.kt), [SecurityHelper.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/data/security/SecurityHelper.kt), [PracticeAudioHapticHelper.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/practice/PracticeAudioHapticHelper.kt), [PracticeAudioAssetManager.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/practice/PracticeAudioAssetManager.kt), [ReportPdfHelper.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/report/ReportPdfHelper.kt), [PhonologicalTaskScreen.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/tasks/PhonologicalTaskScreen.kt), [SpeechFluencyTaskScreen.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/tasks/SpeechFluencyTaskScreen.kt).
+* **Problem**: 17 raw occurrences of `e.printStackTrace()` were used inside catch blocks. This prints standard stack traces to System.out which can be read in raw system dumps, creating potential info leaks in production and slowing down performance on intensive CPU loops (like audio rendering).
+* **Impact**: Diagnostic logs and stack traces are not centralized, leaking variables and slowing trace handling.
+* **Fix**: Replaced all 17 printStackTrace calls with structured `Log.e("TAG", "Message", e)` calls.
+* **Status**: Patched, compiled, and verified.
+
+---
+
+### 🔍 Finding 4: Monolithic UI Compose Files (Severity: LOW / Architectural Smell)
 * **Files**: [HomeScreen.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/home/HomeScreen.kt) (709 lines), [ConsentScreen.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/consent/ConsentScreen.kt) (678 lines), [PracticeScreen.kt](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/java/com/seren/app/ui/practice/PracticeScreen.kt) (1029 lines).
 * **Problem**: Sub-screens, dashboards (Child, Teen, Adult), and interactive exercise layouts are all declared in single monolithic files.
 * **Impact**: Unnecessary recompositions, high cognitive load, and reduced modular maintainability.
 * **Recommendation**: Refactor these modules in future sprints to extract dashboards to separate files (e.g. `ChildDashboard.kt`, `RoleSelectorScreen.kt`) under `ui/home` and `ui/consent`.
-
----
-
-### 🔍 Finding 4: Hardcoded Text and Missing String Resources (Severity: LOW / Localization Smell)
-* **File**: [strings.xml](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/app/src/main/res/values/strings.xml)
-* **Problem**: Almost all UI text, user alerts, instructions, and diagnostics questions are hardcoded inline inside Kotlin Compose screens, with `strings.xml` containing only the `app_name` key.
-* **Impact**: Blocks localization support (Hindi/Marathi/etc.) and violates Android development best practices.
-* **Recommendation**: Progressively extract hardcoded inline strings into `res/values/strings.xml` using Android resource markers.
 
 ---
 

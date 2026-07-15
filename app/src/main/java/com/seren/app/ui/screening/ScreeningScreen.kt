@@ -80,10 +80,10 @@ fun ScreeningScreen(
         isIntroActive = true
     }
 
-    // Navigate to report once session wraps up successfully
     LaunchedEffect(isSessionComplete) {
-        if (isSessionComplete && sessionId != null) {
-            onNavigateToReport(sessionId!!)
+        val currentSessionId = sessionId
+        if (isSessionComplete && currentSessionId != null) {
+            onNavigateToReport(currentSessionId)
         }
     }
 

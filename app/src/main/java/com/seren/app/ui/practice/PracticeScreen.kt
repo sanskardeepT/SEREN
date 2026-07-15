@@ -398,7 +398,8 @@ fun PracticeScreen(
     }
 
     // Practice Simulation progress dialog modal
-    if (exerciseTimerActive && activeExerciseName != null) {
+    val currentExerciseName = activeExerciseName
+    if (exerciseTimerActive && currentExerciseName != null) {
         Dialog(onDismissRequest = { exerciseTimerActive = false }) {
             Card(
                 modifier = Modifier
@@ -413,13 +414,13 @@ fun PracticeScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = activeExerciseName!!,
+                        text = currentExerciseName,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
 
-                    when (activeExerciseName) {
+                    when (currentExerciseName) {
                         "Breathing Focus Space" -> {
                             var breathCycle by remember { mutableStateOf(1) }
                             var isHolding by remember { mutableStateOf(false) }
@@ -441,7 +442,7 @@ fun PracticeScreen(
                                             breathCycle++
                                             if (breathCycle > 3) {
                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedTaskTitles.add(currentExerciseName)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
@@ -507,7 +508,7 @@ fun PracticeScreen(
                                                 correctAnswers++
                                                 if (correctAnswers >= 3) {
                                                     PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                    completedTaskTitles.add(activeExerciseName!!)
+                                                    completedTaskTitles.add(currentExerciseName)
                                                     completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                     exerciseTimerActive = false
                                                 } else {
@@ -570,7 +571,7 @@ fun PracticeScreen(
                                             matchScore++
                                             if (matchScore >= 3) {
                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedTaskTitles.add(currentExerciseName)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
@@ -594,7 +595,7 @@ fun PracticeScreen(
                                             matchScore++
                                             if (matchScore >= 3) {
                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedTaskTitles.add(currentExerciseName)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
@@ -642,7 +643,7 @@ fun PracticeScreen(
                                         PracticeAudioHapticHelper.playSuccessFeedback(context)
                                         scope.launch {
                                             delay(1500)
-                                            completedTaskTitles.add(activeExerciseName!!)
+                                            completedTaskTitles.add(currentExerciseName)
                                             completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                             exerciseTimerActive = false
                                         }
@@ -703,7 +704,7 @@ fun PracticeScreen(
                                                         monsterHealth--
                                                         if (monsterHealth <= 0) {
                                                             PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                            completedTaskTitles.add(activeExerciseName!!)
+                                                            completedTaskTitles.add(currentExerciseName)
                                                             completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                             exerciseTimerActive = false
                                                         } else {
@@ -747,7 +748,7 @@ fun PracticeScreen(
                                             runnerScore++
                                             if (runnerScore >= 4) {
                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedTaskTitles.add(currentExerciseName)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
@@ -769,7 +770,7 @@ fun PracticeScreen(
                                             runnerScore++
                                             if (runnerScore >= 4) {
                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                completedTaskTitles.add(activeExerciseName!!)
+                                                completedTaskTitles.add(currentExerciseName)
                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                 exerciseTimerActive = false
                                             } else {
@@ -845,7 +846,7 @@ fun PracticeScreen(
                                                             sequenceCount++
                                                             if (sequenceCount >= 2) {
                                                                 PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                                completedTaskTitles.add(activeExerciseName!!)
+                                                                completedTaskTitles.add(currentExerciseName)
                                                                 completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                                 exerciseTimerActive = false
                                                             } else {
@@ -950,7 +951,7 @@ fun PracticeScreen(
                                                                 arrows.remove(arrow)
                                                                 if (arrows.isEmpty()) {
                                                                     PracticeAudioHapticHelper.playSuccessFeedback(context)
-                                                                    completedTaskTitles.add(activeExerciseName!!)
+                                                                    completedTaskTitles.add(currentExerciseName)
                                                                     completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                                                     exerciseTimerActive = false
                                                                 } else {
@@ -999,7 +1000,7 @@ fun PracticeScreen(
 
                             Button(
                                 onClick = {
-                                    completedTaskTitles.add(activeExerciseName!!)
+                                    completedTaskTitles.add(currentExerciseName)
                                     completedExercises = minOf(completedExercises + 1, totalRequiredExercises)
                                     exerciseTimerActive = false
                                 }
