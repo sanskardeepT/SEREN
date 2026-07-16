@@ -32,6 +32,8 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val _userAgeGroup = MutableStateFlow<String?>(null)
     val userAgeGroup: StateFlow<String?> = _userAgeGroup.asStateFlow()
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
 
     /** Order of assessment task screens */
     val tasksList = listOf(
@@ -45,24 +47,32 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
     )
 
     fun startSession() {
+        _error.value = null
         viewModelScope.launch {
-            val profile = userDao.getUserProfile()
-            if (profile != null) {
-                _userAgeGroup.value = profile.ageGroup
-                // If there's already an active session, reuse it, otherwise create one
-                val active = screeningDao.getActiveSession()
-                if (active != null) {
-                    _sessionId.value = active.sessionId
+            try {
+                val profile = userDao.getUserProfile()
+                if (profile != null) {
+                    _userAgeGroup.value = profile.ageGroup
+                    // If there's already an active session, reuse it, otherwise create one
+                    val active = screeningDao.getActiveSession()
+                    if (active != null) {
+                        _sessionId.value = active.sessionId
+                    } else {
+                        val newSession = ScreeningSession(
+                            userId = profile.userId,
+                            sessionType = SessionType.SCREENING,
+                            status = SessionStatus.IN_PROGRESS
+                        )
+                        _sessionId.value = screeningDao.insertSession(newSession)
+                    }
+                    _currentTaskIndex.value = 0
+                    _isSessionComplete.value = false
                 } else {
-                    val newSession = ScreeningSession(
-                        userId = profile.userId,
-                        sessionType = SessionType.SCREENING,
-                        status = SessionStatus.IN_PROGRESS
-                    )
-                    _sessionId.value = screeningDao.insertSession(newSession)
+                    _error.value = "User profile not found. Please complete consent."
                 }
-                _currentTaskIndex.value = 0
-                _isSessionComplete.value = false
+            } catch (e: Exception) {
+                android.util.Log.e("ScreeningViewModel", "Error starting screening session", e)
+                _error.value = "Failed to start screening session: ${e.localizedMessage}"
             }
         }
     }
@@ -76,15 +86,20 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
     ) {
         val currentSessionId = _sessionId.value ?: return
         viewModelScope.launch {
-            val taskResult = TaskResult(
-                sessionId = currentSessionId,
-                conditionId = conditionId,
-                taskType = taskType,
-                rawDataJson = rawDataJson,
-                score = score,
-                durationMs = durationMs
-            )
-            screeningDao.insertTaskResult(taskResult)
+            try {
+                val taskResult = TaskResult(
+                    sessionId = currentSessionId,
+                    conditionId = conditionId,
+                    taskType = taskType,
+                    rawDataJson = rawDataJson,
+                    score = score,
+                    durationMs = durationMs
+                )
+                screeningDao.insertTaskResult(taskResult)
+            } catch (e: Exception) {
+                android.util.Log.e("ScreeningViewModel", "Error submitting task result", e)
+                _error.value = "Failed to save progress: ${e.localizedMessage}"
+            }
         }
     }
 
@@ -99,51 +114,56 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
     private fun completeSession() {
         val currentSessionId = _sessionId.value ?: return
         viewModelScope.launch {
-            // Fetch all individual task metrics saved in database during this session
-            val results = screeningDao.getTaskResultsForSession(currentSessionId)
-            
-            // --- FUSIONNET ENSEMBLE SCORING ---
-            // Combine active task results into 0-100 scores for all active conditions.
-            val finalScores = ConditionIds.ACTIVE.mapNotNull { conditionId ->
-                // Gather task scores targeting this specific condition
-                val conditionResults = results.filter { it.conditionId == conditionId }
+            try {
+                // Fetch all individual task metrics saved in database during this session
+                val results = screeningDao.getTaskResultsForSession(currentSessionId)
                 
-                if (conditionResults.isEmpty()) {
-                    return@mapNotNull null
-                }
-                
-                // Average scores
-                val riskVal = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
-                val modalitiesCount = conditionResults.map { it.taskType }.distinct().size
-                
-                // Confidence labels based on count of active modalities (docs/training-protocols.md Section 9.1):
-                // 1 modality ➜ LOW confidence
-                // 2-3 modalities ➜ MEDIUM confidence
-                // 4-6 modalities ➜ HIGH confidence
-                val confidence = when {
-                    modalitiesCount <= 1 -> ConfidenceLevel.LOW
-                    modalitiesCount <= 3 -> ConfidenceLevel.MEDIUM
-                    else -> ConfidenceLevel.HIGH
+                // --- FUSIONNET ENSEMBLE SCORING ---
+                // Combine active task results into 0-100 scores for all active conditions.
+                val finalScores = ConditionIds.ACTIVE.mapNotNull { conditionId ->
+                    // Gather task scores targeting this specific condition
+                    val conditionResults = results.filter { it.conditionId == conditionId }
+                    
+                    if (conditionResults.isEmpty()) {
+                        return@mapNotNull null
+                    }
+                    
+                    // Average scores
+                    val riskVal = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
+                    val modalitiesCount = conditionResults.map { it.taskType }.distinct().size
+                    
+                    // Confidence labels based on count of active modalities (docs/training-protocols.md Section 9.1):
+                    // 1 modality ➜ LOW confidence
+                    // 2-3 modalities ➜ MEDIUM confidence
+                    // 4-6 modalities ➜ HIGH confidence
+                    val confidence = when {
+                        modalitiesCount <= 1 -> ConfidenceLevel.LOW
+                        modalitiesCount <= 3 -> ConfidenceLevel.MEDIUM
+                        else -> ConfidenceLevel.HIGH
+                    }
+
+                    ConditionScore(
+                        sessionId = currentSessionId,
+                        conditionId = conditionId,
+                        riskScore = riskVal.coerceIn(0f, 100f),
+                        confidenceLevel = confidence,
+                        modalitiesUsed = modalitiesCount
+                    )
                 }
 
-                ConditionScore(
+                // Save to database and mark session as complete inside a transaction
+                screeningDao.saveSessionResults(
                     sessionId = currentSessionId,
-                    conditionId = conditionId,
-                    riskScore = riskVal.coerceIn(0f, 100f),
-                    confidenceLevel = confidence,
-                    modalitiesUsed = modalitiesCount
+                    scores = finalScores,
+                    completedAt = System.currentTimeMillis(),
+                    status = SessionStatus.COMPLETED
                 )
+                
+                _isSessionComplete.value = true
+            } catch (e: Exception) {
+                android.util.Log.e("ScreeningViewModel", "Error finalizing screening session", e)
+                _error.value = "Failed to finalize session results: ${e.localizedMessage}"
             }
-
-            // Save to database and mark session as complete inside a transaction
-            screeningDao.saveSessionResults(
-                sessionId = currentSessionId,
-                scores = finalScores,
-                completedAt = System.currentTimeMillis(),
-                status = SessionStatus.COMPLETED
-            )
-            
-            _isSessionComplete.value = true
         }
     }
 }
