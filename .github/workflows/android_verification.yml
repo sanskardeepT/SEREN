@@ -1,0 +1,41 @@
+name: Android Build & Code Quality Verification
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verification:
+    name: Verify Lint, Unit Tests and Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Android Lint (Static Analysis)
+        run: ./gradlew lintDebug
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Verify Debug APK Build
+        run: ./gradlew assembleDebug
