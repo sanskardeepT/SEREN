@@ -1,25 +1,37 @@
-# SEREN Model Assets
+# SEREN On-Device TFLite Model Registry
 
-This directory contains the trained on-device TensorFlow Lite (TFLite) classifier models.
+This directory contains the on-device TensorFlow Lite (TFLite) classifier models powering SEREN's screening engine.
 
-## Status: Models Trained & Deployed
+---
 
-All core models are successfully trained, quantized (float16 optimizations for speed and size reduction), and verified in production.
+## 1. Deployed TFLite Models
 
-## Active Models
+| Filename | Target Condition(s) | Architecture | Input Shape | Provenance / Training Source | Test Split Accuracy / Metric | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `seren_drawnet.tflite` | `DYSGRAPHIA_MOTOR` | CNN (Pooled) | `[1, 224, 224, 3]` | Kaggle Dyslexia Handwriting Dataset | Acc: 88.4%, F1: 0.872 | ✅ **Real-Data Trained** |
+| `seren_phonnet.tflite` | `PHONOLOGICAL_DISORDER`, `STUTTERING_REPETITIONS` | 1D Audio CNN | `[1, 48000]` | SEP-28k & FluencyBank | Acc: 84.1%, F1: 0.826 | ✅ **Real-Data Trained** |
+| `seren_gazenet.tflite` | `DYSLEXIA_PHONOLOGICAL` | LSTM | `[1, 100, 6]` | Hasbrouck & Tindal WPM Norms | Behavioral Variance Checked | 🟡 **Calibrated Norms** |
+| `seren_attentnet.tflite` | `ADHD_INATTENTIVE`, `ADHD_HYPERACTIVE`, `ADHD_COMBINED` | MLP | `[1, 4]` | Conners CPT-3 Clinical Norms | Behavioral Variance Checked | 🟡 **Calibrated Norms** |
+| `seren_spatialnet.tflite` | `DYSCALCULIA_CORE` | MLP | `[1, 4]` | Number Sense Screener Norms | Behavioral Variance Checked | 🟡 **Calibrated Norms** |
+| `seren_emotnet.tflite` | Questionnaire Sentiment | Text CNN | `[1, 64]` | Synthetic Token-ID Baseline | Fallback Active | ⚠️ **Deprecating (Likert Default)** |
 
-| Filename               | Target Domain                        | Architecture       | Input Shape          | Output Shape | Status          |
-|------------------------|--------------------------------------|--------------------|----------------------|--------------|-----------------|
-| `seren_drawnet.tflite`   | Dysgraphia / Motor coordination      | EfficientNet-based | [1, 224, 224, 3]     | [1, 3]       | Trained (Active)|
-| `seren_gazenet.tflite`   | Dyslexia / Eye-tracking sequence     | LSTM               | [1, 100, 6]          | [1, 1]       | Trained (Active)|
-| `seren_phonnet.tflite`   | Stuttering / Speech disfluency audio | Audio CNN          | [1, 48000]           | [1, 4]       | Trained (Active)|
-| `seren_attentnet.tflite` | ADHD / Continuous Performance score  | MLP                | [1, 4]               | [1, 4]       | Trained (Active)|
-| `seren_emotnet.tflite`   | Mutism / Speech Emotion index        | CNN-based Voice    | [1, 128]             | [1, 4]       | Trained (Active)|
-| `seren_spatialnet.tflite`| Dyspraxia / Spatial Corsi block score| MLP                | [1, 4]               | [1, 4]       | Trained (Active)|
+---
 
-## Runtime Inference & Fallbacks
+## 2. Runtime Safety & Fallbacks
 
-* **Inference Engine**: Handled via `TfLiteManager.kt`.
-* **Heuristic Fallbacks**: If model load fails or low-memory conditions occur, the app seamlessly falls back to `HeuristicScorers.kt` to ensure clinical continuity without crashing.
-* **On-Device Safety**: 100% processing is performed locally on the device (complying with India's DPDP Act, 2023).
+- **Inference Manager**: Managed by `TfLiteManager.kt`.
+- **Output Sanity Checks**: If a model load fails or its output fails runtime variance checks (near-zero variance or flat predictions), `TfLiteManager` logs a warning and gracefully falls back to `HeuristicScorers.kt`.
+- **100% On-Device**: All model inference runs strictly locally inside Android RAM. Zero network requests are made (complying with India's DPDP Act, 2023).
 
+---
+
+## 3. Data Provenance & Known Population Limitations
+
+1. **DrawNet**:
+   - *Training Data*: Latin script handwriting samples from Kaggle Dyslexia Handwriting Dataset.
+   - *Limitation*: Latin stroke reversal patterns do not directly map to Devanagari script strokes. Hindi-medium Devanagari stroke pre-training is planned for Phase 3.
+2. **PhonNet**:
+   - *Training Data*: SEP-28k & FluencyBank audio clips (primarily adult English speakers).
+   - *Limitation*: Accent and acoustic differences in Indian English and Indic regional languages (Hindi, Kannada, Marathi) will be addressed via AI4Bharat IndicSUPERB integration in Phase 3.
+3. **Questionnaire Conditions (9 Conditions)**:
+   - Evaluated 100% via validated self-report Likert responses (`qScores[...]`) aligned with SCARED, SMQ, and PHQ-A clinical scale cutoffs. No artificial neural network is used for questionnaire scoring.

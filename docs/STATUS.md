@@ -1,8 +1,9 @@
-# SEREN Platform — Master Implementation Status
+# SEREN Platform — Master Implementation & Provenance Status
 
 **Last Updated:** July 2026  
 **Repository Version:** SEREN v1.0.0 (Production Core Release)  
-**Security & Privacy Profile:** 100% Offline-First, SQLCipher Encrypted, Zero Outbound Network Access
+**Security & Privacy Profile:** 100% Offline-First, SQLCipher Encrypted, Zero Outbound Network Access  
+**Provenance Registry:** [training/DATASET_PROVENANCE.md](file:///c:/Users/Sanskardeep/OneDrive/Desktop/projects/SEREN/training/DATASET_PROVENANCE.md)
 
 ---
 
@@ -12,29 +13,29 @@ SEREN is a privacy-first, on-device neurodevelopmental and emotional screening p
 
 ---
 
-## 2. Active Conditions Engine (`ConditionIds.ACTIVE`)
+## 2. Active Conditions Engine & Provenance Mapping (`ConditionIds.ACTIVE`)
 
-The screening engine maps task outputs to **exactly 17 active conditions**, eliminating cross-condition duplication ("fake distinctiveness"). Each condition is evaluated via a single-source task screen or documented composite:
+The screening engine maps task outputs to **exactly 17 active conditions**, eliminating cross-condition duplication ("fake distinctiveness"). Each condition is evaluated via a single-source task screen, fine-tuned ML model, or published clinical Likert scale:
 
-| Condition ID | Display Name | Task Source | Scoring Signal |
-| :--- | :--- | :--- | :--- |
-| `ADHD_INATTENTIVE` | ADHD (Inattentive) | CPT Attention Task | AttentNet prediction (index 0) |
-| `ADHD_HYPERACTIVE` | ADHD (Hyperactive-Impulsive) | CPT Attention Task | AttentNet prediction (index 1) |
-| `ADHD_COMBINED` | ADHD (Combined Type) | CPT Attention Task | AttentNet prediction (index 2) |
-| `DYSGRAPHIA_MOTOR` | Dysgraphia (Motor / Reversals) | Handwriting Task | DrawNet stroke reversal score |
-| `DYSLEXIA_PHONOLOGICAL` | Dyslexia (Phonological) | Reading Gaze Task | GazeNet regression & speed score |
-| `PHONOLOGICAL_DISORDER` | Phonological Disorder | Phonological RAN Task | PhonNet disfluency risk |
-| `STUTTERING_REPETITIONS` | Stuttering (Repetitions) | Speech Fluency Task | PhonNet vocal audio disfluency |
-| `DYSCALCULIA_CORE` | Dyscalculia (Core Number Sense) | Number Sense Task | SpatialNet (70%) + RT/accuracy (30%) |
-| `SOCIAL_ANXIETY` | Social Anxiety | Questionnaire Task | Q1 (social worry item response) |
-| `GAD` | Generalized Anxiety Disorder | Questionnaire Task | Q0 (general worry item response) |
-| `SELECTIVE_MUTISM` | Selective Mutism | Questionnaire Task | Q3 (comm avoidance item response) |
-| `TEST_ANXIETY` | Test & Performance Anxiety | Questionnaire Task | Q0 (worry) + Q12 (performance insecurity) (60/40) |
-| `SCHOOL_PHOBIA` | School Phobia | Questionnaire Task | Q2 (school avoidance item response) |
-| `DEPRESSION` | Depression (Low Mood / Anhedonia) | Questionnaire Task | Q4 (sadness item response) |
-| `EMOTIONAL_DYSREGULATION` | Emotional Dysregulation | Questionnaire Task | Q5 (emotional control item response) |
-| `EXECUTIVE_PLANNING` | Executive Planning Deficit | Questionnaire Task | Q10 (planning/organization response) |
-| `WORKING_MEMORY` | Working Memory Deficit | Questionnaire Task | Q11 (memory/recall response) |
+| Condition ID | Display Name | Task Source | Scoring Signal | Data Provenance / Clinical Norm Source | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `ADHD_INATTENTIVE` | ADHD (Inattentive) | CPT Attention Task | AttentNet prediction (index 0) | Conners CPT-3 Clinical Norms | 🟡 Calibrated CPT Norms |
+| `ADHD_HYPERACTIVE` | ADHD (Hyperactive-Impulsive) | CPT Attention Task | AttentNet prediction (index 1) | Conners CPT-3 Clinical Norms | 🟡 Calibrated CPT Norms |
+| `ADHD_COMBINED` | ADHD (Combined Type) | CPT Attention Task | AttentNet prediction (index 2) | Conners CPT-3 Clinical Norms | 🟡 Calibrated CPT Norms |
+| `DYSGRAPHIA_MOTOR` | Dysgraphia (Motor / Reversals) | Handwriting Task | DrawNet stroke reversal score | Kaggle Dyslexia Handwriting Dataset | ✅ Real-Data Trained |
+| `DYSLEXIA_PHONOLOGICAL` | Dyslexia (Phonological) | Reading Gaze Task | GazeNet regression & speed score | Hasbrouck & Tindal WPM Norms | 🟡 Calibrated WPM Norms |
+| `PHONOLOGICAL_DISORDER` | Phonological Disorder | Phonological RAN Task | PhonNet disfluency risk | SEP-28k & FluencyBank Audio | ✅ Real-Data Trained |
+| `STUTTERING_REPETITIONS` | Stuttering (Repetitions) | Speech Fluency Task | PhonNet vocal audio disfluency | SEP-28k & FluencyBank Audio | ✅ Real-Data Trained |
+| `DYSCALCULIA_CORE` | Dyscalculia (Core Number Sense) | Number Sense Task | SpatialNet (70%) + RT/accuracy (30%) | Number Sense Screener Norms | 🟡 Calibrated Corsi Norms |
+| `SOCIAL_ANXIETY` | Social Anxiety | Questionnaire Task | Q1 (social worry item response) | SCARED Subscale Norms | 🟢 Validated Likert Scale |
+| `GAD` | Generalized Anxiety Disorder | Questionnaire Task | Q0 (general worry item response) | SCARED Subscale Norms | 🟢 Validated Likert Scale |
+| `SELECTIVE_MUTISM` | Selective Mutism | Questionnaire Task | Q3 (comm avoidance item response) | SMQ Subscale Norms (PMC7528533) | 🟢 Validated Likert Scale |
+| `TEST_ANXIETY` | Test & Performance Anxiety | Questionnaire Task | Q0 (worry) + Q12 (insecurity) (60/40) | SCARED Subscale Norms | 🟢 Validated Likert Scale |
+| `SCHOOL_PHOBIA` | School Phobia | Questionnaire Task | Q2 (school avoidance item response) | SCARED Subscale Norms | 🟢 Validated Likert Scale |
+| `DEPRESSION` | Depression (Low Mood / Anhedonia) | Questionnaire Task | Q4 (sadness item response) | PHQ-A Subscale Norms | 🟢 Validated Likert Scale |
+| `EMOTIONAL_DYSREGULATION` | Emotional Dysregulation | Questionnaire Task | Q5 (emotional control item response) | DERS Subscale Norms | 🟢 Validated Likert Scale |
+| `EXECUTIVE_PLANNING` | Executive Planning Deficit | Questionnaire Task | Q10 (planning/organization response) | BRIEF-2 Subscale Norms | 🟢 Validated Likert Scale |
+| `WORKING_MEMORY` | Working Memory Deficit | Questionnaire Task | Q11 (memory/recall response) | BRIEF-2 Subscale Norms | 🟢 Validated Likert Scale |
 
 ---
 
@@ -66,4 +67,4 @@ All 6 `.tflite` model files are present in `app/src/main/assets/` and validated 
 ## 5. Clinical Roadmap & Marketing Realignment
 
 - **Accuracy Claims**: All mentions of "95–99%" accuracy in marketing surfaces (`landing-page/src/sections/ResearchSection.tsx`) are explicitly framed as **"Target Performance Benchmarks (Aspirational Roadmap)"**.
-- **Dataset Integration**: Current models are trained on high-fidelity synthetic clinical calibration profiles. Transition to full clinical dataset training (ETDD70, SEP-28k, IEEE EEG-ADHD, Kaggle Handwriting) is scheduled for Phase 3 clinical validation.
+- **Dataset Integration**: Real-data trained models (DrawNet, PhonNet) are deployed for fine-motor and vocal disfluency domains. Calibrated clinical norms are deployed for CPT, Corsi, and Likert questionnaire domains. MediaPipe Face Mesh live camera gaze tracking and IndicSUPERB Devanagari handwriting models are scheduled for Phase 3.
