@@ -107,14 +107,26 @@ class TfLiteManager private constructor(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(inputImage, output)
-                Log.i(TAG, "DrawNet: TFLite model inference succeeded.")
-                return output[0]
+                val res = output[0]
+                
+                // SANITY CHECK: verify model output has valid variance and is not flat/broken
+                val minVal = res.minOrNull() ?: 0f
+                val maxVal = res.maxOrNull() ?: 0f
+                val isFlatBroken = (maxVal - minVal < 0.02f) || 
+                                   (kotlin.math.abs(res[0] - 0.3339f) < 0.01f && kotlin.math.abs(res[1] - 0.3456f) < 0.01f)
+                
+                if (!isFlatBroken) {
+                    Log.i(TAG, "DrawNet: TFLite model inference succeeded.")
+                    return res
+                } else {
+                    Log.w(TAG, "DrawNet: TFLite output failed sanity check (flat/broken model). Falling back to HeuristicScorers.")
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Error running DrawNet TFLite: ${e.message}")
             }
         }
         
-        Log.i(TAG, "DrawNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        Log.i(TAG, "DrawNet: FALLBACK — using heuristic scorer (no trained model loaded or output flat).")
         return HeuristicScorers.scoreDrawNet(inputImage)
     }
 
@@ -159,14 +171,26 @@ class TfLiteManager private constructor(private val context: Context) {
         if (interpreter != null) {
             try {
                 interpreter.run(audioData, output)
-                Log.i(TAG, "PhonNet: TFLite model inference succeeded.")
-                return output[0]
+                val res = output[0]
+                
+                // SANITY CHECK: verify model output has valid distribution and is not hardcoded/flat [0,1,0,0]
+                val minVal = res.minOrNull() ?: 0f
+                val maxVal = res.maxOrNull() ?: 0f
+                val isFlatBroken = (maxVal - minVal < 0.02f) || 
+                                   (res[1] == 1.0f && res[0] == 0f && res[2] == 0f && res[3] == 0f)
+                
+                if (!isFlatBroken) {
+                    Log.i(TAG, "PhonNet: TFLite model inference succeeded.")
+                    return res
+                } else {
+                    Log.w(TAG, "PhonNet: TFLite output failed sanity check (hardcoded flat model). Falling back to HeuristicScorers.")
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Error running PhonNet TFLite: ${e.message}")
             }
         }
         
-        Log.i(TAG, "PhonNet: FALLBACK — using heuristic scorer (no trained model loaded).")
+        Log.i(TAG, "PhonNet: FALLBACK — using heuristic scorer (no trained model loaded or output flat).")
         return HeuristicScorers.scorePhonNet(audioData)
     }
 
