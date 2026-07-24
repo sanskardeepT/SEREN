@@ -34,19 +34,19 @@ const pillars = [
 
 const accuracyMetrics = [
   {
-    number: "95–99%",
+    number: "Target: 95–99%",
     label: "Learning Disorders",
-    sub: "Dyslexia, Dysgraphia",
+    sub: "Aspirational Clinical Roadmap Target",
   },
   {
-    number: "90–95%",
+    number: "Target: 90–95%",
     label: "ADHD",
-    sub: "Detection accuracy",
+    sub: "Aspirational Detection Roadmap Target",
   },
   {
-    number: "85–93%",
+    number: "Target: 85–93%",
     label: "Emotional Conditions",
-    sub: "Anxiety & screening",
+    sub: "Aspirational Screening Roadmap Target",
   },
 ];
 
@@ -125,7 +125,7 @@ export default function ResearchSection() {
             className="text-center mt-24 mb-12"
           >
             <h3 className="text-2xl font-semibold text-white font-serif" style={{ fontFamily: "var(--font-heading)" }}>
-              Screening Accuracy
+              Target Performance Benchmarks (Aspirational Roadmap)
             </h3>
           </motion.div>
 

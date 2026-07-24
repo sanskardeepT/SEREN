@@ -235,9 +235,9 @@ fun QuestionnaireTaskScreen(
             val socialAnxietyScore = (qScores[1] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.SOCIAL_ANXIETY, socialAnxietyScore, rawJson, duration)
             
-            // [COMPOSITE] gadScore = qScores[0] * 0.5 + worryScore(EmotNet) * 0.5
+            // [COMPOSITE] gadScore = qScores[0] * 0.6 + worryScore(EmotNet) * 0.4
             // Source: Q0 (general worry item) + EmotNet worry classification
-            val gadScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
+            val gadScore = (qScores[0] * 0.6f) + (worryScore * 0.4f)
             onComplete(ConditionIds.GAD, gadScore, rawJson, duration)
             
             // [SINGLE-ITEM+NLP] mutismScore = qScores[3] * 0.5 + worryScore(EmotNet) * 0.5
@@ -246,11 +246,10 @@ fun QuestionnaireTaskScreen(
             val mutismScore = (qScores[3] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.SELECTIVE_MUTISM, mutismScore, rawJson, duration)
             
-            // [SINGLE-ITEM+NLP] testAnxietyScore = qScores[0] * 0.5 + worryScore(EmotNet) * 0.5
-            // Source: Q0 (worry item, same as GAD) + EmotNet worry — shares item with GAD but
-            // uses different weighting context. Acceptable for MVP.
-            // NOTE: Single questionnaire item basis
-            val testAnxietyScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
+            // [COMPOSITE] testAnxietyScore = qScores[0] * 0.4 + qScores[12] * 0.2 + worryScore(EmotNet) * 0.4
+            // Source: Q0 (worry item) + Q12 (performance/competence insecurity) + EmotNet worry.
+            // Deduplicated from GAD by incorporating performance/academic insecurity item.
+            val testAnxietyScore = (qScores[0] * 0.4f) + (qScores[12] * 0.2f) + (worryScore * 0.4f)
             onComplete(ConditionIds.TEST_ANXIETY, testAnxietyScore, rawJson, duration)
             
             // [SINGLE-ITEM+NLP] schoolPhobiaScore = qScores[2] * 0.5 + worryScore(EmotNet) * 0.5
