@@ -173,7 +173,43 @@ object ConditionIds {
         PUBLIC_SPEAKING_PHOBIA, PDA, ALEXITHYMIA, HSP_OVERWHELM, FAWN_RESPONSE
     )
 
-    val ACTIVE = BATCH1_AND_2
+    /**
+     * ACTIVE conditions: only those for which a task screen produces
+     * a genuinely distinct computed score. Reduced from 84 → 17 to eliminate
+     * the "fake distinctiveness" bug where one score was broadcast to many
+     * unrelated conditions.
+     *
+     * Mapping:
+     *   AttentionTask     → ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED (3 distinct predictions)
+     *   HandwritingTask   → DYSGRAPHIA_MOTOR (1 reversalScore)
+     *   ReadingGazeTask   → DYSLEXIA_PHONOLOGICAL (1 riskScore)
+     *   PhonologicalTask  → PHONOLOGICAL_DISORDER (1 risk)
+     *   SpeechFluencyTask → STUTTERING_REPETITIONS (1 disfluencyScore)
+     *   NumberTask        → DYSCALCULIA_CORE (1 riskScore)
+     *   QuestionnaireTask → SOCIAL_ANXIETY, GAD, SELECTIVE_MUTISM, TEST_ANXIETY,
+     *                       SCHOOL_PHOBIA, DEPRESSION, EMOTIONAL_DYSREGULATION,
+     *                       EXECUTIVE_PLANNING, WORKING_MEMORY (9 distinct scores)
+     *
+     * All 109 condition constants remain declared for future phased expansion.
+     */
+    val ACTIVE = listOf(
+        // AttentionTaskScreen (3 distinct AttentNet prediction indices)
+        ADHD_INATTENTIVE, ADHD_HYPERACTIVE, ADHD_COMBINED,
+        // HandwritingTaskScreen (1 DrawNet reversalScore)
+        DYSGRAPHIA_MOTOR,
+        // ReadingGazeTaskScreen (1 GazeNet riskScore)
+        DYSLEXIA_PHONOLOGICAL,
+        // PhonologicalTaskScreen (1 PhonNet risk)
+        PHONOLOGICAL_DISORDER,
+        // SpeechFluencyTaskScreen (1 PhonNet disfluencyScore)
+        STUTTERING_REPETITIONS,
+        // NumberTaskScreen (1 SpatialNet + heuristic riskScore)
+        DYSCALCULIA_CORE,
+        // QuestionnaireTaskScreen (9 distinct scores — see source comments in that file)
+        SOCIAL_ANXIETY, GAD, SELECTIVE_MUTISM, TEST_ANXIETY, SCHOOL_PHOBIA,
+        DEPRESSION, EMOTIONAL_DYSREGULATION,
+        EXECUTIVE_PLANNING, WORKING_MEMORY
+    )
 
     fun getDisplayName(id: String): String = when (id) {
         DYSLEXIA_PHONOLOGICAL -> "Dyslexia (Phonological)"

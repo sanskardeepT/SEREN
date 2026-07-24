@@ -248,13 +248,11 @@ fun PhonologicalTaskScreen(
                     val risk = 1f - scores[3]
                     
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
-                    onComplete(ConditionIds.DYSLEXIA_PHONOLOGICAL, risk, rawJson, duration)
-                    onComplete(ConditionIds.DYSLEXIA_MIXED, risk, rawJson, duration)
-                    onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, risk, rawJson, duration)
-                    onComplete(ConditionIds.RECEPTIVE_LANGUAGE, risk, rawJson, duration)
-                    onComplete(ConditionIds.ANOMIA, risk, rawJson, duration)
+                    // Only report PHONOLOGICAL_DISORDER — the one condition this phoneme task genuinely measures.
+                    // PhonNet risk (1 - fluent_prob) reflects phoneme awareness difficulty.
+                    // Removed 6 duplicate broadcasts (DYSLEXIA_PHONOLOGICAL, DYSLEXIA_MIXED,
+                    // EXPRESSIVE_LANGUAGE, RECEPTIVE_LANGUAGE, ANOMIA, APD) — all same score.
                     onComplete(ConditionIds.PHONOLOGICAL_DISORDER, risk, rawJson, duration)
-                    onComplete(ConditionIds.APD, risk, rawJson, duration)
                     
                     onNext()
                 },

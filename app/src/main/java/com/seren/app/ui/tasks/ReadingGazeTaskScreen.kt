@@ -150,9 +150,10 @@ fun ReadingGazeTaskScreen(
                 val riskScore = (modelScore * 0.7f) + (heuristicScore * 0.3f)
                 
                 val rawJson = "{\"duration_ms\": $duration, \"wpm\": $wpm, \"word_count\": $wordCount}"
+                // Only report DYSLEXIA_PHONOLOGICAL — the one condition this gaze task genuinely measures.
+                // GazeNet riskScore reflects reading regression patterns indicative of phonological dyslexia.
+                // Removed 2 duplicate broadcasts (DYSLEXIA_MIXED, ADULT_DYSLEXIA) — same score.
                 onComplete(ConditionIds.DYSLEXIA_PHONOLOGICAL, riskScore, rawJson, duration)
-                onComplete(ConditionIds.DYSLEXIA_MIXED, riskScore, rawJson, duration)
-                onComplete(ConditionIds.ADULT_DYSLEXIA, riskScore, rawJson, duration)
                 
                 onNext()
             },

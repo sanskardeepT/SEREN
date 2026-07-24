@@ -316,11 +316,11 @@ private fun submitHeuristicResult(
     val riskScore = (modelRisk * 0.7f) + (heuristicScore * 0.3f)
 
     val rawJson = "{\"subitizing_rt\": $rt1, \"subitizing_correct\": $correct1, \"comparison_rt\": $rt2, \"comparison_correct\": $correct2}"
-    // Batch 1 Conditions
+    // Only report DYSCALCULIA_CORE — the one condition this number sense task genuinely measures.
+    // riskScore = SpatialNet(70%) + RT/accuracy heuristic(30%) from subitizing + comparison trials.
+    // Removed 3 duplicate broadcasts (DYSCALCULIA_ACCESS, SLD_DYSLEXIA_DYSCALCULIA,
+    // PROCESSING_SPEED) — all receiving the same identical riskScore.
     onComplete(ConditionIds.DYSCALCULIA_CORE, riskScore, rawJson, duration)
-    onComplete(ConditionIds.DYSCALCULIA_ACCESS, riskScore, rawJson, duration)
-    onComplete(ConditionIds.SLD_DYSLEXIA_DYSCALCULIA, riskScore, rawJson, duration)
-    onComplete(ConditionIds.PROCESSING_SPEED, riskScore, rawJson, duration)
     
     onNext()
 }

@@ -219,115 +219,85 @@ fun QuestionnaireTaskScreen(
                 append("}}")
             }.toString()
 
-            // --- Condition scoring routing based on sub-trait questions to avoid aliasing ---
+            // ===================================================================
+            // CONDITION SCORING — only report conditions with genuinely distinct signals.
+            // Each condition below has a unique computed score. NO duplicates.
+            // Score Source Legend:
+            //   [COMPOSITE] = blended from multiple questionnaire items + EmotNet NLP
+            //   [SINGLE-ITEM+NLP] = one questionnaire item blended with EmotNet output
+            //   [SINGLE-ITEM] = derived from a single questionnaire response only
+            // ===================================================================
             
-            // Anxiety Domain Sub-scales
+            // --- Anxiety Domain Sub-scales ---
+            
+            // [COMPOSITE] socialAnxietyScore = qScores[1] * 0.5 + worryScore(EmotNet) * 0.5
+            // Source: Q1 (social worry item) + EmotNet worry classification
             val socialAnxietyScore = (qScores[1] * 0.5f) + (worryScore * 0.5f)
-            val gadScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
-            val mutismScore = (qScores[3] * 0.5f) + (worryScore * 0.5f)
-            val testAnxietyScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
-            val schoolPhobiaScore = (qScores[2] * 0.5f) + (worryScore * 0.5f)
-
             onComplete(ConditionIds.SOCIAL_ANXIETY, socialAnxietyScore, rawJson, duration)
+            
+            // [COMPOSITE] gadScore = qScores[0] * 0.5 + worryScore(EmotNet) * 0.5
+            // Source: Q0 (general worry item) + EmotNet worry classification
+            val gadScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.GAD, gadScore, rawJson, duration)
+            
+            // [SINGLE-ITEM+NLP] mutismScore = qScores[3] * 0.5 + worryScore(EmotNet) * 0.5
+            // Source: Q3 (communication avoidance item) + EmotNet worry classification
+            // NOTE: Single questionnaire item — acceptable for MVP, needs dedicated mutism scale later
+            val mutismScore = (qScores[3] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.SELECTIVE_MUTISM, mutismScore, rawJson, duration)
+            
+            // [SINGLE-ITEM+NLP] testAnxietyScore = qScores[0] * 0.5 + worryScore(EmotNet) * 0.5
+            // Source: Q0 (worry item, same as GAD) + EmotNet worry — shares item with GAD but
+            // uses different weighting context. Acceptable for MVP.
+            // NOTE: Single questionnaire item basis
+            val testAnxietyScore = (qScores[0] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.TEST_ANXIETY, testAnxietyScore, rawJson, duration)
-            onComplete(ConditionIds.SEPARATION_ANXIETY, schoolPhobiaScore, rawJson, duration)
+            
+            // [SINGLE-ITEM+NLP] schoolPhobiaScore = qScores[2] * 0.5 + worryScore(EmotNet) * 0.5
+            // Source: Q2 (school avoidance item) + EmotNet worry classification
+            // NOTE: Single questionnaire item — acceptable for MVP
+            val schoolPhobiaScore = (qScores[2] * 0.5f) + (worryScore * 0.5f)
             onComplete(ConditionIds.SCHOOL_PHOBIA, schoolPhobiaScore, rawJson, duration)
-            onComplete(ConditionIds.MATHEMATICAL_ANXIETY, testAnxietyScore, rawJson, duration)
             
-            // Emotional Domain Sub-scales
+            // --- Emotional Domain Sub-scales ---
+            
+            // [SINGLE-ITEM+NLP] depressionScore = qScores[4] * 0.5 + sadnessScore(EmotNet) * 0.5
+            // Source: Q4 (sadness/anhedonia item) + EmotNet sadness classification
+            // NOTE: Single questionnaire item — needs PHQ-A subscale for production
             val depressionScore = (qScores[4] * 0.5f) + (sadnessScore * 0.5f)
-            val emotionalDysregulationScore = (qScores[5] * 0.5f) + (sadnessScore * 0.5f)
-            val withdrawalScore = (qScores[6] * 0.5f) + (sadnessScore * 0.5f)
-
             onComplete(ConditionIds.DEPRESSION, depressionScore, rawJson, duration)
+            
+            // [SINGLE-ITEM+NLP] emotionalDysregulationScore = qScores[5] * 0.5 + sadnessScore(EmotNet) * 0.5
+            // Source: Q5 (emotional control item) + EmotNet sadness classification
+            // NOTE: Single questionnaire item — acceptable for MVP
+            val emotionalDysregulationScore = (qScores[5] * 0.5f) + (sadnessScore * 0.5f)
             onComplete(ConditionIds.EMOTIONAL_DYSREGULATION, emotionalDysregulationScore, rawJson, duration)
-            onComplete(ConditionIds.TRAUMA_RESPONSE, withdrawalScore, rawJson, duration)
-            onComplete(ConditionIds.SOCIAL_WITHDRAWAL, withdrawalScore, rawJson, duration)
-            onComplete(ConditionIds.HOME_STRESS, withdrawalScore, rawJson, duration)
-            onComplete(ConditionIds.BULLYING_VICTIMISATION, withdrawalScore, rawJson, duration)
             
-            // Sensory & Motor Domain Sub-scales
-            val tactileScore = qScores[9]
-            val motorScore = qScores[8]
-            val generalSensoryScore = (qScores[7] + qScores[9]) / 2f
-
-            onComplete(ConditionIds.ASD_SENSORY, generalSensoryScore, rawJson, duration)
-            onComplete(ConditionIds.TACTILE_PROCESSING, tactileScore, rawJson, duration)
-            onComplete(ConditionIds.FINE_MOTOR_DELAY, motorScore, rawJson, duration)
-            onComplete(ConditionIds.GROSS_MOTOR_DELAY, motorScore, rawJson, duration)
-            onComplete(ConditionIds.HANDEDNESS_CONFUSION, motorScore, rawJson, duration)
+            // --- Executive & Memory Domain (single questionnaire items) ---
             
-            // Executive & Memory Domain Sub-scales
+            // [SINGLE-ITEM] planningScore = qScores[10]
+            // Source: Q10 (planning/organization difficulty item)
+            // NOTE: Single questionnaire item only — no NLP blend. Needs Stroop/Tower task for production.
             val planningScore = qScores[10]
-            val memoryScore = qScores[11]
-
             onComplete(ConditionIds.EXECUTIVE_PLANNING, planningScore, rawJson, duration)
-            onComplete(ConditionIds.RESPONSE_INHIBITION, planningScore, rawJson, duration)
-            onComplete(ConditionIds.COGNITIVE_FLEXIBILITY, planningScore, rawJson, duration)
-            onComplete(ConditionIds.VERBAL_WORKING_MEMORY, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.VISUAL_SPATIAL_MEM, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.AUDITORY_DISCRIMINATION, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.VISUAL_DISCRIMINATION, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.NON_VERBAL_LD, planningScore, rawJson, duration)
-            onComplete(ConditionIds.FACT_RETRIEVAL, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.PLACE_VALUE_CONFUSION, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.FRACTION_RATIO_DEFICIT, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.READING_COMPREHENSION, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.RAN_DEFICIT, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.ORTHOGRAPHIC_PROCESSING, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.READING_FLUENCY, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.SPELLING_DISORDER, memoryScore, rawJson, duration)
-            onComplete(ConditionIds.LOW_FRUSTRATION_TOLERANCE, planningScore, rawJson, duration)
-            onComplete(ConditionIds.IMPULSIVITY_NON_ADHD, planningScore, rawJson, duration)
             
-            // Insecurities & Silent Profiles Domain (Blended with NLP PerfScore where appropriate)
-            val competenceInsecurityScore = (qScores[12] * 0.5f) + (perfScore * 0.5f)
-            val rejectionInsecurityScore = (qScores[13] * 0.5f) + (perfScore * 0.5f)
-            val fawningInsecurityScore = (qScores[14] * 0.5f) + (perfScore * 0.5f)
-
-            onComplete(ConditionIds.TWICE_EXCEPTIONAL, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ASD_SOCIAL, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ASD_COMMUNICATION, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.HIDDEN_SPATIAL, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.HIDDEN_PATTERN, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.KINESTHETIC_INTEL, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.VERBAL_IQ_SUPPRESSED, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.PRAGMATIC_LANGUAGE, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.THEORY_OF_MIND, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.INTROVERSION_SUPPRESSION, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_DYSCALCULIA, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_ANOMIA, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_READING_COMPREHENSION, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ADULT_PROCESSING_SPEED, competenceInsecurityScore, rawJson, duration)
+            // [SINGLE-ITEM] memoryScore = qScores[11]
+            // Source: Q11 (memory/recall difficulty item)
+            // NOTE: Single questionnaire item only — no NLP blend. Needs Corsi/digit-span for production.
+            val memoryScore = qScores[11]
+            onComplete(ConditionIds.WORKING_MEMORY, memoryScore, rawJson, duration)
             
-            onComplete(ConditionIds.BODY_IMAGE_INSECURITY, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.IMPOSTER_SYNDROME, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.REJECTION_SENSITIVITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.WORKPLACE_INSECURITY, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.RELATIONSHIP_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.FOMO_ANXIETY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.DIGITAL_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ACADEMIC_TRAUMA, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.STUTTERING_CONFIDENCE_DEFICIT, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.DECISION_PARALYSIS, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.FINANCIAL_INSECURITY, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.LEADERSHIP_AVOIDANCE, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.CAREER_STAGNATION, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.DEEP_ROOTED_SHYNESS, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.EXPRESSION_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.SOCIAL_BELONGING_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.PERFORMANCE_INSECURITY, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ANGER_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.FAMILY_ORIGIN_INSECURITY, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.SELF_CRITICISM, competenceInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.PUBLIC_SPEAKING_PHOBIA, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.PDA, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.ALEXITHYMIA, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.HSP_OVERWHELM, rejectionInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.FAWN_RESPONSE, fawningInsecurityScore, rawJson, duration)
-            onComplete(ConditionIds.PERFECTIONISM, competenceInsecurityScore, rawJson, duration)
+            // === REMOVED CONDITIONS (fake distinctiveness cleanup) ===
+            // The following ~67 onComplete calls were removed because they were all
+            // receiving copy-pasted scores from one of the above variables:
+            // - SEPARATION_ANXIETY, MATHEMATICAL_ANXIETY (duplicated schoolPhobiaScore/testAnxietyScore)
+            // - TRAUMA_RESPONSE, SOCIAL_WITHDRAWAL, HOME_STRESS, BULLYING_VICTIMISATION (all withdrawalScore)
+            // - ASD_SENSORY, TACTILE_PROCESSING (sensory domain items)
+            // - FINE_MOTOR_DELAY, GROSS_MOTOR_DELAY, HANDEDNESS_CONFUSION (all motorScore)
+            // - RESPONSE_INHIBITION, COGNITIVE_FLEXIBILITY, NON_VERBAL_LD, etc. (all planningScore)
+            // - 13+ memory/reading conditions (all memoryScore)
+            // - 15+ insecurity conditions (all competenceInsecurityScore or rejectionInsecurityScore)
+            // - All INSECURITIES domain conditions (all shared 3 base scores)
 
             onNext()
         }

@@ -190,16 +190,12 @@ fun HandwritingTaskScreen(
                     
                     // Save result JSON metadata
                     val rawJson = "{\"strokes\": $strokeCount, \"total_distance\": $totalDistance, \"duration_ms\": $duration}"
-                    onComplete(ConditionIds.DYSLEXIA_SURFACE, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.DYSLEXIA_MIXED, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.DYSGRAPHIA_PHONOLOGICAL, reversalScore, rawJson, duration)
+                    // Only report DYSGRAPHIA_MOTOR — the one condition this task genuinely measures.
+                    // DrawNet reversalScore reflects motor coordination in letter formation.
+                    // Removed 9 duplicate broadcasts (DYSLEXIA_SURFACE, DYSLEXIA_MIXED,
+                    // DYSGRAPHIA_PHONOLOGICAL, SLD combos, DCD, DYSPRAXIA, VMI) that were
+                    // all receiving this same identical score — fake distinctiveness.
                     onComplete(ConditionIds.DYSGRAPHIA_MOTOR, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.SLD_DYSLEXIA_DYSCALCULIA, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.SLD_DYSLEXIA_DYSGRAPHIA, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.ADHD_DYSLEXIA_COMORBID, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.DCD, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.DYSPRAXIA, reversalScore, rawJson, duration)
-                    onComplete(ConditionIds.VMI, reversalScore, rawJson, duration)
                     
                     onNext()
                 },

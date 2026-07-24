@@ -253,16 +253,13 @@ private fun submitAttentionResults(
     // Predictions array mapping classes: [Control, Inattentive, Hyperactive, Combined]
     val rawJson = "{\"misses\": $misses, \"false_alarms\": $falseAlarms, \"rt_mean\": ${"%.1f".format(rtMean)}, \"rt_std\": ${"%.1f".format(rtStd)}, \"duration_ms\": $duration}"
     
-    // Batch 1 Conditions
+    // Only report conditions with genuinely distinct prediction indices.
+    // AttentNet outputs 4-class softmax: [Control, Inattentive, Hyperactive, Combined]
+    // Removed 4 duplicate broadcasts (ADHD_ADULT, ADHD_DYSLEXIA_COMORBID,
+    // PROCESSING_SPEED, WORKING_MEMORY) that were all copy-pasting predictions[3].
     onComplete(ConditionIds.ADHD_INATTENTIVE, predictions[1], rawJson, duration)
     onComplete(ConditionIds.ADHD_HYPERACTIVE, predictions[2], rawJson, duration)
     onComplete(ConditionIds.ADHD_COMBINED, predictions[3], rawJson, duration)
-    
-    // Batch 3 / Adults / Others
-    onComplete(ConditionIds.ADHD_ADULT, predictions[3], rawJson, duration)
-    onComplete(ConditionIds.ADHD_DYSLEXIA_COMORBID, predictions[3], rawJson, duration)
-    onComplete(ConditionIds.PROCESSING_SPEED, predictions[3], rawJson, duration)
-    onComplete(ConditionIds.WORKING_MEMORY, predictions[3], rawJson, duration)
     
     onNext()
 }

@@ -240,15 +240,12 @@ fun SpeechFluencyTaskScreen(
                     
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"
                     
-                    // Speech and Fluency Conditions (clinical base)
+                    // Only report STUTTERING_REPETITIONS — the one condition this speech task genuinely measures.
+                    // PhonNet disfluencyScore (1 - fluent_prob) reflects overall speech disfluency.
+                    // Removed 7 duplicate broadcasts (STUTTERING_PROLONGATIONS, STUTTERING_INTERJECTIONS,
+                    // CLUTTERING, DYSARTHRIA, APRAXIA_OF_SPEECH, EXPRESSIVE_LANGUAGE, VOICE_DISORDER)
+                    // — all receiving the same identical disfluencyScore.
                     onComplete(ConditionIds.STUTTERING_REPETITIONS, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.STUTTERING_PROLONGATIONS, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.STUTTERING_INTERJECTIONS, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.CLUTTERING, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.DYSARTHRIA, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.APRAXIA_OF_SPEECH, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.EXPRESSIVE_LANGUAGE, disfluencyScore, rawJson, duration)
-                    onComplete(ConditionIds.VOICE_DISORDER, disfluencyScore, rawJson, duration)
                     
                     onNext()
                 },
