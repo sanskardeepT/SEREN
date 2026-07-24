@@ -128,8 +128,9 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
                         return@mapNotNull null
                     }
                     
-                    // Average scores
-                    val riskVal = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
+                    // Average scores with defensive NaN protection
+                    val rawRisk = conditionResults.map { it.score ?: 0f }.average().toFloat() * 100f
+                    val riskVal = if (rawRisk.isNaN()) 0f else rawRisk.coerceIn(0f, 100f)
                     val modalitiesCount = conditionResults.map { it.taskType }.distinct().size
                     
                     // Confidence labels based on count of active modalities (docs/training-protocols.md Section 9.1):
@@ -145,7 +146,7 @@ class ScreeningViewModel(application: Application) : AndroidViewModel(applicatio
                     ConditionScore(
                         sessionId = currentSessionId,
                         conditionId = conditionId,
-                        riskScore = riskVal.coerceIn(0f, 100f),
+                        riskScore = riskVal,
                         confidenceLevel = confidence,
                         modalitiesUsed = modalitiesCount
                     )

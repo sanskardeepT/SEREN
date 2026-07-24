@@ -162,15 +162,26 @@ class TfLiteManager private constructor(private val context: Context) {
      * Output: float array of shape [1, 4] representing classes: Repetition, Prolongation, Block, Fluent.
      */
     fun runPhonNet(audioData: FloatArray): FloatArray {
-        require(audioData.size == 48000) {
-            "PhonNet input audio sequence must be exactly 48000 samples (3 seconds at 16kHz)"
+        require(audioData.isNotEmpty()) {
+            "PhonNet input audio sequence must not be empty"
         }
         val interpreter = getPhonNetInterpreter()
         val output = Array(1) { FloatArray(4) }
         
         if (interpreter != null) {
             try {
-                interpreter.run(audioData, output)
+                // Ensure model receives fixed 48,000 sample tensor shape [1, 48000]
+                val modelInput = if (audioData.size == 48000) {
+                    audioData
+                } else if (audioData.size > 48000) {
+                    audioData.copyOfRange(0, 48000)
+                } else {
+                    FloatArray(48000).apply {
+                        System.arraycopy(audioData, 0, this, 0, audioData.size)
+                    }
+                }
+                
+                interpreter.run(modelInput, output)
                 val res = output[0]
                 
                 // SANITY CHECK: verify model output has valid distribution and is not hardcoded/flat [0,1,0,0]

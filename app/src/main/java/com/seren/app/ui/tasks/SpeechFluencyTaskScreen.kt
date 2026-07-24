@@ -235,7 +235,7 @@ fun SpeechFluencyTaskScreen(
                     val silencePercent = AudioFeatures.calculateSilencePercentage(activeAudio)
                     val jitter = AudioFeatures.calculateAmplitudeJitter(activeAudio)
                     
-                    val scores = tfLiteManager.runPhonNet(finalAudio)
+                    val scores = tfLiteManager.runPhonNet(activeAudio)
                     val disfluencyScore = 1f - scores[3]
                     
                     val rawJson = "{\"duration_ms\": $duration, \"silence_percentage\": $silencePercent, \"amplitude_jitter\": $jitter}"

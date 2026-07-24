@@ -26,13 +26,13 @@ The screening engine maps task outputs to **exactly 17 active conditions**, elim
 | `PHONOLOGICAL_DISORDER` | Phonological Disorder | Phonological RAN Task | PhonNet disfluency risk |
 | `STUTTERING_REPETITIONS` | Stuttering (Repetitions) | Speech Fluency Task | PhonNet vocal audio disfluency |
 | `DYSCALCULIA_CORE` | Dyscalculia (Core Number Sense) | Number Sense Task | SpatialNet (70%) + RT/accuracy (30%) |
-| `SOCIAL_ANXIETY` | Social Anxiety | Questionnaire Task | Q1 (social worry) + EmotNet NLP (50/50) |
-| `GAD` | Generalized Anxiety Disorder | Questionnaire Task | Q0 (general worry) + EmotNet NLP (60/40) |
-| `SELECTIVE_MUTISM` | Selective Mutism | Questionnaire Task | Q3 (comm avoidance) + EmotNet NLP (50/50) |
-| `TEST_ANXIETY` | Test & Performance Anxiety | Questionnaire Task | Q0 (worry) + Q12 (insecurity) + EmotNet (40/20/40) |
-| `SCHOOL_PHOBIA` | School Phobia | Questionnaire Task | Q2 (school avoidance) + EmotNet NLP (50/50) |
-| `DEPRESSION` | Depression (Low Mood / Anhedonia) | Questionnaire Task | Q4 (sadness item) + EmotNet NLP (50/50) |
-| `EMOTIONAL_DYSREGULATION` | Emotional Dysregulation | Questionnaire Task | Q5 (emotional control) + EmotNet NLP (50/50) |
+| `SOCIAL_ANXIETY` | Social Anxiety | Questionnaire Task | Q1 (social worry item response) |
+| `GAD` | Generalized Anxiety Disorder | Questionnaire Task | Q0 (general worry item response) |
+| `SELECTIVE_MUTISM` | Selective Mutism | Questionnaire Task | Q3 (comm avoidance item response) |
+| `TEST_ANXIETY` | Test & Performance Anxiety | Questionnaire Task | Q0 (worry) + Q12 (performance insecurity) (60/40) |
+| `SCHOOL_PHOBIA` | School Phobia | Questionnaire Task | Q2 (school avoidance item response) |
+| `DEPRESSION` | Depression (Low Mood / Anhedonia) | Questionnaire Task | Q4 (sadness item response) |
+| `EMOTIONAL_DYSREGULATION` | Emotional Dysregulation | Questionnaire Task | Q5 (emotional control item response) |
 | `EXECUTIVE_PLANNING` | Executive Planning Deficit | Questionnaire Task | Q10 (planning/organization response) |
 | `WORKING_MEMORY` | Working Memory Deficit | Questionnaire Task | Q11 (memory/recall response) |
 

@@ -38,6 +38,9 @@ object HeuristicScorers {
      * Output: Float 0.0-1.0 representing dyslexia risk (higher regressions = higher risk).
      */
     fun scoreGazeNet(gazeSequence: Array<Array<FloatArray>>): Float {
+        if (gazeSequence.isEmpty() || gazeSequence[0].isEmpty()) {
+            return 0.20f
+        }
         var regressionCount = 0
         for (i in 1 until gazeSequence[0].size) {
             val prevX = gazeSequence[0][i - 1][0]
@@ -51,16 +54,21 @@ object HeuristicScorers {
             }
         }
 
-        val ratio = regressionCount.toFloat() / gazeSequence[0].size.toFloat()
+        val total = gazeSequence[0].size
+        if (total == 0) return 0.20f
+        val ratio = regressionCount.toFloat() / total.toFloat()
         return (ratio * 5f).coerceIn(0f, 1f)
     }
 
     /**
      * PhonNet heuristic: measures silence-to-speech ratio in raw audio samples.
-     * Input: FloatArray of 48000 samples (3 seconds @ 16kHz).
+     * Input: FloatArray of raw audio samples.
      * Output: FloatArray(4) = [Repetition, Prolongation, Block, Fluent] probabilities.
      */
     fun scorePhonNet(audioData: FloatArray): FloatArray {
+        if (audioData.isEmpty() || audioData.size < 256) {
+            return floatArrayOf(0.10f, 0.10f, 0.10f, 0.70f)
+        }
         var silenceFrames = 0
         val frameSize = 256
         for (i in audioData.indices step frameSize) {
@@ -75,6 +83,9 @@ object HeuristicScorers {
         }
 
         val totalFrames = audioData.size / frameSize
+        if (totalFrames == 0) {
+            return floatArrayOf(0.10f, 0.10f, 0.10f, 0.70f)
+        }
         val silenceRatio = silenceFrames.toFloat() / totalFrames.toFloat()
 
         // High silence maps to speech block/stutter risk
