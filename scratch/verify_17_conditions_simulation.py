@@ -112,13 +112,13 @@ worryScore = 0.55
 sadnessScore = 0.61
 
 questionnaire_scores = {
-    "SOCIAL_ANXIETY": (qScores[1] * 0.5) + (worryScore * 0.5),                                  # 0.575
-    "GAD": (qScores[0] * 0.6) + (worryScore * 0.4),                                             # 0.700
-    "SELECTIVE_MUTISM": (qScores[3] * 0.5) + (worryScore * 0.5),                                # 0.725
-    "TEST_ANXIETY": (qScores[0] * 0.4) + (qScores[12] * 0.2) + (worryScore * 0.4),              # 0.710 (deduplicated from GAD with performance insecurity item)
-    "SCHOOL_PHOBIA": (qScores[2] * 0.5) + (worryScore * 0.5),                                   # 0.475
-    "DEPRESSION": (qScores[4] * 0.5) + (sadnessScore * 0.5),                                    # 0.455
-    "EMOTIONAL_DYSREGULATION": (qScores[5] * 0.5) + (sadnessScore * 0.5),                       # 0.655
+    "SOCIAL_ANXIETY": qScores[1],                                                               # 0.600
+    "GAD": qScores[0],                                                                          # 0.800
+    "SELECTIVE_MUTISM": qScores[3],                                                             # 0.900
+    "TEST_ANXIETY": (qScores[0] * 0.6) + (qScores[12] * 0.4),                                   # 0.820 (deduplicated from GAD with performance insecurity item)
+    "SCHOOL_PHOBIA": qScores[2],                                                                # 0.400
+    "DEPRESSION": qScores[4],                                                                   # 0.300
+    "EMOTIONAL_DYSREGULATION": qScores[5],                                                      # 0.700
     "EXECUTIVE_PLANNING": qScores[10],                                                          # 0.850
     "WORKING_MEMORY": qScores[11]                                                               # 0.200
 }

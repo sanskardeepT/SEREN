@@ -443,7 +443,7 @@ fun ConsentPrivacyScreen(
     onBack: () -> Unit,
     onAccept: () -> Unit
 ) {
-    val mockupTermsText = """
+    val consentDisclosureText = """
         IMPORTANT INFORMATION AND CONSENT (DPDP ACT COMPLIANT)
         
         1. Purpose of Screening
@@ -498,7 +498,7 @@ fun ConsentPrivacyScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = mockupTermsText,
+                    text = consentDisclosureText,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 22.sp

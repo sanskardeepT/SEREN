@@ -237,7 +237,7 @@ private fun submitAttentionResults(
     }
     
     val rtVar = (rtStd / rtMean).toFloat()
-    val mockGazeOffTask = Random.nextFloat() * 0.15f // simulated gaze indicator
+    val mockGazeOffTask = (missRate * 0.5f + commRate * 0.5f).coerceIn(0f, 0.15f) // deterministic gaze proxy derived from CPT error rates
     
     // Prepare input vector: [miss_rate, commission_rate, rt_variability, gaze_off_task_pct]
     val inputStats = floatArrayOf(

@@ -47,9 +47,14 @@ export default function Footer() {
           <p className="text-xs text-white/25">
             © {new Date().getFullYear()} SEREN. All rights reserved.
           </p>
-          <p className="text-xs text-white/20 italic">
-            Every child deserves to be understood before being judged.
-          </p>
+          <div className="flex items-center gap-6">
+            <a href="/privacy" className="text-xs text-cyan/70 hover:text-cyan transition-colors underline">
+              Privacy Policy & Data Safety
+            </a>
+            <p className="text-xs text-white/20 italic">
+              Every child deserves to be understood before being judged.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
